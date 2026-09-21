@@ -424,3 +424,15 @@ These are not part of this long-running P0 prompt. Do not automatically consume 
 - [x] **Step 4: Limit owner primary UI to training/test history, scores and checklist configuration; keep additional rules secondary and reset all relevant app stores coherently.**
 - [x] **Step 5: Run full unit/integration suite, forced-demo production build and complete production-server desktop/mobile E2E; perform bounded residual review and visual inspection.**
 - [x] **Step 6: Publish verified source to the existing repository/project, verify deployment and real manual Q&A separately, and record measured timing and any concrete remaining limitations.**
+
+## Task 18: Reference-driven Mobile UI Revision
+
+**Depends on:** Task 17
+
+**Deliverable:** Apply the three user-provided mobile app references with cyan accents, lavender canvas, rounded white service cards and original graphics. Preserve the verified simulator, Q&A and owner functionality.
+
+- [x] **Step 1: Record reference-derived product/design context and reproduce the missing mobile navigation with a failing browser test.**
+- [x] **Step 2: Implement a graphic home, prominent practice/test entry points and accessible fixed mobile navigation.**
+- [x] **Step 3: Align simulator, Q&A, checklist and owner screens with the same visual language while retaining behavior and labels.**
+- [x] **Step 4: Run full tests, production build and desktop/mobile E2E; inspect rendered home, checklist, Q&A and active POS for overlap and readability.**
+- [ ] **Step 5: Publish and deploy the verified revision, check the production navigation and core journey, and record outcomes and measured timing.**

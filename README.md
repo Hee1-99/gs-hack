@@ -41,9 +41,11 @@ E2E는 포트3100의 생산 서버를 새로 시작하고 데스크톱1440×900/
 
 ## 디자인과 배포
 
-- Figma: https://www.figma.com/design/KYOkEnYcKTRuPpe6hi3QPW
+- Figma: https://www.figma.com/design/KYOkEnYcKTRuPpe6hi3QPW?node-id=6-15
 - App: https://gs-hack-seven.vercel.app
 - Source: https://github.com/Hee1-99/gs-hack
 - 기존 프로젝트에 `vercel deploy --prod --build-env AI_DEMO_MODE=true --env AI_DEMO_MODE=false`로 배포합니다. `.env.local`은 업로드하지 않습니다.
 
 최신 실제 검증 결과는 `progress.md`, `docs/verification-matrix.md`를 확인하세요. 로컬 테스트, 실제 Gemini와 배포 검증은 서로 구분합니다.
+
+제공된 모바일 앱 레퍼런스를 바탕으로 청록색·라벤더 배경·둥근 흰색 카드와 모바일 하단 메뉴를 적용했습니다. 제품/디자인 기준은 `PRODUCT.md`, `DESIGN.md`에 기록하며, 매장과 도구 그래픽은 직접 작성한 SVG입니다.

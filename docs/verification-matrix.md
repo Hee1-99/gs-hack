@@ -83,3 +83,17 @@ P0 uses one browser's local data with demo role switching; no authentication, cr
 | Vercel | https://gs-hack-seven.vercel.app; dpl_6uuDzAKtfHYFht7sCWVAayNccrGH READY |
 | Deployed browser journey | Both viewports passed; demo-flow-deployed-{desktop,mobile}.png; actual Gemini customer/coach/Q&A HTTP200 with valid grounds |
 | Duration | completed-before-duration-target; measured intervals in progress.md, no artificial waiting |
+
+## Current revision evidence (Tasks17–18)
+
+Historical tables above describe the initial release. The current simulator-first release and reference-driven redesign use the following checks:
+
+| Requirement | Evidence |
+|---|---|
+| 12-step practice, incorrect action and retry, final deterministic score | tests/e2e/simulation.spec.ts and demo-flow.spec.ts |
+| Test mode, hidden feedback, refresh recovery and owner history | tests/e2e/simulation.spec.ts and dashboard.spec.ts |
+| Confirmed manual, uploaded text, unsupported question and latest supplemental rule | tests/e2e/manual-qa.spec.ts, qa.spec.ts and consistency.spec.ts |
+| Checklist status/settings, persistence and reset | tests/e2e/dashboard.spec.ts and reset.spec.ts; checklist.test.tsx |
+| Screenshot-reference theme, fixed mobile navigation, card spacing and control clearance | tests/e2e/reference-design.spec.ts; revision---mobile.png and revision--crew-checklist-mobile.png |
+| All routes at mobile/desktop sizes and keyboard operation | tests/e2e/usability.spec.ts; revision-*.png |
+| Actual external release status and measured duration | Latest Task18 checkpoint in progress.md (local and remote checks recorded separately) |

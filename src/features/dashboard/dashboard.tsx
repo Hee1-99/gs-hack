@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useState } from 'react';
-import { ArrowRight, Check, ChevronDown, ClipboardCheck, ListChecks, SlidersHorizontal, X } from 'lucide-react';
+import { ArrowRight, Check, ChevronDown, ClipboardCheck, ListChecks, SlidersHorizontal, X, Award, Clock3 } from 'lucide-react';
 import { useTrainingStore } from '@/features/training/training-store';
 import { trainingSteps } from '@/features/training/training-data';
 import { summarizeTraining } from './training-summary';
@@ -19,10 +19,10 @@ export function Dashboard() {
     {training.persistence === 'memory' && <p className="persistence-notice" role="alert">연습 기록을 임시로 보관하고 있어요. 새로고침하면 기록이 사라질 수 있어요.</p>}
     {training.persistence === 'recovered' && <p className="persistence-notice" role="status">저장된 연습 기록을 읽지 못해 빈 기록으로 복구했어요.</p>}
     <dl className={styles.stats}>
-      <div><dt>완료한 연습·테스트</dt><dd data-testid="training-count">{summary.completed}<span>회</span></dd></div>
-      <div><dt>평균 점수</dt><dd data-testid="training-average">{summary.averageScore ?? '—'}<span>{summary.averageScore === null ? '완료 후 표시' : '/ 100'}</span></dd></div>
-      <div><dt>완료한 구인 테스트</dt><dd>{summary.tests}<span>회</span></dd></div>
-      <div><dt>진행 중</dt><dd>{summary.active}<span>회</span></dd></div>
+      <div><dt><ClipboardCheck aria-hidden />완료한 연습·테스트</dt><dd data-testid="training-count">{summary.completed}<span>회</span></dd></div>
+      <div><dt><Award aria-hidden />평균 점수</dt><dd data-testid="training-average">{summary.averageScore ?? '—'}<span>{summary.averageScore === null ? '완료 후 표시' : '/ 100'}</span></dd></div>
+      <div><dt><ListChecks aria-hidden />완료한 구인 테스트</dt><dd>{summary.tests}<span>회</span></dd></div>
+      <div><dt><Clock3 aria-hidden />진행 중</dt><dd>{summary.active}<span>회</span></dd></div>
     </dl>
     <section aria-labelledby="records-heading">
       <div className={styles.recordsHeading}><h2 id="records-heading">최근 기록</h2><div className={styles.filters} role="group" aria-label="기록 유형">{([{ value: 'all', label: '전체' }, { value: 'practice', label: '연습' }, { value: 'test', label: '구인 테스트' }] as const).map(option => <button key={option.value} aria-pressed={filter === option.value} onClick={() => setFilter(option.value)}>{option.label}</button>)}</div></div>

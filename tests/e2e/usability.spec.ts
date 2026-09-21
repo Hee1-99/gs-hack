@@ -16,13 +16,13 @@ test('primary pages and active POS fit mobile and desktop without horizontal ove
   for (const route of ['/', '/manager/manual', '/manager/checklist', '/crew', '/crew/questions', '/crew/checklist', '/manager/dashboard']) {
     await page.goto(route); await expect(page.locator('h1')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), route).toBe(true);
-    await page.screenshot({ path: `docs/evidence/revision-${route.replaceAll('/', '-') || 'home'}-${info.project.name}.png`, fullPage: true });
+    await page.screenshot({ path: `docs/evidence/revision-${route.replaceAll('/', '-') || 'home'}-${info.project.name}.png`, fullPage: true, animations: 'disabled' });
   }
   await page.goto('/crew/simulation');
   await page.getByRole('button', { name: '연습 시작하기', exact: true }).click();
   await expect(page.getByRole('group', { name: 'POS 행동 선택' })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  await page.screenshot({ path: `docs/evidence/revision-active-${info.project.name}.png`, fullPage: true });
+  await page.screenshot({ path: `docs/evidence/revision-active-${info.project.name}.png`, fullPage: true, animations: 'disabled' });
 });
 test('keyboard-only quiz, Q&A, checklist and reset focus flow', async ({ page }) => {
   test.setTimeout(60_000);

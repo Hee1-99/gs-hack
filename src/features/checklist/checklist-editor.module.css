@@ -1,19 +1,27 @@
-.toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:4px 0 16px;border-bottom:1px solid var(--line)}
-.toolbar>span{display:flex;align-items:center;gap:8px;font-size:14px}
-.items{display:grid;gap:12px;margin-top:18px}
-.item{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-.item summary{display:flex;align-items:center;gap:18px;padding:22px;cursor:pointer;list-style:none;min-height:100px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:17px 21px;background:#e4f9fb;border:1px solid #d5eff3;border-radius:20px;color:#006b79}
+.toolbar>span{display:flex;align-items:center;gap:9px;font-size:14px}
+.toolbar>span svg{width:22px;height:22px}
+.toolbar>span strong{background:#fff;border-radius:9px;padding:3px 8px;font-size:12px;margin-left:3px}
+.toolbar a{font-size:12px;color:#006b79}
+.items{display:grid;gap:14px;margin-top:18px}
+.item{background:#fff;border:1px solid #e9eaf2;border-radius:26px;overflow:hidden;box-shadow:0 4px 15px #243a5b03}
+.item summary{display:flex;align-items:center;gap:18px;padding:24px;cursor:pointer;list-style:none;min-height:110px}
 .item summary::-webkit-details-marker{display:none}
-.item[open] summary{border-bottom:1px solid var(--line)}
-.number{font-size:13px;font-weight:700;color:var(--muted);align-self:flex-start;padding-top:4px}
-.copy{display:grid;gap:3px;flex:1;min-width:0}
-.copy strong{font-size:17px;word-break:keep-all}
-.description{font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.edit{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
+.item[open] summary{border-bottom:1px solid #edf0f6;background:#fcfdff}
+.number{display:grid;place-items:center;width:48px;height:50px;flex-shrink:0;border-radius:16px;font-size:17px;font-weight:800;color:#007a8a;background:#d9f8fb}
+.item:nth-child(2n) .number{background:#fff0bf;color:#8c6d22}
+.item:nth-child(3n) .number{background:#eeebfb;color:#7468a5}
+.item:nth-child(4n) .number{background:#d6f8e8;color:#29785b}
+.copy{display:grid;gap:5px;flex:1;min-width:0}
+.copy strong{font-size:17px;font-weight:750;word-break:keep-all;letter-spacing:-.3px}
+.description{font-size:13px;color:#747a87;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.edit{display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:9px 12px;border-radius:13px;background:#f5f5fb;font-size:12px;font-weight:600;color:#697382}
 .item[open] .edit svg{transform:rotate(180deg)}
-.form{padding:0 22px 22px}
-.newItem{margin:20px 0}
-.newItem h2{font-weight:700;font-size:18px;margin:0}
+.form{padding:0 24px 24px}
+.form input,.form textarea{background:#f9fafc;border-color:#e0e5ee;border-radius:13px;min-height:46px}
+.form label{color:#525e6d}
+.newItem{margin:20px 0;border-radius:26px!important}
+.newItem h2{font-weight:750;font-size:18px;margin:0}
 .newItem .form{padding:0}
-.note{font-size:12px;color:var(--muted);margin-top:20px}
-@media(max-width:600px){.toolbar{align-items:flex-start;flex-direction:column;gap:0}.item summary{padding:18px;gap:12px}.copy strong{font-size:15px}.form{padding:0 18px 18px}.edit{font-size:0}}
+.note{font-size:12px;color:#747a87;margin:21px 3px}
+@media(max-width:600px){.toolbar{align-items:flex-start;flex-direction:column;gap:0;padding:15px 18px;border-radius:20px}.toolbar a{padding-bottom:0}.item summary{padding:21px 18px;gap:12px}.number{width:40px;height:44px;border-radius:14px;font-size:15px}.copy strong{font-size:15px}.description{font-size:12px}.form{padding:0 18px 20px}.edit{padding:8px;min-width:32px;font-size:0;gap:0;background:transparent}.item{border-radius:24px}}

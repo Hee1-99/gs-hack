@@ -45,3 +45,7 @@ A first-shift simulator for a `스토어 매니저`: choose a concrete action in
 - [x] Checklist settings preserve item status; confirmed reset covers quiz/upload and legacy data.
 - [x] Full unit/integration tests, build and complete production E2E pass; Figma and actual rendered screens inspected.
 - [x] Existing Git target and deployed app verified with exact outcomes in progress.md.
+
+## Reference-driven visual revision — Task18
+
+The user's three mobile app screenshots define the revised visual direction: cyan highlights, a pale lavender canvas, large rounded white service cards, original dimensional store/tool illustrations and fixed mobile bottom navigation with a raised simulator action. PRODUCT.md and DESIGN.md record this direction. Existing practice/test, source-grounded Q&A, checklist and owner workflows remain unchanged. Mobile navigation must not obstruct controls, and all primary pages must remain usable at 390×844 and 1440×900 with keyboard access and reduced motion.
