@@ -1,0 +1,22 @@
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { expect, it, vi } from 'vitest';
+import { StoreProvider } from '@/data/store-provider';
+import { createLocalStoreRepository } from '@/data/local-store-repository';
+import { requestSimulationAi } from '@/ai/client';
+import { SimulationShell } from './simulation-shell';
+vi.mock('@/ai/client', () => ({ requestSimulationAi: vi.fn() }));
+it('retains the session on an HTTP failure and allows retry without another session', async () => {
+  localStorage.clear();
+  const repo = createLocalStoreRepository(localStorage);
+  const request = vi.mocked(requestSimulationAi);
+  request.mockRejectedValueOnce(new Error('offline')).mockResolvedValueOnce({ content: '행사 조건을 알려주세요.', mode: 'demo', groundingRuleIds: ['promotion-response'] });
+  render(<StoreProvider initialRepository={repo}><SimulationShell/></StoreProvider>);
+  await userEvent.click(screen.getByRole('button', { name: '연습 시작' }));
+  expect(await screen.findByRole('alert')).toHaveTextContent('연습 기록은 유지');
+  expect(repo.getSnapshot().sessions).toHaveLength(1);
+  await userEvent.click(screen.getByRole('button', { name: '응답 다시 불러오기' }));
+  await waitFor(() => expect(screen.queryByRole('alert')).not.toBeInTheDocument());
+  expect(await screen.findByText('행사 조건을 알려주세요.')).toBeVisible();
+  expect(repo.getSnapshot().sessions).toHaveLength(1);
+});

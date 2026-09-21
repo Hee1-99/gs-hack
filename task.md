@@ -1,37 +1,48 @@
-# 첫날.zip MVP Implementation Plan
+# FirstDay.zip MVP Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** Follow `AGENTS.md` using tools available in the current session. No external skill or sub-agent is required. Steps use checkbox (`- [ ]`) syntax; only executed and verified work may be checked.
 
-**Goal:** 경영주가 등록한 하나의 매장 규칙이 신입 스토어 매니저의 2+1 시뮬레이션, 근무 중 Q&A, 체크리스트와 경영주 대시보드까지 이어지는 시연 가능한 웹앱 MVP를 만든다.
+**Goal:** Build a demonstrable web app MVP where one store rule registered by the `경영주` carries through a new `스토어 매니저`'s 2+1 simulation, on-shift Q&A, checklist, and the manager dashboard.
 
-**Architecture:** Next.js App Router 앱 안에서 구조화된 Seed와 저장소 인터페이스를 단일 데이터 원천으로 사용한다. 순수 TypeScript 시뮬레이션 엔진이 사실과 행동 판정을 관리하고, 서버 Route Handler의 Gemini 어댑터는 자연어 표현만 생성하며 실패 시 결정론적 데모 응답으로 전환한다.
+**Architecture:** Use structured seed data and a repository interface as the single source of truth within a Next.js App Router application. A pure TypeScript simulation engine manages facts and behavioral evaluation, while a Gemini adapter in a server Route Handler generates only natural-language expression and falls back to deterministic demo responses on failure.
 
-**Tech Stack:** Next.js, TypeScript, Tailwind CSS, Gemini server API, Vitest, Testing Library, Playwright, browser local persistence
+**Tech Stack:** Next.js, TypeScript, Tailwind CSS, Gemini server API, Vitest, Testing Library, Playwright, browser-local persistence
 
 **Spec:** `prd.md`
 
+## Execution Schedule and Evidence
+
+- All Tasks 1–16 are required P0 work. Complete one eligible task at a time in numeric order, except when a documented blocker permits a later independent task whose dependencies are already verified.
+- Tasks 1–9: establish the complete demo flow (planning estimate: 3–4 hours). Tasks 10–15: failure recovery and browser reliability (3–5 hours). Task 16: release rehearsal and evidence (1 hour). Total planning envelope: 7–10 hours, not a claimed runtime or a per-task delay requirement.
+- Measure actual active work toward the 420-minute target under `AGENTS.md`. Do not slow down to match estimates. Task 9 is a core-flow checkpoint; Task 16 owns final completion.
+- Each task boundary requires `npm test`, `npm run build`, and relevant browser tests for changed flows, even where an individual step lists only targeted tests. If a command cannot run, record blocked rather than passed. Run the complete E2E suite at the final gate.
+- A later task may find that an earlier implementation already satisfies its criteria. Verify that evidence and mark it complete without rewriting code or duplicating tests. Do not create a fixed number of tests or screenshots just to fill time.
+- For document-only maintenance, use a reproducible document check instead of inventing an application test. Do not start application implementation just because a planning edit was requested.
+
 ## Global Constraints
 
-- 실제 GS25 POS·사내 시스템·상품·개인정보를 사용하지 않고 합성 데이터만 사용한다.
-- `GEMINI_API_KEY`는 서버에서만 읽고 클라이언트 코드·로그·Git에 노출하지 않는다.
-- 상품·행사 사실과 행동 판정은 LLM이 아닌 구조화 데이터와 결정론적 코드가 관리한다.
-- 매뉴얼에 근거가 없는 답변은 생성하지 않고 `경영주 확인 필요`로 기록한다.
-- 사용자 노출 문구는 `스토어 매니저`, `경영주`로 통일한다.
-- P0를 검증하기 전에는 P1·P2 범위를 시작하지 않는다.
+- Use only synthetic data—never real GS25 POS data, internal systems, products, or personal information.
+- Read `GEMINI_API_KEY` only on the server, and never expose it in client code, logs, or Git.
+- Structured data and deterministic code—not the LLM—manage product and promotion facts and behavioral evaluation.
+- Do not generate answers without support in the manual; record them as `경영주 확인 필요`.
+- Standardize user-facing role labels as `스토어 매니저` and `경영주`.
+- Do not begin P1 or P2 scope before P0 is verified.
 
 ## Review Focus
 
-- Gemini 키 없음·타임아웃·잘못된 응답에서도 데모 모드로 전체 흐름이 이어져야 한다.
-- 규칙 수정 전 진행 중인 세션은 스냅샷을 유지하고, 새 세션과 새 Q&A만 최신 규칙을 사용해야 한다.
-- POS를 조회하지 않은 정답을 올바른 절차로 평가해서는 안 된다.
-- 근거 규칙이 없는 질문은 그럴듯한 답변 대신 미해결 상태와 경영주 확인 안내를 생성해야 한다.
-- 손상되거나 오래된 로컬 저장 데이터는 Seed 초기 상태로 안전하게 복구되어야 한다.
+- The full flow must continue in demo mode when the Gemini key is absent, a request times out, or the response is invalid.
+- Sessions already in progress before a rule edit must retain their snapshot; only new sessions and new Q&A requests use the latest rule.
+- A correct answer without a POS lookup must not be evaluated as following the correct procedure.
+- A question without a supporting rule must produce an unresolved status and a prompt to confirm with the `경영주`, not a plausible-sounding answer.
+- Corrupted or stale locally stored data must recover safely to the seed state.
 
 ---
 
-## Task 1: 프로젝트 기반과 품질 게이트
+## Task 1: Project Foundation and Quality Gates
 
-**Deliverable:** 실행·테스트·빌드가 가능한 Next.js 앱 골격과 공통 검증 명령
+**Depends on:** none
+
+**Deliverable:** A Next.js application skeleton that can run, test, and build, with shared verification commands
 
 **Files:**
 - Create: `package.json`, `next.config.ts`, `tsconfig.json`, `vitest.config.ts`, `playwright.config.ts`
@@ -42,9 +53,9 @@
 **Interfaces:**
 - Produces: `npm run dev`, `npm test`, `npm run test:e2e`, `npm run build`
 
-- [ ] **Step 1: 테스트와 빌드 스크립트가 포함된 프로젝트를 초기화한다.**
+- [x] **Step 1: Initialize the project with test and build scripts.**
 
-  `package.json`에 최소 다음 스크립트를 둔다.
+  Include at least the following scripts in `package.json`:
 
   ```json
   {
@@ -59,7 +70,7 @@
   }
   ```
 
-- [ ] **Step 2: 홈 스모크 E2E를 먼저 작성한다.**
+- [x] **Step 2: Write the home-page smoke E2E first.**
 
   ```ts
   import { expect, test } from '@playwright/test'
@@ -71,13 +82,15 @@
   })
   ```
 
-- [ ] **Step 3: 최소 홈과 레이아웃을 구현하고 스모크 테스트를 통과시킨다.**
-- [ ] **Step 4: `.env.local`이 Git 추적 대상이 아닌지 `git status --short --ignored`로 확인한다.**
-- [ ] **Step 5: `npm test`, `npm run build`, 스모크 E2E를 실행하고 실제 결과를 `progress.md`에 기록한다.**
+- [x] **Step 3: Implement the minimum home page and layout, and make the smoke test pass.**
+- [x] **Step 4: Confirm with `git check-ignore .env.local` and `git ls-files -- .env.local` that `.env.local` is ignored and not tracked, without reading or printing its contents.**
+- [x] **Step 5: Run `npm test`, `npm run build`, and the smoke E2E, then record the actual results in `progress.md`.**
 
-## Task 2: 도메인 모델, 합성 Seed, 저장소
+## Task 2: Domain Model, Synthetic Seed, and Repository
 
-**Deliverable:** 모든 기능이 공유하는 타입 안전 데이터와 새로고침 후 유지되는 저장소
+**Depends on:** Task 1
+
+**Deliverable:** Type-safe shared data for every feature and a repository that persists after refresh
 
 **Files:**
 - Create: `src/domain/types.ts`
@@ -90,7 +103,7 @@
 - Produces: `StoreRepository`, `createLocalStoreRepository(storage)`, `resetToSeed()`
 - Produces types: `StoreRule`, `Product`, `Promotion`, `Scenario`, `SimulationSession`, `ChecklistProgress`, `QuestionLog`
 
-- [ ] **Step 1: 비어 있거나 손상된 저장소가 Seed로 복구되는 실패 테스트를 작성한다.**
+- [x] **Step 1: Write a failing test showing that empty or corrupted storage recovers from the seed.**
 
   ```ts
   it('recovers invalid persisted data with seed data', () => {
@@ -101,14 +114,16 @@
   })
   ```
 
-- [ ] **Step 2: 엔티티 타입과 합성 데이터의 정확한 값을 정의한다.**
-- [ ] **Step 3: 저장소 인터페이스와 localStorage 어댑터를 구현한다.**
-- [ ] **Step 4: 규칙 버전 증가, 체크리스트 저장, 질문 로그 저장, 전체 초기화 테스트를 추가한다.**
-- [ ] **Step 5: 관련 테스트와 전체 테스트를 실행하고 결과를 기록한다.**
+- [x] **Step 2: Define the entity types and exact synthetic-data values.**
+- [x] **Step 3: Implement the repository interface and localStorage adapter.**
+- [x] **Step 4: Add tests for incrementing rule versions, saving checklist state, saving question logs, and resetting all data.**
+- [x] **Step 5: Run the relevant tests and the full test suite, then record the results.**
 
-## Task 3: 경영주 매뉴얼 관리와 역할별 셸
+## Task 3: Manager Manual Management and Role-specific Shells
 
-**Deliverable:** 역할 전환, 경영주 매뉴얼 조회·수정·저장, 규칙 버전 표시
+**Depends on:** Task 2
+
+**Deliverable:** Role switching, manager manual viewing/editing/saving, and rule-version display
 
 **Files:**
 - Create: `src/app/manager/layout.tsx`, `src/app/manager/manual/page.tsx`
@@ -120,15 +135,18 @@
 - Consumes: `StoreRepository.listRules()`, `StoreRepository.updateRule()`
 - Produces: latest saved `StoreRule` with incremented `version` and `updatedAt`
 
-- [ ] **Step 1: 규칙 저장 시 버전이 증가하고 수정 내용이 다시 표시되는 컴포넌트 테스트를 작성한다.**
-- [ ] **Step 2: 모바일 우선 스토어 매니저 셸과 반응형 경영주 셸을 구현한다.**
-- [ ] **Step 3: 제목·내용·분류·예외 대응을 수정하는 매뉴얼 편집기를 구현한다.**
-- [ ] **Step 4: 합성 데이터 안내와 저장 성공·실패 상태를 표시한다.**
-- [ ] **Step 5: 새로고침 후 규칙과 버전이 유지되는 E2E를 추가해 통과시킨다.**
+- [x] **Step 1: Write a component test showing that saving a rule increments its version and displays the edited content again.**
+- [x] **Step 2: Implement a mobile-first `스토어 매니저` shell and a responsive `경영주` shell.**
+- [x] **Step 3: Implement a manual editor for title, content, category, and exception handling.**
+- [x] **Step 4: Display the synthetic-data notice and save success/failure states.**
+- [x] **Step 5: Add and pass an E2E test showing that the rule and version persist after refresh.**
+- [x] **Step 6: Allow the `경영주` to create a missing rule with a stable ID, validate required fields, and verify that it appears after refresh.**
 
-## Task 4: 결정론적 시뮬레이션 엔진과 가상 POS
+## Task 4: Deterministic Simulation Engine and Virtual POS
 
-**Deliverable:** 규칙 스냅샷, 행동 로그, POS 조회에 따라 결과가 달라지는 순수 도메인 엔진
+**Depends on:** Task 2
+
+**Deliverable:** A pure domain engine whose results vary based on rule snapshots, action logs, and POS lookups
 
 **Files:**
 - Create: `src/features/simulation/engine.ts`
@@ -142,7 +160,7 @@
 - Produces: `recordEvent(session, event): SimulationSession`
 - Produces: `validateSession(session): VerifiedResults`
 
-- [ ] **Step 1: POS 미조회 정답을 절차 미준수로 판정하는 실패 테스트를 작성한다.**
+- [x] **Step 1: Write a failing test that treats a correct answer without a POS lookup as a process violation.**
 
   ```ts
   it('does not treat a lucky answer as a verified procedure', () => {
@@ -153,14 +171,16 @@
   })
   ```
 
-- [ ] **Step 2: 규칙 스냅샷과 이벤트 타입을 포함한 상태 전이를 구현한다.**
-- [ ] **Step 3: 상품명·가격·재고·행사 조건을 조회하고 `pos_lookup` 이벤트를 남기는 POS를 구현한다.**
-- [ ] **Step 4: 진행 중 세션은 이전 규칙, 새 세션은 변경된 규칙을 사용하는 테스트를 추가한다.**
-- [ ] **Step 5: 순수 도메인 테스트 전체를 통과시킨다.**
+- [x] **Step 2: Implement state transitions that include rule snapshots and event types.**
+- [x] **Step 3: Implement a POS that retrieves product name, price, inventory, and promotion conditions, and records a `pos_lookup` event.**
+- [x] **Step 4: Add a test proving that an in-progress session uses the old rule while a new session uses the edited rule.**
+- [x] **Step 5: Make the complete pure-domain test suite pass.**
 
-## Task 5: Gemini 어댑터와 데모 폴백
+## Task 5: Gemini Adapter and Demo Fallback
 
-**Deliverable:** 비밀 값을 노출하지 않는 고객·코치 서버 API와 장애 시 결정론적 응답
+**Depends on:** Task 4
+
+**Deliverable:** Customer and coach server APIs that do not expose secrets, with deterministic responses during failures
 
 **Files:**
 - Create: `src/ai/types.ts`, `src/ai/gemini-client.ts`, `src/ai/demo-responses.ts`
@@ -173,15 +193,18 @@
 - Produces: `generateCoaching(input): Promise<AiReply>`
 - `AiReply` includes `content`, `mode: 'gemini' | 'demo'`, `groundingRuleIds`
 
-- [ ] **Step 1: 키 없음, 타임아웃, 잘못된 형식이 모두 `mode: 'demo'`를 반환하는 테스트를 작성한다.**
-- [ ] **Step 2: 공식 Gemini 서버 SDK를 Route Handler 내부에서만 초기화한다.**
-- [ ] **Step 3: 고정 사실과 검증 결과를 변경하지 못하도록 입력·출력 스키마를 제한한다.**
-- [ ] **Step 4: 오류 객체와 로그에서 API 키 및 전체 프롬프트를 제거한다.**
-- [ ] **Step 5: 실제 키 없이 데모 모드 통합 테스트를 통과시키고, 실제 키 검증은 별도 상태로 기록한다.**
+- [x] **Step 1: Write tests showing that a missing key, timeout, and invalid format all return `mode: 'demo'`.**
+- [x] **Step 1a: Test that `AI_DEMO_MODE=true` prevents every provider call even when a key is configured; keep this setting for unattended tests and browser runs.**
+- [x] **Step 2: Initialize the official Gemini server SDK only inside the Route Handler.**
+- [x] **Step 3: Restrict input and output schemas so they cannot change fixed facts or validation results.**
+- [x] **Step 4: Remove API keys and full prompts from error objects and logs.**
+- [x] **Step 5: Pass the demo-mode integration test without a real key, and record real-key verification as a separate status.**
 
-## Task 6: 시뮬레이션 UI, 피드백, 재도전
+## Task 6: Simulation UI, Feedback, and Retry
 
-**Deliverable:** 잘못된 첫 시도와 POS 조회 후 개선된 재도전을 비교할 수 있는 화면
+**Depends on:** Task 3, Task 4, Task 5
+
+**Deliverable:** A screen that compares an incorrect first attempt with an improved retry after a POS lookup
 
 **Files:**
 - Create: `src/app/crew/simulation/page.tsx`
@@ -194,15 +217,17 @@
 - Consumes: simulation engine, customer API, coach API, repository
 - Produces: completed sessions and feedback persisted for dashboard use
 
-- [ ] **Step 1: 조회 없이 확정 답변한 첫 시도에서 절차 누락 피드백이 보이는 E2E를 작성한다.**
-- [ ] **Step 2: 대화, 행동 버튼, 가상 POS, 현재 진행 상태를 한 화면 흐름으로 구현한다.**
-- [ ] **Step 3: 결정론적 검증 결과와 AI 코칭 문구를 분리해 표시한다.**
-- [ ] **Step 4: 변형 시나리오 재도전과 전후 행동 비교를 구현한다.**
-- [ ] **Step 5: POS 조회 후 응대한 재도전에서 개선된 결과가 보이는 E2E를 통과시킨다.**
+- [x] **Step 1: Write an E2E test showing process-omission feedback after the first attempt gives a definitive answer without a lookup.**
+- [x] **Step 2: Implement conversation, action buttons, the virtual POS, and current progress as one screen flow.**
+- [x] **Step 3: Display deterministic validation results separately from AI coaching text.**
+- [x] **Step 4: Implement a variant-scenario retry and a before/after behavior comparison.**
+- [x] **Step 5: Pass the E2E showing improved results when the retry answers after a POS lookup.**
 
-## Task 7: 근거 기반 업무 Q&A
+## Task 7: Grounded Work Q&A
 
-**Deliverable:** 최신 매뉴얼 규칙에 근거한 답변, 인용, 미해결 질문 기록
+**Depends on:** Task 3, Task 5
+
+**Deliverable:** Answers grounded in the latest manual rules, citations, and unresolved-question logging
 
 **Files:**
 - Create: `src/features/qa/rule-search.ts`
@@ -215,15 +240,17 @@
 - Produces: `findRelevantRules(question, rules): StoreRule[]`
 - Produces Q&A response: `answer`, `ruleIds`, `ruleVersion`, `resolutionStatus`
 
-- [ ] **Step 1: 관련 규칙이 없으면 미해결로 반환하는 실패 테스트를 작성한다.**
-- [ ] **Step 2: 작은 데이터셋에 맞는 결정론적 규칙 검색을 구현한다.**
-- [ ] **Step 3: 근거 규칙이 있을 때만 Gemini가 표현을 생성하도록 Q&A Route를 구현한다.**
-- [ ] **Step 4: 규칙 제목·버전, 데모 모드, 경영주 확인 필요 상태를 UI에 표시한다.**
-- [ ] **Step 5: 경영주가 규칙을 수정한 뒤 새 질문에 변경 내용이 반영되는 E2E를 통과시킨다.**
+- [x] **Step 1: Write a failing test showing that a question without a related rule is returned as unresolved.**
+- [x] **Step 2: Implement deterministic rule search appropriate for the small dataset.**
+- [x] **Step 3: Implement the Q&A Route so Gemini generates phrasing only when supporting rules exist.**
+- [x] **Step 4: Display the rule title/version, demo mode, and `경영주 확인 필요` state in the UI.**
+- [x] **Step 5: Pass the E2E showing that after the `경영주` edits a rule, a new question reflects the changed content.**
 
-## Task 8: 업무 체크리스트와 경영주 대시보드
+## Task 8: Work Checklist and Manager Dashboard
 
-**Deliverable:** 영속 체크리스트와 지원 목적의 운영 현황 요약
+**Depends on:** Task 6, Task 7
+
+**Deliverable:** A persistent checklist and a support-oriented operational summary
 
 **Files:**
 - Create: `src/app/crew/checklist/page.tsx`
@@ -237,15 +264,18 @@
 - Consumes: sessions, checklist progress, question logs
 - Produces: counts for training, checklist, questions, needs-manager-review
 
-- [ ] **Step 1: 완료·확인 필요 상태와 집계를 검증하는 테스트를 작성한다.**
-- [ ] **Step 2: 네 개 업무와 세 상태를 제공하는 체크리스트를 구현한다.**
-- [ ] **Step 3: 새로고침 유지와 확인 후 초기화를 구현한다.**
-- [ ] **Step 4: 훈련·질문·체크리스트·확인 필요를 요약하는 대시보드를 구현한다.**
-- [ ] **Step 5: 점수·순위·적합성 판단 문구가 없고 전체 집계가 정확한지 테스트한다.**
+- [x] **Step 1: Write tests for completed and confirmation-needed states and their aggregations.**
+- [x] **Step 2: Implement a checklist with four tasks and three states.**
+- [x] **Step 3: Implement refresh persistence and reset after confirmation.**
+- [x] **Step 4: Implement a dashboard summarizing training, questions, checklist status, and confirmation-needed items.**
+- [x] **Step 5: Test that counts are accurate and there is no language about scores, rankings, or suitability judgments.**
+- [x] **Step 6: Allow the `경영주` to create/edit checklist items with stable IDs; verify that saved changes appear in the `스토어 매니저` checklist after refresh without clearing unrelated progress.**
 
-## Task 9: 전 구간 검증, 접근성, 제출 준비
+## Task 9: Core-flow Verification and Demo Documentation
 
-**Deliverable:** 초기 상태부터 마지막 대시보드까지 재현 가능한 데모와 제출 근거
+**Depends on:** Task 8
+
+**Deliverable:** A reproducible demo and submission evidence from the initial state through the final dashboard
 
 **Files:**
 - Modify: `tests/e2e/demo-flow.spec.ts`
@@ -257,26 +287,127 @@
 - Consumes: all P0 features
 - Produces: verified demo script and reproducible commands
 
-- [ ] **Step 1: 전체 P0 수직 흐름 E2E를 작성한다.**
+- [x] **Step 1: Write the full P0 vertical-flow E2E.**
 
   ```ts
   test('completes the manager-to-crew-to-manager demo loop', async ({ page }) => {
-    // Seed 초기화 → 규칙 수정 → 잘못된 첫 시도 → POS 재도전
-    // → 최신 규칙 Q&A → 체크리스트 → 경영주 대시보드 집계
+    // Reset seed → edit rule → incorrect first attempt → POS retry
+    // → latest-rule Q&A → checklist → manager dashboard aggregation
   })
   ```
 
-- [ ] **Step 2: 모바일·데스크톱 핵심 화면, 키보드 이동, 레이블, 로딩·빈 상태·오류 상태를 확인한다.**
-- [ ] **Step 3: `npm test`, `npm run test:e2e`, `npm run build`를 깨끗한 상태에서 실행한다.**
-- [ ] **Step 4: Gemini 키 없음과 실제 키 사용을 구분해 검증하고 결과를 기록한다.**
-- [ ] **Step 5: README에 설치, 환경변수, 합성 데이터, 데모 동선, 데모 모드, 알려진 한계를 기록한다.**
-- [ ] **Step 6: 비밀 값과 실제 데이터가 Git 추적 파일·빌드 출력·브라우저 번들에 없는지 점검한다.**
-- [ ] **Step 7: P0 수용 기준을 하나씩 실제 증거와 대조하고 모두 충족했을 때만 Ralph 반복을 종료한다.**
+- [x] **Step 2: Check core mobile and desktop screens, keyboard navigation, labels, loading states, empty states, and error states.**
+- [x] **Step 3: Run `npm test`, `npm run test:e2e`, and `npm run build` from a clean state.**
+- [x] **Step 4: Verify forced demo mode and the mocked missing-key case. Run a separate bounded live Gemini smoke check when an existing key is available; this is pre-authorized. Record the actual result or `not run` with the missing prerequisite, then restore forced demo mode for regression tests.**
+- [x] **Step 5: Document installation, environment variables, synthetic data, the demo flow, demo mode, and known limitations in the README.**
+- [x] **Step 6: Check that no secret values or real data appear in Git-tracked files, build output, or the browser bundle.**
+- [x] **Step 7: Record the core-flow checkpoint and outstanding P0 evidence in `docs/verification-matrix.md`, then continue to Task 10. Do not end the run at this checkpoint.**
 
-## P1 Backlog — P0 완료 후에만 시작
+## Task 10: Persistence Failure and Recovery
 
-- [ ] 담배 위치·배달 주문·유통기한·물류·인수인계 시나리오 확장
-- [ ] 시간대별 체크리스트
-- [ ] 질문 주제 분류와 반복 질문 추이
-- [ ] 교육 전후 행동 개선 비교 고도화
-- [ ] Supabase 저장소 어댑터와 정식 역할 권한
+**Depends on:** Task 9
+
+**Deliverable:** Honest saved/unsaved behavior and safe recovery for the existing local repository.
+
+**Files:** Repository adapter and tests under `src/data/`; shared persistence UI; `tests/e2e/persistence.spec.ts`.
+
+- [x] **Step 1: Reproduce malformed JSON, valid JSON with an invalid schema, and an unsupported storage version in repository tests.**
+- [x] **Step 2: Test storage reads/writes that throw (including quota failure); implement a recoverable seed or an explicit in-memory mode with an unsaved-state notice. Do not show a successful durable save after a failed write.**
+- [x] **Step 3: Verify valid saved rules, checklist items, questions, and sessions survive refresh; recovery affects only the app's storage key and never unrelated browser data.**
+- [x] **Step 4: Browser-test cancelled reset, confirmed reset, and loading the recovered seed. Verify that reset clears the app's history and counts consistently.**
+- [x] **Step 5: Run targeted recovery tests, the full suite, build, and affected E2E; record actual recovery behavior and remaining limits.**
+
+## Task 11: Simulation Event Ordering and Snapshot Integrity
+
+**Depends on:** Task 10
+
+**Deliverable:** Reproducible evaluation of the current primary and variant scenarios under out-of-order and repeated actions.
+
+**Files:** Simulation engine, validator, structured facts and tests; `tests/e2e/simulation.spec.ts`.
+
+- [x] **Step 1: Add table-driven failing cases for answer-before-lookup, lookup-before-answer, lookup-after-answer, wrong-product lookup, and manager-confirmation events. Assert actual expected outcomes, not only snapshots.**
+- [x] **Step 2: Ensure a later lookup never erases an earlier unverified definitive answer and an unrelated product lookup cannot satisfy verification. Derive quantities/prices from shared structured facts.**
+- [x] **Step 3: Verify a manager rule edit leaves the active session snapshot unchanged, while a new session uses the new version; retry has a distinct session ID and linked prior attempt.**
+- [x] **Step 4: Verify duplicate submission, double-click, and returning from the POS do not duplicate completion or lose events. Keep structured answer intent separate from free-form AI phrasing so evaluation does not depend on an LLM verdict.**
+- [x] **Step 5: Run the full suite/build and browser first-attempt/retry flow; record deterministic feedback and dashboard counts for both attempts.**
+
+## Task 12: AI Boundary, Timeout, and Grounding Failures
+
+**Depends on:** Task 11
+
+**Deliverable:** Stable customer, coach, and Q&A routes under provider failures without a live paid call.
+
+**Files:** `src/ai/`, all three AI Route Handlers and tests, browser request-failure scenarios.
+
+- [x] **Step 1: Use mocked provider responses for timeout, quota response, empty text, malformed output, unknown rule IDs, and conflicting price/promotion claims; add failing cases only where coverage is absent.**
+- [x] **Step 2: Apply a finite timeout/abort policy and validate request size/schema. Reject invalid user requests clearly; use deterministic fallback for provider failures without unbounded retries.**
+- [x] **Step 3: Verify server-generated grounding and deterministic verdicts remain authoritative. Render facts from structured data and discard contradictory generated facts; do not rely on prompt instructions alone.**
+- [x] **Step 4: Verify forced demo mode makes zero outbound provider calls, fallback displays `데모 모드`, and UI recovers from a failed HTTP request. Use synthetic canary strings in mocked errors to assert raw credentials/prompts never reach responses or logs.**
+- [x] **Step 5: Run relevant route/browser tests, full tests and build in forced demo mode. Keep live Gemini evidence separate; bounded live checks are pre-authorized, and `not run` must state the concrete missing prerequisite.**
+
+## Task 13: Manual, Q&A, Checklist, and Dashboard Consistency
+
+**Depends on:** Task 12
+
+**Deliverable:** The manager's edits and worker actions produce consistent, explainable results throughout the existing P0 flow.
+
+**Files:** Manual editor, rule search, checklist, dashboard summary and associated tests.
+
+- [x] **Step 1: Test blank/whitespace input, ambiguous question matches, and unsupported questions. A coincidental keyword must not produce an unsupported definitive answer.**
+- [x] **Step 2: Browser-test unresolved question → manager adds a supporting synthetic rule → new question receives that rule/version. Preserve the original question record and distinguish past unresolved history from a new resolved answer.**
+- [x] **Step 3: Verify manager-created and edited checklist items retain stable IDs; transitions among all three states persist and update dashboard counts without duplication.**
+- [x] **Step 4: Define and test dashboard counting semantics for completed training attempts, checklist completion, question count, and confirmation-needed items. Verify empty, partially complete, repeated action, and reset states. Document these semantics without adding personnel scoring.**
+- [x] **Step 5: Run targeted tests, full tests/build, and the changed user flows; link the observed counts and rule versions in the verification matrix.**
+
+## Task 14: Responsive, Keyboard, and Failure-state Usability
+
+**Depends on:** Task 13
+
+**Deliverable:** Both roles can complete the same P0 journey on a small screen and with keyboard controls.
+
+**Files:** Existing pages/components/styles, targeted component/E2E tests, browser evidence.
+
+- [x] **Step 1: Inspect home, manual editor, simulation/POS/feedback, Q&A, checklist, and dashboard at 390×844 and 1440×900; record concrete overflow, hidden-control, or reading-order failures before fixing them.**
+- [x] **Step 2: Complete role switching, editing, POS lookup, retry, Q&A and checklist by keyboard; verify labels, visible focus, focus return after dialogs, and announcements for async status.**
+- [x] **Step 3: Verify disabled/pending behavior prevents duplicate actions and loading/empty/error/save-failure states give an actionable next step. Ensure retry preserves entered content where appropriate.**
+- [x] **Step 4: Fix observed usability defects while preserving the established flow; visibly distinguish synthetic data, demo role switching, generated wording, and manager-confirmation status. Do not redesign working screens just to consume time.**
+- [x] **Step 5: Run relevant regression tests, full tests/build, and repeat only affected browser checks; record viewports and screenshots of the verified flow.**
+
+## Task 15: Production-server Browser Regression
+
+**Depends on:** Task 14
+
+**Deliverable:** Isolated, reproducible E2E coverage exercising the built app rather than only its development server.
+
+**Files:** `playwright.config.ts`, `package.json`, `tests/e2e/`, test fixtures, README verification commands.
+
+- [x] **Step 1: Configure and document an E2E production-server command with forced demo mode, isolated test storage/browser contexts, and no dependency on a pre-existing development server. Use the existing test framework rather than adding a second runner.**
+- [x] **Step 2: Run the complete journey from a fresh seed at mobile and desktop sizes: manager rule edit, incorrect attempt, POS retry, grounded and unresolved Q&A, checklist changes, and exact dashboard counts.**
+- [x] **Step 3: Verify refresh/direct-route entry and back navigation, plus rule edits during an active session. Inspect browser console errors, failed app requests, and hydration problems and fix observed defects.**
+- [x] **Step 4: Capture useful failure traces/screenshots using synthetic data, remove arbitrary test sleeps in favor of observable state, and fix fixture isolation rather than masking intermittent failures with broad retries.**
+- [x] **Step 5: Run the full suite/build and complete production-server E2E; record commands, environment mode, actual results and evidence paths.**
+
+## Task 16: Final Evidence, Release Rehearsal, and Run Closure
+
+**Depends on:** Task 15
+
+**Deliverable:** A reproducible local release, honest verification record, and accurate duration outcome.
+
+**Files:** `README.md`, `docs/demo-script.md`, `docs/verification-matrix.md`, `progress.md`, `task.md`, `prd.md`; only defect-driven source changes.
+
+- [x] **Step 1: Perform one bounded residual review against the PRD and the failure matrix in `docs/ralph-long-run-audit.md`. For each real remaining defect record a reproducer, fix it, and rerun affected checks. Do not reopen satisfied scope without evidence.**
+- [x] **Step 2: Write a reproducible demo script covering both roles, first-attempt failure, POS retry, changed rule, unresolved question, checklist, dashboard and reset. Document setup, commands, data model boundaries, demo fallback and known limitations.**
+- [x] **Step 3: Check tracked-file names and ignore rules, inspect server/client imports, and use a synthetic test canary to verify secrets stay out of client bundles and error responses. Never print or copy `.env.local` values into scans, evidence, or logs. Git initialization, commits, pushes, and deployment are pre-authorized; inspect the exact staged files and verified repository/branch/deployment target before publication. Preserve unrelated user changes.**
+- [x] **Step 4: After the final code change run `npm test`, `npm run build`, and the complete production-server E2E command; perform the documented demo in a fresh browser context and inspect its rendered results. Preserve failure evidence and report exact command outcomes.**
+- [ ] **Step 5: After local gates pass, perform the pre-authorized Git publication and deployment with available credentials and verified targets; confirm the remote commit, final deployment status, and deployed browser flow. Map every PRD acceptance criterion and Task 1–16 checkbox to actual evidence. Record live Gemini, Git publication, and deployment separately with their actual results and URLs; if a prerequisite is missing, record the external blocker and leave unverified work unchecked rather than asking for renewed approval.**
+- [ ] **Step 6: Append the final timing/resume record. If active work reached 420 minutes and all gates pass, record `complete`; if all gates and the residual review passed earlier, record `completed-before-duration-target` with actual elapsed work. Otherwise continue eligible work or record a concrete `blocked/interrupted` checkpoint.**
+
+## P1 Backlog — Requires Separate Authorization After Tasks 1–16
+
+These are not part of this long-running P0 prompt. Do not automatically consume them to meet the time target.
+
+- [ ] Expand scenarios for tobacco-product locations, delivery orders, expiration dates, logistics, and shift handoffs
+- [ ] Time-based checklists
+- [ ] Question-topic classification and repeated-question trends
+- [ ] More advanced before/after training behavior comparison
+- [ ] Supabase repository adapter and production role permissions

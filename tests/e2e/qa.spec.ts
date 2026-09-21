@@ -1,0 +1,22 @@
+import { expect, test } from '@playwright/test';
+test('answers from the latest rule and preserves unsupported questions', async ({ page }, testInfo) => {
+  await page.goto('/crew/questions');
+  await page.getByLabel('매장에 궁금한 점').fill('택배는 어떻게 보내요?');
+  await page.getByRole('button', { name: '질문하기', exact: true }).click();
+  await expect(page.getByTestId('question-log').first()).toContainText('경영주 확인 필요');
+  await page.getByRole('link', { name: '경영주로 전환' }).click();
+  const rule = page.getByRole('form', { name: '행사 문의는 POS 확인 후 안내' });
+  await rule.getByLabel('규칙 내용').fill('조회 후 행사 조건을 고객에게 차근차근 안내해 주세요.');
+  await rule.getByRole('button', { name: '규칙 저장' }).click();
+  await page.getByRole('link', { name: '스토어 매니저로 전환' }).click();
+  await page.getByRole('link', { name: '매장 Q&A', exact: true }).click();
+  await page.getByRole('button', { name: '행사 문의는 POS 확인 후 안내', exact: true }).click();
+  await expect(page.getByTestId('question-log').first()).toContainText('조회 후 행사 조건을 고객에게 차근차근 안내해 주세요.');
+  await expect(page.getByTestId('question-log').first()).toContainText('v2');
+  await expect(page.getByTestId('question-log').first()).toContainText('3,000원');
+  await expect(page.getByTestId('question-log').first()).toContainText('데모 모드');
+  await page.reload();
+  await expect(page.getByTestId('question-log')).toHaveCount(2);
+  await expect(page.getByTestId('question-log').last()).toContainText('경영주 확인 필요');
+  await page.screenshot({ path: `docs/evidence/qa-${testInfo.project.name}.png`, fullPage: true });
+});

@@ -1,181 +1,193 @@
-# 첫날.zip 제품 요구사항 문서
+# FirstDay.zip Product Requirements Document
 
-> 상태: Ralph 구현 기준 문서
-> 작성일: 2026-09-21
-> 행사: GS 52g PLAI 해커톤 개발자 리그
-> 우선순위: 하나의 완결된 데모 흐름을 먼저 완성한다.
+> Status: Reference document for Ralph implementation
+> Date: 2026-09-21
+> Event: GS 52g PLAI Hackathon Developer League
+> Priority: Complete one end-to-end demo flow first.
 
-## 1. 제품 한 줄 정의
+## 1. One-line Product Definition
 
-첫날.zip은 경영주가 등록한 매장별 업무 지침을 바탕으로 신입 스토어 매니저가 출근 전에 AI 고객과 연습하고, 근무 중에는 근거 있는 답변과 체크리스트를 사용하며, 경영주는 교육·질문·업무 진행 현황을 확인하는 웹 기반 온보딩·업무 지원 서비스다.
+FirstDay.zip is a web-based onboarding and work-support service where a new `스토어 매니저` practices with an AI customer before work using store-specific instructions registered by the `경영주`, uses grounded answers and a checklist during work, and where the `경영주` reviews training, questions, and task progress.
 
-## 2. 해결할 문제
+## 2. Problem to Solve
 
-- 신입 스토어 매니저는 여러 업무와 매장별 규칙을 충분히 연습하기 전에 실제 고객을 응대한다.
-- 모르는 내용을 매번 경영주에게 질문하기 어렵고, 동시에 처리하는 업무를 빠뜨릴 수 있다.
-- 경영주는 새로운 스토어 매니저가 들어올 때마다 같은 내용을 반복 교육한다.
-- 구두 지침은 누락되거나 다르게 이해될 수 있고, 스토어 매니저가 어디에서 막히는지 파악하기 어렵다.
+- A new `스토어 매니저` serves real customers before having enough opportunity to practice various tasks and store-specific rules.
+- It can be difficult to ask the `경영주` every time something is unclear, and concurrent tasks can easily be missed.
+- The `경영주` repeats the same training whenever a new `스토어 매니저` joins.
+- Verbal instructions can be omitted or interpreted differently, and it is difficult to identify where a `스토어 매니저` gets stuck.
 
-이 제품은 교육 부담과 적응의 어려움을 줄일 수 있다는 가설을 검증한다. 교육 시간 감소, 이직률 개선 등의 효과를 이미 입증한 것처럼 표현하지 않는다.
+This product tests the hypothesis that it can reduce training burden and adjustment difficulties. Do not imply that outcomes such as reduced training time or improved retention have already been proven.
 
-## 3. 핵심 사용자
+## 3. Primary Users
 
-### 신입 스토어 매니저
+### New `스토어 매니저`
 
-- 출근 전에 실수해도 괜찮은 환경에서 연습한다.
-- 근무 중 필요한 매장별 지침을 빠르게 확인한다.
-- 해야 할 업무와 인수인계 항목을 놓치지 않는다.
-- 스스로 처리할 수 없는 상황은 경영주 확인이 필요하다고 기록한다.
+- Practices before work in an environment where mistakes are safe.
+- Quickly checks store-specific instructions needed during work.
+- Avoids missing required tasks and handoff items.
+- Records situations that cannot be handled independently as requiring confirmation from the `경영주`.
 
-### 경영주
+### `경영주`
 
-- 매장 지침과 체크리스트를 한 번 등록해 반복 사용한다.
-- 스토어 매니저의 훈련 완료, 질문, 체크리스트 진행 상황을 확인한다.
-- 미해결 질문을 바탕으로 매뉴얼을 보완한다.
+- Registers store instructions and checklists once for repeated use.
+- Reviews training completion, questions, and checklist progress for the `스토어 매니저`.
+- Improves the manual based on unresolved questions.
 
-## 4. 제품 원칙
+## 4. Product Principles
 
-1. **단일 진실 공급원:** 매장 규칙은 시뮬레이션, 업무 Q&A, 체크리스트, 대시보드가 함께 사용한다.
-2. **AI와 판정 분리:** Gemini는 자연어 표현을 담당하고, 상품·행사 정보와 행동 판정은 구조화된 데이터와 결정론적 코드가 담당한다.
-3. **행동 기반 피드백:** 답이 우연히 맞아도 POS 확인 없이 확정 안내했다면 절차 미준수로 피드백한다.
-4. **근거 없는 답변 금지:** 매뉴얼에 없는 질문은 추측하지 않고 경영주 확인을 안내하며 미해결 질문으로 기록한다.
-5. **합성 데이터만 사용:** 실제 GS25 POS, 상품, 사내 매뉴얼, 고객 또는 근무자 개인정보를 사용하지 않는다.
-6. **지원 도구, 감시 도구 아님:** 체크리스트와 대시보드는 인사 평가·채용 적합성 판정·실시간 감시에 사용하지 않는다.
-7. **장애 내성:** Gemini 키가 없거나 호출에 실패해도 명확히 표시된 데모 모드로 전체 시연이 가능해야 한다.
+1. **Single source of truth:** Store rules are shared by the simulation, work Q&A, checklist, and dashboard.
+2. **Separate AI from evaluation:** Gemini handles natural-language expression, while structured data and deterministic code handle product and promotion facts and behavioral evaluation.
+3. **Behavior-based feedback:** Even if an answer happens to be correct, giving a definitive answer without checking the POS is treated as a process violation.
+4. **No ungrounded answers:** For questions not covered by the manual, do not guess. Direct the user to confirm with the `경영주` and record the question as unresolved.
+5. **Synthetic data only:** Do not use real GS25 POS data, products, internal manuals, or customer or worker personal information.
+6. **A support tool, not a surveillance tool:** Do not use the checklist or dashboard for personnel evaluation, hiring-suitability decisions, or real-time surveillance.
+7. **Failure tolerance:** The full demo must remain available in a clearly labeled demo mode when the Gemini key is missing or a call fails.
 
-## 5. P0 사용자 여정
+## 5. P0 User Journey
 
-1. 홈에서 `스토어 매니저 모드` 또는 `경영주 모드`를 선택한다.
-2. 경영주가 가상 매장 `GS25 첫날점`의 행사 응대 규칙과 체크리스트를 조회·수정·저장한다.
-3. 신입 스토어 매니저가 2+1 행사 문의 시뮬레이션을 시작한다.
-4. AI 고객이 행사 적용 여부를 묻고, 사용자는 답변하거나 가상 POS에서 상품을 조회한다.
-5. 규칙 검증기가 POS 조회 여부, 답변, 경영주 확인 요청을 행동 로그와 비교한다.
-6. 코치가 근거와 함께 잘한 점·놓친 절차를 설명하고 재도전을 제공한다.
-7. 근무 지원 화면에서 같은 행사 규칙에 관해 질문하면 매뉴얼 버전과 근거가 표시된다.
-8. 스토어 매니저가 오늘의 체크리스트를 완료하거나 `경영주 확인 필요` 상태로 표시한다.
-9. 경영주 대시보드에서 훈련 완료, 체크리스트 진행도, 질문, 확인 필요 항목을 확인한다.
-10. 경영주가 누락된 규칙을 보완하면 이후 새 Q&A와 새 시뮬레이션 세션에 반영된다.
+1. On the home page, select either `스토어 매니저 모드` or `경영주 모드`.
+2. The `경영주` views, edits, and saves the promotion-response rules and checklist for the virtual store `GS25 첫날점`.
+3. A new `스토어 매니저` starts a simulation for a 2+1 promotion inquiry.
+4. The AI customer asks whether the promotion applies, and the user either answers or looks up the product in the virtual POS.
+5. The rule validator compares the POS lookup, response, and request for manager confirmation against the action log.
+6. The coach explains what was done well and which steps were missed, with supporting grounds, and offers a retry.
+7. In the work-support screen, asking about the same promotion rule displays the manual version and supporting rule.
+8. The `스토어 매니저` completes today's checklist or marks an item as `경영주 확인 필요`.
+9. In the dashboard, the `경영주` reviews training completion, checklist progress, questions, and items requiring confirmation.
+10. When the `경영주` adds a missing rule, it applies to subsequent new Q&A requests and new simulation sessions.
 
-## 6. P0 기능 요구사항
+## 6. P0 Functional Requirements
 
-### F1. 역할별 화면
+### F1. Role-specific Screens
 
-- 홈에서 두 역할을 선택할 수 있다.
-- 인증은 구현하지 않으며 역할 전환은 데모용임을 표시한다.
-- 스토어 매니저 화면은 모바일 우선, 경영주 화면은 모바일·데스크톱 반응형으로 만든다.
+- Both roles can be selected from the home page.
+- Authentication is not implemented, and role switching is labeled as demo-only.
+- The `스토어 매니저` screens are mobile-first, while the `경영주` screens are responsive across mobile and desktop.
 
-### F2. 공통 합성 데이터
+### F2. Shared Synthetic Data
 
-- 가상 매장 1개, 상품 3개, 행사 1개, 대표 시나리오 1개와 변형 시나리오 1개를 제공한다.
-- 대표 상품 `캔커피 A`는 합성 데이터이며 가격 1,500원, 2+1 행사, 3개 구매 시 3,000원으로 설정한다.
-- 모든 합성 데이터에는 실제 GS25 운영 정보가 아님을 표시한다.
+- Provide one virtual store, three products, one promotion, one primary scenario, and one variant scenario.
+- The representative product `캔커피 A` is synthetic data priced at KRW 1,500, with a 2+1 promotion totaling KRW 3,000 for three units.
+- Clearly state that all synthetic data is not actual GS25 operational information.
 
-### F3. 매장 매뉴얼 관리
+### F3. Store Manual Management
 
-- 경영주가 규칙의 제목, 내용, 분류, 예외 대응을 수정하고 저장할 수 있다.
-- 저장할 때 버전과 수정 시각이 갱신된다.
-- 진행 중인 시뮬레이션은 시작 시점의 규칙 스냅샷을 유지한다.
-- 저장 이후 시작한 Q&A와 시뮬레이션은 최신 규칙을 사용한다.
+- The `경영주` can edit and save a rule's title, content, category, and exception handling.
+- Saving updates the version and modification time.
+- An in-progress simulation retains the rule snapshot from when it began.
+- Q&A requests and simulations started after a save use the latest rules.
 
-### F4. AI 고객 시뮬레이션과 가상 POS
+### F4. AI Customer Simulation and Virtual POS
 
-- 고객 첫 발화, 스토어 매니저 답변, POS 조회, 경영주 확인 요청을 하나의 세션에 기록한다.
-- 가상 POS는 상품명, 가격, 재고, 행사 조건을 구조화된 데이터에서 조회한다.
-- 대화를 오가거나 POS 패널을 열어도 세션 상태가 유지된다.
-- Gemini 응답은 고정 사실을 바꾸지 못한다.
+- Record the customer's opening line, the `스토어 매니저` response, POS lookups, and requests for manager confirmation in one session.
+- The virtual POS retrieves product name, price, inventory, and promotion conditions from structured data.
+- Session state persists while moving between the conversation and POS panel.
+- Gemini responses cannot change fixed facts.
 
-### F5. 규칙 검증과 코칭
+### F5. Rule Validation and Coaching
 
-- 최소 판정 항목은 `POS 조회 수행`, `확인 전 확정 안내`, `최종 답변`, `경영주 확인 요청`이다.
-- 판정 결과는 결정론적 코드가 생성한다.
-- 코칭 문구는 판정 결과와 행동 로그만을 근거로 생성한다.
-- 첫 시도와 재도전의 행동 차이를 비교해 보여준다.
+- Evaluation must include, at minimum, `POS lookup performed`, `definitive answer before verification`, `final answer`, and `manager confirmation requested`.
+- Deterministic code generates evaluation results.
+- Coaching text is generated only from the evaluation results and action log.
+- Show the behavioral differences between the first attempt and the retry.
 
-### F6. 매장 전용 업무 Q&A
+### F6. Store-specific Work Q&A
 
-- 질문과 관련된 매뉴얼 규칙을 찾아 답변에 규칙 제목·버전을 표시한다.
-- 근거가 없으면 답변을 꾸며내지 않고 경영주 확인을 안내한다.
-- 질문, 답변, 근거 규칙 ID, 해결 상태를 기록한다.
-- 자주 묻는 질문 버튼을 제공한다.
+- Find manual rules related to the question and display the rule title and version with the answer.
+- If there is no supporting rule, do not fabricate an answer; direct the user to confirm with the `경영주`.
+- Record the question, answer, supporting rule ID, and resolution status.
+- Provide frequently asked question buttons.
 
-### F7. 업무 체크리스트
+### F7. Work Checklist
 
-- 기본 항목 4개를 제공하고 경영주가 등록한 항목을 표시한다.
-- 상태는 `대기`, `완료`, `경영주 확인 필요` 중 하나다.
-- 새로고침 후에도 상태가 유지된다.
-- 초기화는 확인 절차 후 수행한다.
+- Provide four default items and display items registered by the `경영주`.
+- The available states are `대기`, `완료`, and `경영주 확인 필요`.
+- State persists after a refresh.
+- Reset occurs only after confirmation.
 
-### F8. 경영주 대시보드
+### F8. Manager Dashboard
 
-- 훈련 완료 여부, 체크리스트 완료 수, 질문 수, 확인 필요 수를 표시한다.
-- 미해결 질문과 매뉴얼 보완 후보를 표시한다.
-- 점수, 순위, 근무 적합성 같은 평가 지표는 표시하지 않는다.
+- Display training completion, completed checklist item count, question count, and confirmation-needed count.
+- Display unresolved questions and candidates for manual improvement.
+- Do not display evaluative metrics such as scores, rankings, or work suitability.
 
-## 7. AI 실행 정책
+## 7. AI Runtime Policy
 
-- Gemini API는 서버 측 Route Handler에서만 호출한다.
-- `GEMINI_API_KEY`를 브라우저 번들, 로그, 오류 메시지에 노출하지 않는다.
-- 요청에는 현재 매뉴얼 규칙, 시나리오의 고정 사실, 허용된 출력 역할만 전달한다.
-- API 키가 없거나 타임아웃·한도 초과·형식 오류가 발생하면 결정론적 데모 응답을 반환한다.
-- 데모 응답 사용 시 화면에 `데모 모드`를 표시한다.
-- LLM 결과를 상품 가격, 행사 조건, 판정 결과의 원본 데이터로 저장하지 않는다.
+- Call the Gemini API only from a server-side Route Handler.
+- Do not expose `GEMINI_API_KEY` in the browser bundle, logs, or error messages.
+- Send only the current manual rules, the scenario's fixed facts, and the permitted output role in a request.
+- If the API key is missing or a timeout, quota error, or format error occurs, return a deterministic demo response.
+- Display `데모 모드` in the UI when a demo response is used.
+- Do not store LLM output as the source data for product prices, promotion conditions, or evaluation results.
 
-## 8. 데이터 및 상태 전략
+## 8. Data and State Strategy
 
-해커톤 P0는 동일 브라우저에서 완결된 시연이 가능하도록 로컬 영속 저장을 기본으로 한다. 데이터 접근은 저장소 인터페이스 뒤에 두어 이후 Supabase로 교체할 수 있게 한다.
+The hackathon P0 uses local persistent storage by default so the end-to-end demo can run in the same browser. Keep data access behind a repository interface so it can later be replaced with Supabase.
 
-핵심 엔티티:
+Core entities:
 
 - `Store`, `StoreRule`, `Product`, `Promotion`, `Scenario`
 - `SimulationSession`, `SimulationEvent`, `SimulationFeedback`
 - `ChecklistItem`, `ChecklistProgress`, `QuestionLog`
 
-규칙·시나리오·사용자 행동은 별도 구조로 관리한다. UI, 프롬프트, 검증 코드에 같은 규칙 문장을 중복 하드코딩하지 않는다.
+Manage rules, scenarios, and user actions as separate structures. Do not duplicate the same rule text by hardcoding it in the UI, prompts, and validation code.
 
-## 9. 기술 방향
+## 9. Technical Direction
 
 - Next.js App Router + TypeScript
-- Tailwind CSS 기반 반응형 UI
-- Gemini 서버 호출과 결정론적 데모 폴백
-- 순수 TypeScript 시뮬레이션 엔진·규칙 검증기
-- 브라우저 로컬 영속 저장을 사용하는 저장소 어댑터
-- Vitest 단위·통합 테스트, Playwright 핵심 사용자 여정 테스트
-- Vercel 배포를 고려한 환경변수와 서버/클라이언트 경계
+- Responsive UI based on Tailwind CSS
+- Gemini server calls with a deterministic demo fallback
+- Pure TypeScript simulation engine and rule validator
+- Repository adapter using browser-local persistent storage
+- Vitest unit and integration tests, plus Playwright tests for core user journeys
+- Environment-variable and server/client boundaries designed with Vercel deployment in mind
 
-## 10. P0 수용 기준
+## 10. P0 Acceptance Criteria
 
-- [ ] 초기 상태에서 마지막 경영주 대시보드까지 한 브라우저 세션에서 시연된다.
-- [ ] POS를 조회하지 않은 답변과 조회 후 답변의 행동 로그·피드백이 실제로 다르다.
-- [ ] 가상 POS, 규칙 검증기, Q&A가 동일한 매장 규칙과 행사 데이터를 사용한다.
-- [ ] 경영주가 규칙을 수정한 뒤 새로운 Q&A와 새 시뮬레이션에 변경 내용이 반영된다.
-- [ ] 체크리스트 상태가 새로고침 후 유지되고 대시보드에 집계된다.
-- [ ] 매뉴얼에 없는 질문은 미해결로 기록되고 경영주 확인을 안내한다.
-- [ ] Gemini 키가 없는 상태에서도 데모 모드로 핵심 흐름이 중단되지 않는다.
-- [ ] `npm test`, `npm run build`, 핵심 Playwright 시나리오가 통과한다.
-- [ ] README에 실행법, 환경변수, 합성 데이터, 데모 동선, 알려진 한계를 기록한다.
-- [ ] 실제 통과하지 않은 항목을 완료로 표시하지 않는다.
+- [x] The flow from the initial state through the final manager dashboard can be demonstrated in one browser session.
+- [x] The action logs and feedback actually differ between an answer without a POS lookup and an answer after a lookup.
+- [x] The virtual POS, rule validator, and Q&A use the same store rules and promotion data.
+- [x] After the `경영주` edits a rule, the change applies to new Q&A requests and new simulation sessions.
+- [x] Checklist state persists after refresh and is aggregated in the dashboard.
+- [x] Questions not covered by the manual are recorded as unresolved and direct the user to confirm with the `경영주`.
+- [x] The core flow continues in demo mode without a Gemini key.
+- [x] `npm test`, `npm run build`, and the core Playwright scenarios pass.
+- [x] The README documents setup, environment variables, synthetic data, the demo flow, and known limitations.
+- [x] The `경영주` can add a missing rule and create/edit checklist items; new Q&A and the checklist use the saved data without rewriting past logs.
+- [x] Corrupted or unavailable local storage produces recovery or a visible non-persistent state, never a false saved confirmation.
+- [x] Event ordering, wrong-product lookups, duplicate submissions, retries, and immutable rule snapshots are verified deterministically.
+- [x] Mocked AI timeout, quota, malformed output, and contradictory facts cannot alter deterministic evaluation or leak raw provider errors.
+- [x] The complete flow is verified at mobile and desktop widths, with keyboard navigation and a confirmed reset, against the production server.
+- [ ] Tasks 10–16 in `task.md` pass and `docs/verification-matrix.md` maps each P0 criterion to actual evidence.
+- [x] No item is marked complete unless it actually passed.
 
-## 11. 우선순위와 축소 규칙
+### Extended P0 Run Contract
 
-시간이 부족하면 화면 수와 시나리오 수를 줄이되 아래 연결은 보존한다.
+The core feature checkpoint is Task 9. Release completion includes Tasks 10–16, which strengthen the same P0 flow without adding new business scenarios or infrastructure. Plan at least 420 active work minutes (7 hours), with a 7–10 hour planning envelope; record actual time, not estimates presented as execution. This target does not replace acceptance criteria or authorize idle work. Follow the duration, resume, early-completion, and host-limit rules in `AGENTS.md` and `goal.md`.
 
-`경영주 규칙 저장 → 2+1 시뮬레이션 → POS 행동 검증 → 근거 기반 Q&A → 체크리스트 → 경영주 대시보드`
+Real Gemini calls, deployment, and Git publication are pre-authorized for this run under the YOLO Execution Authorization in `AGENTS.md`; do not request separate confirmation. Keep repeatable regression checks in `AI_DEMO_MODE=true`, which must force the deterministic path even when a local key is present. Run a separate bounded live Gemini smoke check when credentials are available, then publish and deploy after the local gates pass using verified project targets. Record remote commit, deployment URL/status, and live API results independently from local evidence. Missing credentials, targets, or access must be recorded as concrete external blockers and must not stop independent demo-mode work; `not run` never means passed.
 
-P1의 추가 시나리오, 시간대별 체크리스트, 질문 분류, 상세 진도, 교육 전후 분석은 P0가 검증된 뒤에만 시작한다.
+## 11. Prioritization and Scope-reduction Rules
 
-## 12. 명시적 제외 범위
+If time is limited, reduce the number of screens and scenarios while preserving the following connections:
 
-- 실제 GS25 POS·재고·매출·결제·발주·환불·사내 시스템 연동
-- 실제 상품 행사나 내부 매뉴얼 사용
-- 정식 인증과 개인정보 기반 계정
-- 음성·영상 분석
-- 근무자 감시, 채용 적합성·근무 성과 자동 판정
-- 임금·근로계약·CCTV 관련 확정적 법률 조언
-- 별도 장보기 추천 서비스
+`Save manager rules → 2+1 simulation → validate POS behavior → grounded Q&A → checklist → manager dashboard`
 
-## 13. 데모 안전장치
+P1 additions—more scenarios, time-based checklists, question classification, detailed progress, and pre/post-training analysis—require a separate scope decision after all extended P0 gates are verified. They are not automatic work to consume the seven-hour target.
 
-- 실제 Gemini 호출과 무관하게 전체 흐름을 재현할 수 있는 데모 모드를 유지한다.
-- 데모 데이터 초기화 버튼과 복구 가능한 Seed를 제공한다.
-- 합성 데이터 안내, AI 생성 답변 안내, 관리자 확인 필요 상태를 시각적으로 구분한다.
-- 라이브 데모와 동일한 핵심 흐름을 담은 예비 영상을 준비할 수 있도록 동선을 고정한다.
+## 12. Explicitly Out of Scope
+
+- Integration with actual GS25 POS, inventory, sales, payment, ordering, refunds, or internal systems
+- Use of real product promotions or internal manuals
+- Production authentication and accounts based on personal information
+- Voice or video analysis
+- Worker surveillance or automated decisions about hiring suitability or work performance
+- Definitive legal advice about wages, employment agreements, or CCTV
+- A separate grocery-shopping recommendation service
+
+## 13. Demo Safeguards
+
+- Maintain a demo mode that reproduces the full flow regardless of real Gemini calls.
+- Provide a demo-data reset button and a recoverable seed.
+- Visually distinguish synthetic-data notices, AI-generated answer notices, and administrator-confirmation states.
+- Keep the route through the product stable so a backup video can show the same core flow as the live demo.

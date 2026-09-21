@@ -1,0 +1,34 @@
+import { expect, test } from '@playwright/test';
+test('HTTP failure retains question and retry resolves once; pending prevents duplicates', async ({ page }) => {
+  await page.goto('/crew/questions');
+  await page.route('**/api/ai/qa', route => route.fulfill({ status: 503, body: 'SYNTHETIC_ERROR_CANARY' }));
+  await page.getByLabel('매장에 궁금한 점').fill('행사 문의는 POS 확인 후 안내');
+  await page.getByRole('button', { name: '질문하기', exact: true }).click();
+  await expect(page.getByRole('alert').filter({ hasText: '다시 질문' })).toBeVisible();
+  await expect(page.getByLabel('매장에 궁금한 점')).toHaveValue('행사 문의는 POS 확인 후 안내');
+  await expect(page.locator('body')).not.toContainText('SYNTHETIC_ERROR_CANARY');
+  await page.unroute('**/api/ai/qa');
+  let release!: () => void;
+  const gate = new Promise<void>(resolve => { release = resolve; });
+  let calls = 0;
+  await page.route('**/api/ai/qa', async route => { calls++; await gate; await route.continue(); });
+  await page.getByRole('button', { name: '질문하기', exact: true }).click();
+  await expect(page.getByRole('button', { name: '규칙 확인 중…' })).toBeDisabled();
+  await expect(page.getByRole('status').filter({ hasText: '찾고 있어요' })).toBeVisible();
+  release();
+  await expect(page.getByTestId('question-log')).toHaveCount(1);
+  await expect(page.getByTestId('question-log')).toContainText('데모 모드');
+  expect(calls).toBe(1);
+});
+test('customer HTTP failure keeps playable session and restores same session on retry', async ({ page }) => {
+  await page.route('**/api/ai/customer', route => route.fulfill({ status: 503, body: 'SYNTHETIC_PROVIDER_CANARY' }));
+  await page.goto('/crew/simulation');
+  await page.getByRole('button', { name: '연습 시작', exact: true }).click();
+  await expect(page.getByRole('alert').filter({ hasText: '연습 기록은 유지' })).toBeVisible();
+  await expect(page.getByLabel('고객에게 할 말')).toBeEnabled();
+  await page.unroute('**/api/ai/customer');
+  await page.getByRole('button', { name: '응답 다시 불러오기' }).click();
+  await expect(page.getByRole('button', { name: '응답 다시 불러오기' })).toHaveCount(0);
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('firstday.zip')!).sessions.length)).toBe(1);
+  await expect(page.locator('body')).not.toContainText('SYNTHETIC_PROVIDER_CANARY');
+});

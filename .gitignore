@@ -1,6 +1,7 @@
 # Dependencies and build output
 node_modules/
 .next/
+.firstday-build/
 out/
 coverage/
 playwright-report/
@@ -16,3 +17,5 @@ test-results/
 .DS_Store
 Thumbs.db
 *.log
+*.tsbuildinfo
+.vercel/
