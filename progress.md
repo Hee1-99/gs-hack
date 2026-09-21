@@ -4,13 +4,13 @@
 
 ## Current Status
 
-- Phase: Implementation in progress
-- Last completed task: Task 13 — Consistency; Gemini live blocker resolved
-- Next task: Task 14 final usability regression, then Tasks 15–16
-- Current blockers: None known for Gemini; Tasks 14–16 remain unverified.
-- Gemini verification status: Customer, coach and Q&A live calls passed on production server after fixing SDK deadline.
-- Deployment verification status: Not performed; deployment and Git publication are now pre-authorized for the implementation run under AGENTS.md. Host permissions remain unchanged.
-- Implementation run status: Active; see measured checkpoints below.
+- Phase: P0 complete
+- Last completed task: Task16 — verified release
+- Next task: None in authorized P0 scope
+- Current blockers: None
+- Gemini verification status: Customer, coach and Q&A passed live on public deployment.
+- Deployment verification status: READY at https://gs-hack-seven.vercel.app; deployed browser journey passed both widths.
+- Implementation run status: completed-before-duration-target; see final measured checkpoint.
 - Prompt audit status: 47/47 structural document checks passed; see `docs/ralph-long-run-audit.md`
 
 ## Iteration Log
@@ -293,3 +293,27 @@
 - Accounts/targets: GitHub authenticated Hee1-99, public origin Hee1-99/gs-hack main remote21607dd. Vercel CLI whoami hee1-99; scopehee1-99s-projects project list has no gs-hack. New project will use verified repository name in that existing scope; no unrelated project modification.
 - Timing: runStartedAt: 2026-09-21T09:05:58.258Z; lastCheckpointAt: 2026-09-21T10:25:00.272Z; active interval: 6.12 minutes; activeWorkMinutes: 71.36; excludedPauseMinutes: at least1.29 plus earlier unknown gap; uncertainty: prior gap excluded.
 - Next checkbox: Task16 Step5 — commit/push verified staged files, link project, configure server-only key via stdin, deploy with build demo=true/runtime live=false flag distinction, verify remote URLs and deployed flow. No app server running.
+
+### Iteration 24 — 2026-09-21T10:31:51.034Z — publication and deployment
+
+- Selected task: Task16 Step5. Git implementation bb4e9f2 and deployment configuration9871955 pushed to verified origin main. Vercel project gs-hack created in hee1-99s-projects; projectId prj_XnDVliKpSvI7m6jtqUVrRKok5xOB.
+- CLI link automatically appended an OIDC variable to ignored .env.local; existing Gemini key remained present. No secret printed. Key/model/demo runtime variables configured via stdin as sensitive production variables. Redundant CLI-added ignore entries removed; existing exclusions retained.
+- Dry upload:93 source/config files, .env.local, both build directories, node_modules and evidence excluded.
+- First remote build compiled and typechecked but packaging failed: expected .next instead of configured .firstday-build. Root-cause count1; added matching outputDirectory to vercel.json. Second deployment running; no success claimed yet.
+- Timing: runStartedAt: 2026-09-21T09:05:58.258Z; lastCheckpointAt: 2026-09-21T10:31:51.034Z; active interval: 6.85 minutes; activeWorkMinutes: 78.21; excludedPauseMinutes: at least1.29 plus earlier unknown gap; uncertainty: prior interrupted gap excluded.
+- Next checkbox: Task16 Step5 — await deployment then deployed live smoke and fresh browser full flow. No local server running.
+
+### Iteration 25 — 2026-09-21T10:34:29.076Z — final release closure
+
+- Selected task: Task16 Steps5–6, complete. All Tasks1–16 and PRD P0 criteria have evidence in docs/verification-matrix.md.
+- Git: origin https://github.com/Hee1-99/gs-hack main confirmed987195543784ce66441cf69d934ab42ead29fd34 (implementation bb4e9f2 plus deployment configuration). Final evidence-only commit follows; deployed application source unchanged.
+- Deployment: dpl_6uuDzAKtfHYFht7sCWVAayNccrGH READY verified by CLI inspect; https://gs-hack-seven.vercel.app aliases https://gs-hack-p6t59pbuo-hee1-99s-projects.vercel.app. Remote production build compiled/typechecked/generated pages and packaged successfully after output-directory correction. Build forced demo; runtime real Gemini.
+- Live smoke: node scripts/live-smoke.mjs https://gs-hack-seven.vercel.app exit0; customer200 gemini, coach200 gemini, Q&A200 live; rule grounds and3,000원 fact valid.
+- Deployed E2E: npx playwright test --config .vercel/remote.config.ts,2/2 passed32.7s, fresh contexts390x844 and1440x900, no retries. Same demo-flow.spec.ts;120s scenario/25s expect timeouts for network, one worker, remote baseURL and no local webServer. Exact dashboard2,1/4,2,2; snapshotsv2; incorrect answer differs from POS retry. Screenshots docs/evidence/demo-flow-deployed-*.png; mobile rendered result and public home visually inspected.
+- Verification-fixture failure: temporary config was initially placed inside Playwright outputDir and was cleared before workers read it; moved config to ignored .vercel, separate outputDir; both cases then passed. No product workaround or assertion weakening.
+- Prior final local gate remains59 unit/integration, build and32 full production-server E2E passed. No source change since that gate; remote-only output configuration independently passed actual Vercel build.
+- Root-cause failures: output-directory mismatch resolved after1; remote config cleanup resolved after1; no unresolved failures. No local server running. Existing CLI-linked .env.local remains ignored; secrets never printed.
+- Known limits: synthetic demo, browser-local records, no authentication or cross-device synchronization. AI expression is constrained; deterministic facts/evaluation remain separate. P1 not started.
+- Timing: runStartedAt: 2026-09-21T09:05:58.258Z; lastCheckpointAt: 2026-09-21T10:34:29.076Z; active interval: 2.63 minutes; activeWorkMinutes: 80.84; excludedPauseMinutes: at least1.29 plus earlier unknown gap; uncertainty: earlier interrupted interval conservatively excluded.
+- Outcome: completed-before-duration-target. All required gates and one bounded residual review finished before420 minutes; no artificial wait or extra scope.
+- Next checkbox: None. Final action: publish this evidence-only commit and verify remote SHA/clean working tree.

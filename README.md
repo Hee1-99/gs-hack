@@ -43,3 +43,10 @@ E2E는 기존 개발 서버를 재사용하지 않고 포트 3100에서 프로�
 - 데이터 초기화는 확인 후 이 앱의 저장 키만 덮어씁니다. 브라우저 데이터를 지우면 기록이 사라집니다.
 
 현재 구현 단계와 실제 검증 결과는 `progress.md`와 `docs/verification-matrix.md`를 참조하세요. 테스트 결과를 실서비스·실제 Gemini 검증으로 해석하지 않습니다.
+
+## Published demo
+
+- App: https://gs-hack-seven.vercel.app
+- Source: https://github.com/Hee1-99/gs-hack
+- Production uses real Gemini with deterministic fallback; automated regression stays forced demo. Verified customer, coach and grounded Q&A live, plus full desktop/mobile deployed journeys on2026-09-21. Data remains local to each browser.
+- Vercel uses the Next.js preset and `.firstday-build` output. Deploy with `vercel deploy --prod --build-env AI_DEMO_MODE=true --env AI_DEMO_MODE=false`; configure the existing key as a sensitive server-side production variable. Never upload `.env.local`.

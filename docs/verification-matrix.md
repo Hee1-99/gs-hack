@@ -20,7 +20,7 @@ Final local gate (2026-09-21): 59 unit/integration tests, production build, and 
 | Event ordering and duplicate prevention | engine/rule-validator tests, simulation.spec.ts | Early answer remains violation; confirmation must precede final answer; no duplicate completion |
 | AI failure and secret boundaries | boundary/route/provider tests; check-secret-boundary.mjs | Bounded requests, safe fallback, no raw error, zero secret hits |
 | Keyboard/mobile/navigation/reset | usability.spec.ts, navigation.spec.ts | 390x844 and 1440x900; Tab journey, focus return, direct/back/refresh pass |
-| Tasks10–16 release gates | task.md, progress.md | Local gates complete; external release pending |
+| Tasks10–16 release gates | task.md, progress.md | All local and external release gates passed |
 | Honest recorded evidence | progress.md historical results and failure screenshots | Only observed passes checked; prior failures retained |
 
 ## Task checkbox mapping
@@ -43,7 +43,7 @@ Final local gate (2026-09-21): 59 unit/integration tests, production build, and 
 | 14 | All | Keyboard/reading-order/viewport evidence; Iteration21 |
 | 15 | All | Production server configuration and full navigation regression; Iteration22 |
 | 16 | Steps1–4 | Bounded residual review, demo script, canary/staged scan, final59/32; Iteration23 |
-| 16 | Steps5–6 | Publication/deployment and final timing pending |
+| 16 | Steps5–6 | Production READY, remote commit verified, deployed full journey2/2; Iteration25 |
 
 ## Residual review and known limits
 
@@ -58,7 +58,7 @@ P0 uses one browser's local data with demo role switching; no authentication, cr
 | Check | Result |
 |---|---|
 | Local live Gemini | Three HTTP200 genuine live responses, grounded and fixed-price-valid; Iteration20 |
-| Git | Verified Hee1-99/gs-hack main; publication pending |
-| Vercel | Verified hee1-99 account and hee1-99s-projects scope; deployment pending |
-| Deployed browser journey | Pending |
-| Duration | Measured active intervals in progress.md; no seven-hour claim |
+| Git | https://github.com/Hee1-99/gs-hack main; implementation bb4e9f2, deployment config9871955 confirmed remotely |
+| Vercel | https://gs-hack-seven.vercel.app; dpl_6uuDzAKtfHYFht7sCWVAayNccrGH READY |
+| Deployed browser journey | Both viewports passed; demo-flow-deployed-{desktop,mobile}.png; actual Gemini customer/coach/Q&A HTTP200 with valid grounds |
+| Duration | completed-before-duration-target; measured intervals in progress.md, no artificial waiting |

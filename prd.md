@@ -158,7 +158,7 @@ Manage rules, scenarios, and user actions as separate structures. Do not duplica
 - [x] Event ordering, wrong-product lookups, duplicate submissions, retries, and immutable rule snapshots are verified deterministically.
 - [x] Mocked AI timeout, quota, malformed output, and contradictory facts cannot alter deterministic evaluation or leak raw provider errors.
 - [x] The complete flow is verified at mobile and desktop widths, with keyboard navigation and a confirmed reset, against the production server.
-- [ ] Tasks 10–16 in `task.md` pass and `docs/verification-matrix.md` maps each P0 criterion to actual evidence.
+- [x] Tasks 10–16 in `task.md` pass and `docs/verification-matrix.md` maps each P0 criterion to actual evidence.
 - [x] No item is marked complete unless it actually passed.
 
 ### Extended P0 Run Contract
