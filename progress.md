@@ -548,3 +548,12 @@
 - Visual inspection confirmed bundled `storeSans` typography, consistent cyan/white rounded surfaces, readable solid login card, blurred owner sections behind it and no horizontal overflow. The preview has computed `blur(4.5px)`, `aria-hidden=true` and `inert=true`. Temporary viewport override was reset and server3101 stopped.
 - Timing: originalrunStartedAt2026-09-21T09:05:58.258Z; lastCheckpointAt:2026-09-22T02:20:38.8108920+09:00; measuredactiveinterval:3.89 minutes; cumulativeactiveWorkMinutes:250.88. Earlier unmeasured Task24 work remains excluded.
 - Exact next checkbox: Task24 Step5 stage only the verified source/docs, publish to `origin/main`, deploy the Vercel production target and inspect a fresh signed-out production session. User-owned crawl audit remains untouched.
+
+### Iteration50 — 2026-09-22T02:22:41+09:00 — Task24 published and live
+
+- Published application commit `37f2b47ad758a631db650d2e6fa4bc144ec92ddb` to `origin/main`; the remote ref matched exactly. User-owned untracked `docs/evidence/gs25-training-crawl-audit.json` remained excluded.
+- Vercel deployment `dpl_8ww1oTrD5uMgrSnEWraEcHbncmRw` reached READY. Immutable deployment: https://gs-hack-44fsc8lzx-hee1-99s-projects.vercel.app ; production alias: https://gs-hack-seven.vercel.app .
+- Fresh signed-out Edge Computer Use visually confirmed the production overlay and blurred workspace. Rendered checks confirmed1080px content width, bundled `storeSans`, `blur(4.5px)`, inert and aria-hidden preview, placeholder-only values, visible login prompt and no horizontal overflow.
+- Task24 all five checkboxes are verified. Outcome: completed-before-duration-target; the requested design alignment, blurred functional preview, privacy boundary, responsive verification and deployment are complete.
+- Timing: originalrunStartedAt2026-09-21T09:05:58.258Z; lastCheckpointAt:2026-09-22T02:22:41.6856461+09:00; measuredactiveinterval:2.05 minutes; cumulativeactiveWorkMinutes:252.93. Stopped and unmeasured gaps remain excluded.
+- Nextcheckbox:none. Finalaction:push this documentation-only closure and verify remote SHA; no additional deploy is needed because the live artifact contains `37f2b47`.

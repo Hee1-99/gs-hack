@@ -511,4 +511,4 @@ These are not part of this long-running P0 prompt. Do not automatically consume 
 - [x] **Step 2: Add a failing regression for the blurred preview, inaccessible placeholder layer and login overlay.**
 - [x] **Step 3: Build the privacy-safe preview with consistent width, typography, spacing and responsive layout.**
 - [x] **Step 4: Run full tests/build and inspect desktop/mobile in a real signed-out browser.**
-- [ ] **Step 5: Publish, deploy and verify the production alias and remote commit.**
+- [x] **Step 5: Publish, deploy and verify the production alias and remote commit.**
