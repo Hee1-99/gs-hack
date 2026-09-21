@@ -500,3 +500,15 @@ These are not part of this long-running P0 prompt. Do not automatically consume 
 - [x] **Step 3: Verify loading, signed-out, crew and owner states with focused and full automated tests.**
 - [x] **Step 4: Run the production build and inspect the landing-to-owner flow in a real signed-out browser.**
 - [x] **Step 5: Publish, deploy and verify the corrected production owner entry.**
+
+## Task 24: Blurred Owner Login Preview
+
+**Depends on:** Task 23
+
+**Deliverable:** Replace the oversized signed-out text panel with a responsive, blurred and non-personal owner-workspace preview plus a centered login prompt.
+
+- [x] **Step 1: Reproduce the mismatched typography and full-width signed-out panel from the supplied screenshot.**
+- [x] **Step 2: Add a failing regression for the blurred preview, inaccessible placeholder layer and login overlay.**
+- [x] **Step 3: Build the privacy-safe preview with consistent width, typography, spacing and responsive layout.**
+- [x] **Step 4: Run full tests/build and inspect desktop/mobile in a real signed-out browser.**
+- [ ] **Step 5: Publish, deploy and verify the production alias and remote commit.**

@@ -43,3 +43,5 @@ Task21 is the current authoritative request: make checklist progress date-specif
 Task22 is the current visual request: replace the raised simulator icon in the mobile LNB with a symbol that reads as interactive practice instead of a generic grid, while preserving navigation behavior, sizing and active-state styling.
 
 Task23 is the current access-state correction: a signed-out visitor may open the 경영주 관리 entry from the landing page, but must see only a plain explanation and login action. Local guest practice, questions, checklist progress, scores and other data must never appear as owner store data.
+
+Task24 supersedes Task23's plain signed-out presentation while retaining its privacy boundary: show a safe, non-personal owner-workspace preview at the normal content width, blur and disable it, and place a clear centered owner-login prompt above it. Match the established GStep Noto Sans KR typography and responsive layout.

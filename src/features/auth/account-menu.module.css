@@ -1,0 +1,32 @@
+.signedOut{position:relative;width:min(1080px,calc(100% - 48px));min-height:720px;margin:24px auto 0;isolation:isolate}
+.preview{filter:blur(4.5px);opacity:.46;pointer-events:none;user-select:none;padding-bottom:80px}
+.previewBar{display:flex;align-items:center;justify-content:space-between;min-height:48px;font-size:13px;color:#697483}
+.previewBar strong{color:#202731;font-size:14px}
+.previewTabs{display:flex;gap:26px;border-bottom:1px solid #e4e7ef;overflow:hidden}
+.previewTabs span{display:flex;align-items:center;gap:7px;min-height:49px;font-size:13px;color:#747a87;white-space:nowrap;border-bottom:2px solid transparent}
+.previewTabs .activeTab{color:#006b79;border-color:#02bfd3;font-weight:750}
+.previewHeading{display:flex;align-items:center;justify-content:space-between;gap:24px;margin:34px 0 24px}
+.previewHeading p{margin:0 0 8px;color:#008ba0;font-size:11px;font-weight:800;letter-spacing:1.6px}
+.previewHeading h2{margin:0 0 8px;font-size:31px;letter-spacing:-1.1px}
+.previewHeading>div>span{display:block;color:#747a87;font-size:13px}
+.accountButton{padding:10px 16px;border:1px solid #e4e7ef;border-radius:13px;background:#fcfdff;font-size:12px;font-weight:700}
+.previewActions{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
+.previewActions>div{display:flex;align-items:center;gap:13px;padding:17px 19px;border:1px solid #e6eaf1;border-radius:20px;background:#fcfdff}
+.previewActions>div>svg{box-sizing:content-box;padding:9px;border-radius:12px;background:#d9f8fb;color:#007f90}
+.previewActions span{display:grid;gap:3px}.previewActions strong{font-size:13px}.previewActions small{font-size:10px;color:#747a87}
+.previewStats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:0 0 34px}
+.previewStats>div{padding:20px;border:1px solid #e8ebf2;border-radius:23px;background:#fcfdff}
+.previewStats dt{display:flex;align-items:center;gap:7px;color:#697483;font-size:11px;font-weight:700}
+.previewStats dt svg{color:#008598}.previewStats dd{margin:12px 0 0;color:#006b79;font-size:31px;font-weight:800}
+.previewSection{margin-top:26px}.previewSection>div:first-child{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:15px}
+.previewSection h3{margin:0;font-size:20px}.previewSection>div:first-child>span{color:#747a87;font-size:11px}
+.previewRows{display:grid;grid-template-columns:1fr 1fr;gap:12px}.previewRows i{display:block;height:78px;border:1px solid #e7ebf2;border-radius:20px;background:#fcfdff}
+.previewRecord{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:14px;padding:18px;border:1px solid #e7ebf2;border-radius:22px;background:#fcfdff}
+.previewRecord i{display:block;width:44px;height:44px;border-radius:15px;background:#d9f8fb}.previewRecord>span{height:12px;max-width:220px;border-radius:8px;background:#e8ebf2}.previewRecord strong{font-size:26px;color:#006b79}
+.prompt{position:absolute;z-index:2;top:310px;left:50%;width:min(440px,calc(100% - 40px));transform:translate(-50%,-50%);padding:34px 34px 32px;border:1px solid #dce7eb;border-radius:28px;background:#fcfdff;box-shadow:0 24px 70px #33425c24;text-align:center}
+.lockIcon{display:grid;place-items:center;width:52px;height:52px;margin:0 auto 18px;border-radius:18px;background:#d9f8fb;color:#007f90}
+.prompt>p{margin:0 0 9px;color:#008598;font-size:11px;font-weight:800;letter-spacing:1.5px}
+.prompt h1{margin:0;font-size:27px;letter-spacing:-.9px;line-height:1.42}
+.prompt>span:not(.lockIcon){display:block;max-width:34ch;margin:14px auto 23px;color:#697483;font-size:13px;line-height:1.75}
+.prompt .button{min-width:168px;border-radius:14px;background:#02b8cd;border-color:#02b8cd;color:#102f38}
+@media(max-width:700px){.signedOut{width:calc(100% - 32px);min-height:690px;margin-top:12px}.previewBar{min-height:40px}.previewTabs{gap:18px}.previewTabs span{min-height:45px;font-size:11px}.previewTabs span:nth-child(4){display:none}.previewHeading{align-items:flex-start;margin:27px 0 18px}.previewHeading h2{font-size:25px}.previewHeading>div>span,.accountButton{display:none}.previewActions{grid-template-columns:1fr;gap:10px}.previewActions>div{padding:14px}.previewStats{grid-template-columns:1fr 1fr;gap:10px}.previewStats>div{padding:16px}.previewStats dd{font-size:27px}.previewRows{grid-template-columns:1fr}.previewRows i:nth-child(2){display:none}.prompt{top:295px;padding:29px 24px 27px;border-radius:24px}.prompt h1{font-size:23px}.prompt>span:not(.lockIcon){font-size:12px}.prompt .button{width:100%}}

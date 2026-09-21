@@ -532,3 +532,19 @@
 - Task23 all five checkboxes are verified. Outcome: completed-before-duration-target; the requested signed-out empty state, regression coverage, publication and production verification are complete.
 - Timing: originalrunStartedAt2026-09-21T09:05:58.258Z; lastCheckpointAt:2026-09-22T02:06:19.9666983+09:00; measuredactiveinterval:3.10 minutes; cumulativeactiveWorkMinutes:246.99. Stopped and previously unmeasured gaps remain excluded.
 - Nextcheckbox:none. Finalaction:push this documentation-only closure and verify the remote SHA; no application redeploy is needed because deployment `dpl_7EGtCsg9vVjcJHAkHpNiJV9KfNmT` already contains `6afe099`.
+
+### Iteration48 — 2026-09-22T02:16:45+09:00 — Task24 design implementation
+
+- User supplied a screenshot of the plain signed-out owner panel and requested typography/width consistency plus a blurred functional preview beneath the owner-login prompt. Applied the `impeccable` product-register guidance after loading PRODUCT.md and DESIGN.md; the user screenshot satisfied the visual probe gate.
+- Added the regression first; focused auth test failed1/5 on the old plain panel. Replaced it with a static owner-workspace preview containing only labels and em-dash placeholders, never local/cloud records. The preview is blurred, non-interactive, `inert` and `aria-hidden`; the solid centered prompt says `경영주로 로그인하여 확인해 보세요` and links to `/login`.
+- New scoped CSS uses the established 1080px content width, bundled Noto Sans KR inheritance, cyan/tinted surfaces and desktop/mobile grids. Focused auth tests5/5 and TypeScript passed.
+- Task24 implementation timing starts at the first exact checkpoint 2026-09-22T02:16:45.5812283+09:00; earlier screenshot review and implementation time lacks an exact start timestamp and is excluded rather than estimated. Preserve cumulativeactiveWorkMinutes246.99.
+- Exact next checkbox: Task24 Step4 run plan/full tests/build, inspect signed-out desktop and390x844 mobile rendering with Computer Use, then publish and deploy. User-owned untracked crawl audit remains untouched.
+
+### Iteration49 — 2026-09-22T02:20:38+09:00 — Task24 local design gates
+
+- Verified document plan63/63, full unit/integration151/151, TypeScript and production build with21routes. Secret boundary inspected1,574files with no leak or tracked secret; whitespace check passed.
+- Computer Use verified the signed-out preview at the normal browser size plus explicit1440x900 and390x844 viewports. Desktop measured a1080px preview width and centered440px prompt; mobile measured a343px preview and303px prompt, with prompt bottom560 above the fixed navigation top762 and document scrollWidth375 within viewport390.
+- Visual inspection confirmed bundled `storeSans` typography, consistent cyan/white rounded surfaces, readable solid login card, blurred owner sections behind it and no horizontal overflow. The preview has computed `blur(4.5px)`, `aria-hidden=true` and `inert=true`. Temporary viewport override was reset and server3101 stopped.
+- Timing: originalrunStartedAt2026-09-21T09:05:58.258Z; lastCheckpointAt:2026-09-22T02:20:38.8108920+09:00; measuredactiveinterval:3.89 minutes; cumulativeactiveWorkMinutes:250.88. Earlier unmeasured Task24 work remains excluded.
+- Exact next checkbox: Task24 Step5 stage only the verified source/docs, publish to `origin/main`, deploy the Vercel production target and inspect a fresh signed-out production session. User-owned crawl audit remains untouched.

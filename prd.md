@@ -77,3 +77,5 @@ The mobile LNB uses a game-controller symbol for its raised simulator action so 
 ## Signed-out owner state — Task23
 
 The landing-page owner entry remains available as a product explanation. Until authentication resolves it shows a loading state; after a signed-out result it shows only what owners can review and a login action. It must not render browser-local practice attempts, questions, checklist status, scores, synthetic staff rows or owner navigation as store data. Signed-in owners retain the existing store-scoped workspace, while signed-in store managers retain the owner-only denial state.
+
+Task24 refines the signed-out state: display a static, privacy-safe preview of the owner workspace structure using placeholder values only. The preview is blurred, inert and hidden from assistive technology; a solid centered login card remains readable above it. Use the same 1080px content width, bundled Noto Sans KR, cyan accent, rounded surfaces and mobile breakpoints as the rest of GStep. No browser-local or cloud record may appear in the preview.
