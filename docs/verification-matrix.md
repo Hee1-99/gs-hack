@@ -111,3 +111,7 @@ Historical tables above describe the initial release. The current simulator-firs
 | Store/member/record RLS and invite restrictions | supabase/verify-rls.mjs exact migration executed locally11checks; live evidence separately recorded in progress.md |
 | Final local regression |125unit/integration, production build and56desktop/mobile E2E pass; full gate after ID/password and race fix |
 | Actual remote account journey and deployed AI | Latest Task19 release checkpoint in progress.md; never inferred from local results |
+
+Task19 deployed evidence: source f3425bffe1790e929b9e380e703f78e337a9bf27, deployment dpl_6TC3FWH3HYEu9uaU74fbFKQs69gL independently READY. Deployed navigation4/4; actual ID/password signup and store creation, login/logout/refresh, six-step course with Gemini written score100 and final100, remote checklist persistence, owner A record visibility and owner B isolation verified. Actual Gemini customer chat and70point evaluation persisted across refresh and were rendered in an independent owner browser. Screenshots: gstep-account-*.png. SDK role/store checks10/10 and local exact SQL11/11 are separate evidence.
+
+Bounded additional live stale-version conflict probe remains unverified:20second status0 on three direct executions, retries stopped, root cause unknown. This is not recorded as a successful conflict response or proof of no mutation. Details in supabase/README.md and progress.md. Normal save, live isolation and primary user journeys passed.

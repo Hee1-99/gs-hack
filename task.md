@@ -447,5 +447,5 @@ These are not part of this long-running P0 prompt. Do not automatically consume 
 - [x] **Step 2: Expand confirmed-manual training into chapters with objective and short-answer steps, deterministic time-aware scoring plus validated Gemini rubric scores, truthful grading animations and transparent final breakdown.**
 - [x] **Step 3: Implement bounded Gemini multi-turn customer scenarios and useful friendly Q&A with manual/general guidance clearly distinguished and expanded FAQs.**
 - [x] **Step 4: Implement Supabase login/signup, roles, store membership, RLS-isolated records and shared checklist/rules with explicit local demo fallback; verify auth/error/isolation code paths.**
-- [ ] **Step 5: Connect the intended Supabase project, apply reviewed schema and verify live role/store isolation and persisted records; leave blocked if connection details are unavailable.**
-- [ ] **Step 6: Integrate dashboard/navigation, run full local tests/build/E2E, inspect mobile/desktop, verify bounded real Gemini, publish and deploy available functionality; record live backend separately and all limitations/timing.**
+- [x] **Step 5: Connect the intended Supabase project, apply reviewed schema and verify live role/store isolation and persisted records; leave blocked if connection details are unavailable.**
+- [x] **Step 6: Integrate dashboard/navigation, run full local tests/build/E2E, inspect mobile/desktop, verify bounded real Gemini, publish and deploy available functionality; record live backend separately and all limitations/timing.**
