@@ -1,65 +1,62 @@
 import { expect, test } from '@playwright/test';
-test('shows omission, then improved POS retry and a mixed-product exception', async ({ page }, testInfo) => {
+import { trainingSteps } from '../../src/features/training/training-data';
+
+async function choose(page: import('@playwright/test').Page, index: number, wrong = false) {
+  const step = trainingSteps[index];
+  const choice = step.choices.find(item => wrong ? item.id !== step.correctChoiceId : item.id === step.correctChoiceId)!;
+  await page.getByRole('heading', { name: step.title, exact: true }).waitFor();
+  await page.getByRole('group', { name: 'POS 행동 선택' }).getByRole('button').filter({ hasText: choice.label }).click();
+}
+
+test('complete quiz keeps an incorrect action and improves the score on a POS retry', async ({ page }, testInfo) => {
   await page.goto('/crew/simulation');
-  await page.getByRole('button', { name: '연습 시작', exact: true }).click();
-  await expect(page.getByRole('heading', { name: '고객과의 대화' })).toBeVisible();
-  await page.getByLabel('안내할 내용').selectOption('apply');
-  await page.getByLabel('안내할 총액').fill('3000');
-  await page.getByLabel('고객에게 할 말').fill('행사가 적용돼요. 세 개에 삼천 원입니다.');
-  await page.getByRole('button', { name: '답변하고 결과 보기' }).click();
-  await expect(page.getByRole('heading', { name: '확인 순서를 다시 연습해요' })).toBeVisible();
-  await expect(page.getByTestId('result-lookup')).toContainText('미조회');
-  await expect(page.getByTestId('result-order')).toContainText('있음');
-  await page.getByRole('button', { name: '같은 상황 다시 연습' }).click();
-  await page.getByRole('button', { name: '캔커피 A 조회' }).click();
-  await expect(page.getByRole('status').filter({ hasText: '1,500원' })).toContainText('3,000원');
-  await page.getByLabel('안내할 내용').selectOption('apply');
-  await page.getByLabel('안내할 총액').fill('3000');
-  await page.getByLabel('고객에게 할 말').fill('POS에서 확인했어요. 행사 조건을 안내해 드릴게요.');
-  await page.getByRole('button', { name: '답변하고 결과 보기' }).click();
-  await expect(page.getByRole('heading', { name: '확인하고 안내했어요' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: '확인하고 안내했어요' })).toBeFocused();
-  await expect(page.getByRole('table', { name: '이전 연습과 비교' })).toContainText('미조회');
-  await expect(page.getByRole('table', { name: '이전 연습과 비교' })).toContainText('조회함');
-  await page.screenshot({ path: `docs/evidence/simulation-${testInfo.project.name}.png`, fullPage: true });
-  await page.getByRole('button', { name: '다른 상품을 섞는 상황 연습' }).click();
-  await page.getByRole('button', { name: '캔커피 A 조회' }).click();
-  await page.getByRole('button', { name: '경영주 확인 요청', exact: true }).click();
-  await page.getByLabel('안내할 내용').selectOption('check_manager');
-  await page.getByLabel('고객에게 할 말').fill('경영주에게 먼저 확인해 드릴게요.');
-  await page.getByRole('button', { name: '답변하고 결과 보기' }).click();
-  await expect(page.getByRole('heading', { name: '확인하고 안내했어요' })).toBeVisible();
+  await page.getByRole('button', { name: '연습 시작하기', exact: true }).click();
+  for (let index = 0; index < trainingSteps.length; index++) {
+    await choose(page, index, index === 3);
+    if (index === 3) await page.screenshot({ path: `docs/evidence/quiz-pos-${testInfo.project.name}.png`, fullPage: true });
+    await page.getByRole('button', { name: '이 행동으로 진행' }).click();
+    await expect(page.getByRole('heading', { name: index === 3 ? '이 단계는 다시 기억해 두세요.' : '좋아요, 정확한 순서예요!' })).toBeVisible();
+    await page.getByRole('button', { name: index === trainingSteps.length - 1 ? '최종 점수 보기' : '다음 단계', exact: true }).click();
+  }
+  await expect(page.getByRole('heading', { name: '끝까지 해냈어요!' })).toBeFocused();
+  await expect(page.locator('.score-display')).toHaveText('92/ 100점');
+  await page.getByRole('button', { name: '다시 연습하기' }).click();
+  for (let index = 0; index < trainingSteps.length; index++) {
+    await choose(page, index);
+    await page.getByRole('button', { name: '이 행동으로 진행' }).click();
+    await page.getByRole('button', { name: index === trainingSteps.length - 1 ? '최종 점수 보기' : '다음 단계', exact: true }).click();
+  }
+  await expect(page.locator('.score-display')).toHaveText('100/ 100점');
   await page.reload();
-  await expect(page.getByRole('heading', { name: '확인하고 안내했어요' })).toBeVisible();
-  const sessions = await page.evaluate(() => JSON.parse(localStorage.getItem('firstday.zip')!).sessions);
-  expect(sessions).toHaveLength(3);
-  expect(sessions.filter((session: { status: string }) => session.status === 'completed')).toHaveLength(3);
+  await page.getByRole('button', { name: '지난 결과 보기' }).click();
+  await expect(page.locator('.score-display')).toHaveText('100/ 100점');
+  const attempts = await page.evaluate(() => JSON.parse(localStorage.getItem('firstday-training-v1')!).attempts);
+  expect(attempts).toHaveLength(2);
+  expect(attempts.map((attempt: { score: number }) => attempt.score)).toEqual([92, 100]);
+  await page.screenshot({ path: `docs/evidence/quiz-result-${testInfo.project.name}.png`, fullPage: true });
 });
 
-test('active snapshot survives manager edits, POS navigation and double submission', async ({ page }) => {
-  await page.goto('/crew/simulation');
-  await page.getByRole('button', { name: '연습 시작', exact: true }).dblclick();
-  await page.getByRole('button', { name: '캔커피 A 조회' }).click();
-  const before = await page.evaluate(() => JSON.parse(localStorage.getItem('firstday.zip')!).sessions[0]);
-  await page.getByRole('link', { name: '경영주로 전환' }).click();
-  const form = page.getByRole('form', { name: '행사 문의는 POS 확인 후 안내' });
-  await form.getByLabel('규칙 내용').fill('수정 후 새로운 안내');
-  await form.getByRole('button', { name: '규칙 저장' }).click();
-  await page.getByRole('link', { name: '스토어 매니저로 전환' }).click();
-  await page.getByRole('link', { name: '응대 연습', exact: true }).click();
-  await expect(page.getByText('시작 시 매뉴얼 v1 적용')).toBeVisible();
-  await expect(page.getByText('캔커피 A POS 조회', { exact: true })).toBeVisible();
-  await page.getByLabel('안내할 총액').fill('3000');
-  await page.getByLabel('고객에게 할 말').fill('확인한 금액입니다.');
-  await page.getByRole('button', { name: '답변하고 결과 보기' }).dblclick();
-  await expect(page.getByRole('heading', { name: '확인하고 안내했어요' })).toBeVisible();
-  await page.getByRole('button', { name: '같은 상황 다시 연습' }).click();
-  await expect(page.getByText('시작 시 매뉴얼 v2 적용')).toBeVisible();
-  const sessions = await page.evaluate(() => JSON.parse(localStorage.getItem('firstday.zip')!).sessions);
-  expect(sessions).toHaveLength(2);
-  expect(sessions[0].snapshot).toEqual(before.snapshot);
-  expect(sessions[0].events.filter((event: { type: string }) => event.type === 'answer')).toHaveLength(1);
-  expect(sessions[1].previousAttemptId).toBe(sessions[0].id);
-  await page.goto('/manager/dashboard');
-  await expect(page.getByTestId('training-count')).toHaveText('1');
+test('hiring test resumes after refresh and hides feedback until the complete result', async ({ page }) => {
+  await page.goto('/crew/simulation?mode=test');
+  await page.getByLabel('테스트 참여자 별칭').fill('지원자 A');
+  await page.getByRole('button', { name: '테스트 시작하기', exact: true }).click();
+  for (let index = 0; index < trainingSteps.length; index++) {
+    await choose(page, index, index === 0);
+    await expect(page.locator('.training-feedback')).toHaveCount(0);
+    await expect(page.getByText(trainingSteps[index].explanation, { exact: true })).toHaveCount(0);
+    await page.getByRole('button', { name: index === trainingSteps.length - 1 ? '제출하고 점수 보기' : '답 제출하고 다음 단계' }).click();
+    if (index === 2) {
+      await page.reload();
+      await page.getByRole('button', { name: '이어서 하기' }).click();
+      await expect(page.getByRole('heading', { name: trainingSteps[3].title, exact: true })).toBeVisible();
+    }
+  }
+  await expect(page.locator('.score-display')).toHaveText('92/ 100점');
+  await expect(page.getByText('지원자 A님의 테스트 결과예요.')).toBeVisible();
+  await page.locator('.review-incorrect summary').click();
+  await expect(page.getByText(trainingSteps[0].explanation, { exact: true })).toBeVisible();
+  const attempts = await page.evaluate(() => JSON.parse(localStorage.getItem('firstday-training-v1')!).attempts);
+  expect(attempts).toHaveLength(1);
+  expect(attempts[0].answers).toHaveLength(12);
+  expect(attempts[0]).toMatchObject({ mode: 'test', candidateName: '지원자 A', score: 92, status: 'completed' });
 });

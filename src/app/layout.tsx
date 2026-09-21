@@ -7,8 +7,8 @@ export const metadata: Metadata = { title: '첫날.zip | 첫 근무를 위한 �
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <html lang="ko"><body>
     <a className="skip-link" href="#main">본문으로 건너뛰기</a>
-    <header className="site-header"><Link className="brand" href="/" aria-label="첫날.zip 홈"><span className="brand-mark" aria-hidden>zip</span>첫날<span className="brand-suffix">.zip</span></Link><span className="demo-label">가상 매장 체험</span></header>
+    <header className="site-header"><Link className="brand" href="/" aria-label="첫날.zip 홈"><span className="brand-mark" aria-hidden>zip</span>첫날<span className="brand-suffix">.zip</span></Link><div className="header-actions"><span className="demo-label">가상 매장 체험</span><Link href="/manager/dashboard">경영주 관리</Link></div></header>
     <main id="main"><StoreProvider>{children}</StoreProvider></main>
-    <footer className="site-footer"><strong>연습은 가볍게, 첫날은 든든하게.</strong><p>실제 GS25 운영 정보가 아닌 합성 데이터입니다. 실제 점포 업무에는 사용하지 마세요.</p><span>로그인 없는 데모용 역할 전환 · 기록은 이 브라우저에 보관</span></footer>
+    <footer className="site-footer"><strong>연습은 가볍게, 첫날은 든든하게.</strong><p>공개 GS25 교육 자료 기반 · 거래·상품은 합성 데이터 · 실제 POS와 연결되지 않습니다.</p><span>로그인 없는 체험판 · 기록은 이 브라우저에 보관</span></footer>
   </body></html>;
 }

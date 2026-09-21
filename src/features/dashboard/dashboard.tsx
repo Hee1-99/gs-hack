@@ -1,15 +1,42 @@
 'use client';
 import Link from 'next/link';
-import { ArrowUpRight, MessageCircle } from 'lucide-react';
-import { useStore, StoreLoading } from '@/data/store-provider';
-import { summarizeDashboard } from './dashboard-summary';
-import { ResetData } from '@/components/reset-data';
+import { useState } from 'react';
+import { ArrowRight, Check, ChevronDown, ClipboardCheck, ListChecks, SlidersHorizontal, X } from 'lucide-react';
+import { useTrainingStore } from '@/features/training/training-store';
+import { trainingSteps } from '@/features/training/training-data';
+import { summarizeTraining } from './training-summary';
+import styles from './dashboard.module.css';
+
+type Filter = 'all' | 'practice' | 'test';
 export function Dashboard() {
-  const store = useStore(); if (!store) return <StoreLoading/>;
-  const summary = summarizeDashboard(store.state);
-  return <><div className="page-heading"><p className="eyebrow">MAKE THE NEXT FIRST DAY EASIER</p><h1>우리 매장의 오늘</h1><p>{store.state.store.name} · 연습과 업무에서 필요한 도움을 살펴봐요.</p></div><dl className="dashboard-stats"><div><dt>완료한 연습</dt><dd data-testid="training-count">{summary.completedTraining}</dd><span>재도전을 포함한 완료 횟수</span></div><div><dt>완료한 업무</dt><dd data-testid="checklist-count">{summary.checklistDone} / {summary.checklistTotal}</dd><span>현재 등록된 업무 기준</span></div><div><dt>누적 질문</dt><dd data-testid="question-count">{summary.questions}</dd><span>이 브라우저에 남긴 질문</span></div><div><dt>확인 필요</dt><dd data-testid="needs-manager-count">{summary.needsManager}</dd><span>미해결 질문 + 확인 요청 업무</span></div></dl>
-    <div className="dashboard-grid"><section aria-labelledby="unresolved-heading"><div className="section-heading"><h2 id="unresolved-heading">매뉴얼에 보완할 질문</h2><span className="pill">{summary.unresolved.length}개</span></div>{!summary.unresolved.length ? <div className="empty-state"><MessageCircle size={26} aria-hidden/><h3>아직 미해결 질문이 없어요</h3><p>규칙에서 답을 찾지 못한 질문이 이곳에 모여요.</p></div> : <ul className="review-list">{summary.unresolved.map(question => <li key={question.id}><span className="pill warning-pill">경영주 확인 필요</span><h3>{question.question}</h3><p>질문 당시 답할 규칙이 없거나 근거가 명확하지 않았어요.</p><Link className="text-link" href="/manager/manual">매뉴얼 보완하기 <ArrowUpRight size={14} aria-hidden/></Link></li>)}</ul>}</section>
-    <section aria-labelledby="needs-heading"><div className="section-heading"><h2 id="needs-heading">함께 확인할 업무</h2><span className="pill">{summary.needsItems.length}개</span></div>{!summary.needsItems.length ? <div className="empty-state"><h3>현재 확인 요청이 없어요</h3><p>체크리스트에서 도움이 필요한 항목을 볼 수 있어요.</p></div> : <ul className="review-list">{summary.needsItems.map(item => <li key={item.id}><span className="small-note">{item.category}</span><h3>{item.title}</h3><p>{item.description}</p></li>)}</ul>}</section></div>
-    <section className="recent-training" aria-labelledby="recent-heading"><div className="section-heading"><h2 id="recent-heading">최근 연습 기록</h2><span className="small-note">완료와 진행 상태를 확인해요</span></div>{!summary.sessions.length ? <p className="empty-state">스토어 매니저가 연습을 시작하면 기록이 나타나요.</p> : <div className="table-scroll"><table><thead><tr><th scope="col">연습 상황</th><th scope="col">진행 상태</th><th scope="col">사용한 규칙</th><th scope="col">시작 시각</th></tr></thead><tbody>{[...summary.sessions].reverse().map(session => <tr key={session.id}><th scope="row">{session.scenario.title}{session.previousAttemptId && <span className="small-note"> · 재도전</span>}</th><td>{session.status === 'completed' ? '연습 완료' : '진행 중'}</td><td>{session.snapshot.rules.filter(rule => session.scenario.ruleIds.includes(rule.id)).map(rule => `v${rule.version}`).join(', ')}</td><td><time dateTime={session.createdAt}>{new Date(session.createdAt).toLocaleString('ko-KR')}</time></td></tr>)}</tbody></table></div>}</section><ResetData/>
+  const training = useTrainingStore();
+  const [filter, setFilter] = useState<Filter>('all');
+  if (!training.ready) return <p className="loading" role="status">연습 기록을 불러오고 있어요…</p>;
+  const summary = summarizeTraining(training.attempts);
+  const records = summary.recent.filter(attempt => filter === 'all' || attempt.mode === filter);
+  return <>
+    <div className="page-heading heading-with-action"><div><p className="eyebrow">경영주</p><h1>연습 기록과 점수</h1><p>스토어 매니저가 어떤 단계를 연습했는지 확인해요.</p></div><Link className="button secondary" href="/manager/checklist"><ListChecks size={18} aria-hidden />체크리스트 설정</Link></div>
+    {training.persistence === 'memory' && <p className="persistence-notice" role="alert">연습 기록을 임시로 보관하고 있어요. 새로고침하면 기록이 사라질 수 있어요.</p>}
+    {training.persistence === 'recovered' && <p className="persistence-notice" role="status">저장된 연습 기록을 읽지 못해 빈 기록으로 복구했어요.</p>}
+    <dl className={styles.stats}>
+      <div><dt>완료한 연습·테스트</dt><dd data-testid="training-count">{summary.completed}<span>회</span></dd></div>
+      <div><dt>평균 점수</dt><dd data-testid="training-average">{summary.averageScore ?? '—'}<span>{summary.averageScore === null ? '완료 후 표시' : '/ 100'}</span></dd></div>
+      <div><dt>완료한 구인 테스트</dt><dd>{summary.tests}<span>회</span></dd></div>
+      <div><dt>진행 중</dt><dd>{summary.active}<span>회</span></dd></div>
+    </dl>
+    <section aria-labelledby="records-heading">
+      <div className={styles.recordsHeading}><h2 id="records-heading">최근 기록</h2><div className={styles.filters} role="group" aria-label="기록 유형">{([{ value: 'all', label: '전체' }, { value: 'practice', label: '연습' }, { value: 'test', label: '구인 테스트' }] as const).map(option => <button key={option.value} aria-pressed={filter === option.value} onClick={() => setFilter(option.value)}>{option.label}</button>)}</div></div>
+      {!records.length ? <div className={styles.empty}><ClipboardCheck size={36} aria-hidden /><h3>{filter === 'all' ? '아직 연습 기록이 없어요' : `${filter === 'test' ? '구인 테스트' : '연습'} 기록이 없어요`}</h3><p>스토어 매니저가 시뮬레이터를 진행하면 단계별 결과가 여기에 저장돼요.</p><Link href="/crew/simulation" className="button">시뮬레이터 열기<ArrowRight size={16} aria-hidden /></Link></div> : <div className={styles.records}>{records.map(attempt => <details key={attempt.id} className={styles.record}>
+        <summary><span className={styles.avatar} aria-hidden>{attempt.candidateName.slice(0, 1)}</span><span className={styles.recordIdentity}><strong>{attempt.candidateName}</strong><span>{attempt.mode === 'test' ? '구인 테스트' : '연습'} · <time dateTime={attempt.startedAt}>{new Date(attempt.startedAt).toLocaleString('ko-KR', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</time></span></span><span className={styles.score}>{attempt.status === 'completed' ? <><strong>{attempt.score}</strong><span>점</span></> : <span className={styles.inProgress}>진행 중<br />{attempt.answers.length} / {trainingSteps.length}단계</span>}</span><ChevronDown size={18} aria-hidden /></summary>
+        <div className={styles.resultBody}><p className={styles.resultLabel}>{attempt.status === 'completed' ? `${attempt.answers.filter(answer => answer.correct).length}개 정답 · ${trainingSteps.length}개 단계 완료` : `${attempt.answers.length}개 단계 응답 · 완료 후 점수가 표시돼요`}</p>
+          {!attempt.answers.length ? <p className="small-note">아직 제출한 답변이 없어요.</p> : <ol className={styles.steps}>{attempt.answers.map(answer => {
+            const step = trainingSteps.find(item => item.id === answer.stepId);
+            return <li key={answer.stepId}><span className={answer.correct ? styles.correct : styles.incorrect}>{answer.correct ? <Check size={15} aria-hidden /> : <X size={15} aria-hidden />}<span className="sr-only">{answer.correct ? '정답' : '오답'}</span></span><div><strong>{step?.title ?? answer.stepId}</strong><p>{step?.choices.find(choice => choice.id === answer.choiceId)?.label ?? '선택한 답변'}</p>{step && <a href={step.source.url} target="_blank" rel="noreferrer">교육 근거 · {step.source.title}</a>}</div></li>;
+          })}</ol>}
+        </div>
+      </details>)}</div>}
+      <p className={styles.note}>이 브라우저에 저장된 기록이에요. 점수는 교육 내용의 이해도를 확인하는 참고 자료이며, 채용 적합성을 자동 판정하지 않아요.</p>
+    </section>
+    <Link href="/manager/manual" className={styles.settings}><SlidersHorizontal size={18} aria-hidden /><span><strong>매장 추가 규칙</strong><span>우리 매장에만 필요한 안내를 덧붙여요.</span></span><ArrowRight size={18} aria-hidden /></Link>
   </>;
 }

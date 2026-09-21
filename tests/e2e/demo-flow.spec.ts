@@ -1,35 +1,33 @@
 import { expect, test } from '@playwright/test';
-
-test('completes the manager-to-crew-to-manager demo loop', async ({ page }, info) => {
-  await page.goto('/manager/dashboard');
-  await page.getByRole('button', { name: '데모 데이터 초기화', exact: true }).click();
-  await page.getByRole('button', { name: '초기화하기', exact: true }).click();
-  await page.getByRole('link', { name: '매장 매뉴얼', exact: true }).click();
+import { trainingSteps } from '../../src/features/training/training-data';
+test('single browser full demo: rules, quiz failure and retry, Q&A, checklist and owner records', async ({ page }, info) => {
+  test.setTimeout(90_000);
+  await page.goto('/manager/manual');
   const rule = page.getByRole('form', { name: '행사 문의는 POS 확인 후 안내' });
   await rule.getByLabel('규칙 내용').fill('POS 조회 후 동일 상품 행사 조건을 천천히 안내해요.');
   await rule.getByRole('button', { name: '규칙 저장' }).click();
   await expect(rule).toContainText('v2');
-  await page.getByRole('link', { name: '스토어 매니저로 전환' }).click();
   await page.goto('/crew/simulation');
-  await page.getByRole('button', { name: '연습 시작', exact: true }).click();
-  await page.getByLabel('안내할 내용').selectOption('apply');
-  await page.getByLabel('안내할 총액').fill('4500');
-  await page.getByLabel('고객에게 할 말').fill('세 개에 4,500원입니다.');
-  await page.getByRole('button', { name: '답변하고 결과 보기' }).click();
-  await expect(page.getByRole('heading', { name: '확인 순서를 다시 연습해요' })).toBeVisible();
-  await page.getByRole('button', { name: '같은 상황 다시 연습' }).click();
-  await page.getByRole('button', { name: '캔커피 A 조회' }).click();
-  await page.getByLabel('안내할 내용').selectOption('apply');
-  await page.getByLabel('안내할 총액').fill('3000');
-  await page.getByLabel('고객에게 할 말').fill('POS에서 확인했어요. 같은 상품 세 개는 3,000원이에요.');
-  await page.getByRole('button', { name: '답변하고 결과 보기' }).click();
-  await expect(page.getByRole('heading', { name: '확인하고 안내했어요' })).toBeVisible();
+  await page.getByRole('button', { name: '연습 시작하기', exact: true }).click();
+  for (let attempt = 0; attempt < 2; attempt++) {
+    for (const [index, step] of trainingSteps.entries()) {
+      const choice = step.choices.find(c => attempt === 0 && index === 3 ? c.id !== step.correctChoiceId : c.id === step.correctChoiceId)!;
+      await page.getByRole('group', { name: 'POS 행동 선택' }).getByRole('button').filter({ hasText: choice.label }).click();
+      await page.getByRole('button', { name: '이 행동으로 진행' }).click();
+      await page.getByRole('button', { name: index === trainingSteps.length - 1 ? '최종 점수 보기' : '다음 단계', exact: true }).click();
+    }
+    await expect(page.locator('.score-display')).toContainText(attempt === 0 ? '92' : '100');
+    if (attempt === 0) await page.getByRole('button', { name: '다시 연습하기' }).click();
+  }
   await page.getByRole('link', { name: '매장 Q&A', exact: true }).click();
-  await expect(page.getByText('아직 질문이 없어요')).toBeVisible();
+  await page.getByText(/매장 추가 규칙 ·/).click();
   await page.getByRole('button', { name: '행사 문의는 POS 확인 후 안내', exact: true }).click();
   await expect(page.getByTestId('question-log').first()).toContainText('천천히 안내해요.');
   await expect(page.getByTestId('question-log').first()).toContainText('v2');
-  await page.getByLabel('매장에 궁금한 점').fill('택배는 어떻게 보내요?');
+  await page.getByRole('button', { name: '상품 검수', exact: true }).click();
+  await expect(page.getByTestId('question-log')).toHaveCount(2);
+  await expect(page.getByTestId('question-log').first()).toContainText('매뉴얼 근거 있음');
+  await page.getByLabel('매장에 궁금한 점').fill('직원 급여 정산 계좌');
   await page.getByRole('button', { name: '질문하기', exact: true }).click();
   await expect(page.getByTestId('question-log').first()).toContainText('경영주 확인 필요');
   await page.getByRole('link', { name: '체크리스트', exact: true }).click();
@@ -37,16 +35,13 @@ test('completes the manager-to-crew-to-manager demo loop', async ({ page }, info
   await page.getByLabel('소비기한 확인 상태').selectOption('needs_manager');
   await page.reload();
   await expect(page.getByLabel('입고 상품 확인 상태')).toHaveValue('done');
-  await page.getByRole('link', { name: '경영주로 전환' }).click();
-  await page.getByRole('link', { name: '대시보드', exact: true }).click();
-  await expect(page.getByTestId('training-count')).toHaveText('2');
-  await expect(page.getByTestId('checklist-count')).toHaveText('1 / 4');
-  await expect(page.getByTestId('question-count')).toHaveText('2');
-  await expect(page.getByTestId('needs-manager-count')).toHaveText('2');
-  const sessions = await page.evaluate(() => JSON.parse(localStorage.getItem('firstday.zip')!).sessions);
-  expect(sessions[0].results.finalAnswerCorrect).toBe(false);
-  expect(sessions[1].results.procedureFollowed).toBe(true);
-  expect(sessions[1].previousAttemptId).toBe(sessions[0].id);
-  expect(sessions.map((s: { snapshot: { rules: { version: number }[] } }) => s.snapshot.rules[0].version)).toEqual([2, 2]);
-  await page.screenshot({ path: `docs/evidence/demo-flow-${info.project.name}.png`, fullPage: true });
+  await page.getByRole('link', { name: '경영주 관리', exact: true }).click();
+  await expect(page.getByTestId('training-count')).toHaveText('2회');
+  await expect(page.getByTestId('training-average')).toHaveText('96/ 100');
+  await expect(page.getByRole('link', { name: '업무 관리', exact: true })).toHaveCount(0);
+  const attempts = await page.evaluate(() => JSON.parse(localStorage.getItem('firstday-training-v1')!).attempts);
+  expect(attempts.map((a: { score: number }) => a.score)).toEqual([92, 100]);
+  expect(attempts[0].answers[3].correct).toBe(false);
+  expect(attempts[1].answers[3].correct).toBe(true);
+  await page.screenshot({ path: `docs/evidence/demo-flow-revision-${info.project.name}.png`, fullPage: true });
 });

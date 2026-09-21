@@ -6,6 +6,7 @@ out/
 coverage/
 playwright-report/
 test-results/
+test-results-*/
 
 # Local secrets
 .env
@@ -19,4 +20,3 @@ Thumbs.db
 *.log
 *.tsbuildinfo
 .vercel/
-

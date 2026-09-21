@@ -1,193 +1,47 @@
-# FirstDay.zip Product Requirements Document
+# FirstDay.zip Product Requirements — current revision
 
-> Status: Reference document for Ralph implementation
-> Date: 2026-09-21
-> Event: GS 52g PLAI Hackathon Developer League
-> Priority: Complete one end-to-end demo flow first.
+Date: 2026-09-21. This revision records the user's latest requested product behavior. Original Tasks 1–16 remain historical release evidence; Task17 gates the new behavior. The prior 420-minute planning target was evaluated honestly at the first release; revision time is separately measured and never padded.
 
-## 1. One-line Product Definition
+## Product
 
-FirstDay.zip is a web-based onboarding and work-support service where a new `스토어 매니저` practices with an AI customer before work using store-specific instructions registered by the `경영주`, uses grounded answers and a checklist during work, and where the `경영주` reviews training, questions, and task progress.
+A first-shift simulator for a `스토어 매니저`: choose a concrete action in a graphic store/POS, complete all 12 stages, and receive a deterministic score. The same course supports an interview `테스트` with feedback withheld until completion. The `경영주` reviews practice/test records and scores and configures the checklist. Store Q&A searches the supplied GS25 education summaries or uploaded manual and asks Gemini to explain supported content.
 
-## 2. Problem to Solve
+## P0 revision flow
 
-- A new `스토어 매니저` serves real customers before having enough opportunity to practice various tasks and store-specific rules.
-- It can be difficult to ask the `경영주` every time something is unclear, and concurrent tasks can easily be missed.
-- The `경영주` repeats the same training whenever a new `스토어 매니저` joins.
-- Verbal instructions can be omitted or interpreted differently, and it is difficult to identify where a `스토어 매니저` gets stuck.
+1. Home presents **연습 시작하기** as the main action, with **테스트 시작하기**, **매장 Q&A**, and **체크리스트** immediately accessible. There is no **경영주로 시작** mode card.
+2. `/crew` redirects to the unified `/crew/simulation`; the separate **첫걸음** and **응대 연습** navigation is removed.
+3. Simulator shows one current mission, customer graphics, a familiar POS-style panel, action choices, and stage progress.
+4. The 12 stages cover handover, discrepancy check, scanning, promotion lookup, discount/points, card completion, receipt, pending sale, complaint response, expiry complaint, disposal registration and handover reporting.
+5. Practice shows immediate correct/incorrect feedback and source; test records answers without showing feedback until all stages are complete.
+6. Final result shows 0–100 score, chapter breakdown, chosen/correct actions and source links. Retry creates a separate record. An unfinished attempt can resume after refresh.
+7. Q&A retrieves only confirmed supplied manual summaries or the user's uploaded `.md`/`.txt` manual. Answers show preserved source excerpts and links; missing evidence produces an unresolved answer. Manager-added rules remain available as a secondary feature.
+8. The owner uses **연습 기록·점수** and **체크리스트 설정**. The operational **업무 관리** dashboard is removed. Additional rules are accessible as secondary settings.
 
-This product tests the hypothesis that it can reduce training burden and adjustment difficulties. Do not imply that outcomes such as reduced training time or improved retention have already been proven.
+## Grounding and evaluation
 
-## 3. Primary Users
+- The authoritative supplied document is `docs/gs25-store-manager-training-map.md`. It contains 58 confirmed video-body summaries and 20 uncollected bodies. Only confirmed summaries enter the default runtime corpus. Original source links and collection limitations are preserved.
+- This is public education material summarized in the supplied document, not a complete current internal operating manual. Uncollected bodies are never filled by model guesses. Latest store policies require separate confirmation.
+- Products, transaction amounts and POS artwork are synthetic. No official assets, live POS or financial transactions are used.
+- Gemini is server-only and generates Q&A explanations from retrieved evidence; source IDs and numerical claims are checked and invalid/failed output falls back to cited excerpts.
+- Quiz scoring is deterministic, independent of Gemini. Test results support a human interview; the app does not predict personal suitability or make hiring decisions.
+- Upload supports UTF-8 `.md`/`.txt`, maximum20KB. Uploaded manuals replace default manual retrieval. Uploads persist locally and are sent to the server/Gemini when asking a question. PDF/HWP extraction is not implemented and is not advertised.
+- Demo mode remains functional without an API key. Automated tests and builds force `AI_DEMO_MODE=true`; live Gemini checks are bounded and separate.
 
-### New `스토어 매니저`
+## State and limits
 
-- Practices before work in an environment where mistakes are safe.
-- Quickly checks store-specific instructions needed during work.
-- Avoids missing required tasks and handoff items.
-- Records situations that cannot be handled independently as requiring confirmation from the `경영주`.
+- Browser-local persistence: existing rules/checklists/questions in `firstday.zip`; quiz attempts in `firstday-training-v1`; uploaded manual in `firstday-uploaded-manual-v1`.
+- No authentication, cross-device owner account, secure proctoring or hiring decision automation. Test alias is optional; real names are unnecessary.
+- A quiz record includes course version, selected answers, final score and timestamps. Scores/history remain visible after reload. Invalid saved scores recover safely.
+- Confirmed reset clears all three app data areas and keeps unrelated browser keys untouched. Save failures must be visible.
+- Keyboard navigation, focus on stage/result changes, reduced motion, and 390×844/1440×900 layouts are required.
 
-### `경영주`
+## Acceptance evidence — Task17
 
-- Registers store instructions and checklists once for repeated use.
-- Reviews training completion, questions, and checklist progress for the `스토어 매니저`.
-- Improves the manual based on unresolved questions.
-
-## 4. Product Principles
-
-1. **Single source of truth:** Store rules are shared by the simulation, work Q&A, checklist, and dashboard.
-2. **Separate AI from evaluation:** Gemini handles natural-language expression, while structured data and deterministic code handle product and promotion facts and behavioral evaluation.
-3. **Behavior-based feedback:** Even if an answer happens to be correct, giving a definitive answer without checking the POS is treated as a process violation.
-4. **No ungrounded answers:** For questions not covered by the manual, do not guess. Direct the user to confirm with the `경영주` and record the question as unresolved.
-5. **Synthetic data only:** Do not use real GS25 POS data, products, internal manuals, or customer or worker personal information.
-6. **A support tool, not a surveillance tool:** Do not use the checklist or dashboard for personnel evaluation, hiring-suitability decisions, or real-time surveillance.
-7. **Failure tolerance:** The full demo must remain available in a clearly labeled demo mode when the Gemini key is missing or a call fails.
-
-## 5. P0 User Journey
-
-1. On the home page, select either `스토어 매니저 모드` or `경영주 모드`.
-2. The `경영주` views, edits, and saves the promotion-response rules and checklist for the virtual store `GS25 첫날점`.
-3. A new `스토어 매니저` starts a simulation for a 2+1 promotion inquiry.
-4. The AI customer asks whether the promotion applies, and the user either answers or looks up the product in the virtual POS.
-5. The rule validator compares the POS lookup, response, and request for manager confirmation against the action log.
-6. The coach explains what was done well and which steps were missed, with supporting grounds, and offers a retry.
-7. In the work-support screen, asking about the same promotion rule displays the manual version and supporting rule.
-8. The `스토어 매니저` completes today's checklist or marks an item as `경영주 확인 필요`.
-9. In the dashboard, the `경영주` reviews training completion, checklist progress, questions, and items requiring confirmation.
-10. When the `경영주` adds a missing rule, it applies to subsequent new Q&A requests and new simulation sessions.
-
-## 6. P0 Functional Requirements
-
-### F1. Role-specific Screens
-
-- Both roles can be selected from the home page.
-- Authentication is not implemented, and role switching is labeled as demo-only.
-- The `스토어 매니저` screens are mobile-first, while the `경영주` screens are responsive across mobile and desktop.
-
-### F2. Shared Synthetic Data
-
-- Provide one virtual store, three products, one promotion, one primary scenario, and one variant scenario.
-- The representative product `캔커피 A` is synthetic data priced at KRW 1,500, with a 2+1 promotion totaling KRW 3,000 for three units.
-- Clearly state that all synthetic data is not actual GS25 operational information.
-
-### F3. Store Manual Management
-
-- The `경영주` can edit and save a rule's title, content, category, and exception handling.
-- Saving updates the version and modification time.
-- An in-progress simulation retains the rule snapshot from when it began.
-- Q&A requests and simulations started after a save use the latest rules.
-
-### F4. AI Customer Simulation and Virtual POS
-
-- Record the customer's opening line, the `스토어 매니저` response, POS lookups, and requests for manager confirmation in one session.
-- The virtual POS retrieves product name, price, inventory, and promotion conditions from structured data.
-- Session state persists while moving between the conversation and POS panel.
-- Gemini responses cannot change fixed facts.
-
-### F5. Rule Validation and Coaching
-
-- Evaluation must include, at minimum, `POS lookup performed`, `definitive answer before verification`, `final answer`, and `manager confirmation requested`.
-- Deterministic code generates evaluation results.
-- Coaching text is generated only from the evaluation results and action log.
-- Show the behavioral differences between the first attempt and the retry.
-
-### F6. Store-specific Work Q&A
-
-- Find manual rules related to the question and display the rule title and version with the answer.
-- If there is no supporting rule, do not fabricate an answer; direct the user to confirm with the `경영주`.
-- Record the question, answer, supporting rule ID, and resolution status.
-- Provide frequently asked question buttons.
-
-### F7. Work Checklist
-
-- Provide four default items and display items registered by the `경영주`.
-- The available states are `대기`, `완료`, and `경영주 확인 필요`.
-- State persists after a refresh.
-- Reset occurs only after confirmation.
-
-### F8. Manager Dashboard
-
-- Display training completion, completed checklist item count, question count, and confirmation-needed count.
-- Display unresolved questions and candidates for manual improvement.
-- Do not display evaluative metrics such as scores, rankings, or work suitability.
-
-## 7. AI Runtime Policy
-
-- Call the Gemini API only from a server-side Route Handler.
-- Do not expose `GEMINI_API_KEY` in the browser bundle, logs, or error messages.
-- Send only the current manual rules, the scenario's fixed facts, and the permitted output role in a request.
-- If the API key is missing or a timeout, quota error, or format error occurs, return a deterministic demo response.
-- Display `데모 모드` in the UI when a demo response is used.
-- Do not store LLM output as the source data for product prices, promotion conditions, or evaluation results.
-
-## 8. Data and State Strategy
-
-The hackathon P0 uses local persistent storage by default so the end-to-end demo can run in the same browser. Keep data access behind a repository interface so it can later be replaced with Supabase.
-
-Core entities:
-
-- `Store`, `StoreRule`, `Product`, `Promotion`, `Scenario`
-- `SimulationSession`, `SimulationEvent`, `SimulationFeedback`
-- `ChecklistItem`, `ChecklistProgress`, `QuestionLog`
-
-Manage rules, scenarios, and user actions as separate structures. Do not duplicate the same rule text by hardcoding it in the UI, prompts, and validation code.
-
-## 9. Technical Direction
-
-- Next.js App Router + TypeScript
-- Responsive UI based on Tailwind CSS
-- Gemini server calls with a deterministic demo fallback
-- Pure TypeScript simulation engine and rule validator
-- Repository adapter using browser-local persistent storage
-- Vitest unit and integration tests, plus Playwright tests for core user journeys
-- Environment-variable and server/client boundaries designed with Vercel deployment in mind
-
-## 10. P0 Acceptance Criteria
-
-- [x] The flow from the initial state through the final manager dashboard can be demonstrated in one browser session.
-- [x] The action logs and feedback actually differ between an answer without a POS lookup and an answer after a lookup.
-- [x] The virtual POS, rule validator, and Q&A use the same store rules and promotion data.
-- [x] After the `경영주` edits a rule, the change applies to new Q&A requests and new simulation sessions.
-- [x] Checklist state persists after refresh and is aggregated in the dashboard.
-- [x] Questions not covered by the manual are recorded as unresolved and direct the user to confirm with the `경영주`.
-- [x] The core flow continues in demo mode without a Gemini key.
-- [x] `npm test`, `npm run build`, and the core Playwright scenarios pass.
-- [x] The README documents setup, environment variables, synthetic data, the demo flow, and known limitations.
-- [x] The `경영주` can add a missing rule and create/edit checklist items; new Q&A and the checklist use the saved data without rewriting past logs.
-- [x] Corrupted or unavailable local storage produces recovery or a visible non-persistent state, never a false saved confirmation.
-- [x] Event ordering, wrong-product lookups, duplicate submissions, retries, and immutable rule snapshots are verified deterministically.
-- [x] Mocked AI timeout, quota, malformed output, and contradictory facts cannot alter deterministic evaluation or leak raw provider errors.
-- [x] The complete flow is verified at mobile and desktop widths, with keyboard navigation and a confirmed reset, against the production server.
-- [x] Tasks 10–16 in `task.md` pass and `docs/verification-matrix.md` maps each P0 criterion to actual evidence.
-- [x] No item is marked complete unless it actually passed.
-
-### Extended P0 Run Contract
-
-The core feature checkpoint is Task 9. Release completion includes Tasks 10–16, which strengthen the same P0 flow without adding new business scenarios or infrastructure. Plan at least 420 active work minutes (7 hours), with a 7–10 hour planning envelope; record actual time, not estimates presented as execution. This target does not replace acceptance criteria or authorize idle work. Follow the duration, resume, early-completion, and host-limit rules in `AGENTS.md` and `goal.md`.
-
-Real Gemini calls, deployment, and Git publication are pre-authorized for this run under the YOLO Execution Authorization in `AGENTS.md`; do not request separate confirmation. Keep repeatable regression checks in `AI_DEMO_MODE=true`, which must force the deterministic path even when a local key is present. Run a separate bounded live Gemini smoke check when credentials are available, then publish and deploy after the local gates pass using verified project targets. Record remote commit, deployment URL/status, and live API results independently from local evidence. Missing credentials, targets, or access must be recorded as concrete external blockers and must not stop independent demo-mode work; `not run` never means passed.
-
-## 11. Prioritization and Scope-reduction Rules
-
-If time is limited, reduce the number of screens and scenarios while preserving the following connections:
-
-`Save manager rules → 2+1 simulation → validate POS behavior → grounded Q&A → checklist → manager dashboard`
-
-P1 additions—more scenarios, time-based checklists, question classification, detailed progress, and pre/post-training analysis—require a separate scope decision after all extended P0 gates are verified. They are not automatic work to consume the seven-hour target.
-
-## 12. Explicitly Out of Scope
-
-- Integration with actual GS25 POS, inventory, sales, payment, ordering, refunds, or internal systems
-- Use of real product promotions or internal manuals
-- Production authentication and accounts based on personal information
-- Voice or video analysis
-- Worker surveillance or automated decisions about hiring suitability or work performance
-- Definitive legal advice about wages, employment agreements, or CCTV
-- A separate grocery-shopping recommendation service
-
-## 13. Demo Safeguards
-
-- Maintain a demo mode that reproduces the full flow regardless of real Gemini calls.
-- Provide a demo-data reset button and a recoverable seed.
-- Visually distinguish synthetic-data notices, AI-generated answer notices, and administrator-confirmation states.
-- Keep the route through the product stable so a backup video can show the same core flow as the live demo.
+- [x] Home, unified simulator, Q&A and narrowed owner navigation work in an actual browser.
+- [x] Incorrect POS action yields92 and complete correct retry yields100; both records persist and are visible to owner.
+- [x] Test hides explanations until completion, resumes after refresh, and preserves alias/mode.
+- [x] Confirmed manual and uploaded text produce evidence-backed answers; unsupported questions remain unresolved.
+- [x] Gemini live answer verified separately from repeatable demo-mode tests.
+- [x] Checklist settings preserve item status; confirmed reset covers quiz/upload and legacy data.
+- [x] Full unit/integration tests, build and complete production E2E pass; Figma and actual rendered screens inspected.
+- [ ] Existing Git target and deployed app verified with exact outcomes in progress.md.

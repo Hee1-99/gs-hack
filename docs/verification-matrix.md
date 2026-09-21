@@ -1,3 +1,24 @@
+# Current revision verification — Task17 (2026-09-21)
+
+The original release evidence below is historical. Latest user request replaces role-choice/chat/operational-dashboard behavior with the following verified contract.
+
+| Current requirement | Evidence | Actual local result |
+|---|---|---|
+| Clear practice/test landing, unified simulator, no owner start card | page.test.tsx; smoke.spec.ts; navigation.spec.ts | Passed |
+| Twelve manual-grounded steps, graphic customer/POS, full quiz and score | training-engine.test.ts; simulation.spec.ts | Incorrect POS92, correct retry100; source links and both records verified |
+| Interview test, no feedback until finished, alias and refresh recovery | simulation.spec.ts; dashboard.spec.ts | Passed desktop/mobile |
+| Confirmed manual and uploaded text priority, source preservation, refusal | manual-answer.test.ts; manual-qa.spec.ts; consistency.spec.ts | 58 confirmed summaries,20 pending excluded; upload priority and unsupported answer verified |
+| Server Gemini and failure handling | AI tests; ai-failure.spec.ts; bounded Node route smoke | Actual live Gemini1call200/mode live/source verified; forced demo regressions pass |
+| Owner scores/history and checklist configuration only | dashboard tests; dashboard.spec.ts; reset.spec.ts | Score filters/detail sources, item-state preservation and all-store reset verified |
+| Mobile/keyboard/reduced motion and error recovery | usability.spec.ts; persistence.spec.ts; store-provider.test.tsx | 390×844 and1440×900, no overflow, focus flow, StrictMode recovery fixed |
+| Figma and actual UI visual review | https://www.figma.com/design/KYOkEnYcKTRuPpe6hi3QPW ; docs/evidence/figma-redesign.png and revision-*.png | Figma clipping fixed; screenshots inspected |
+| Full release gate | npm test; AI_DEMO_MODE=true npm run build; npm run test:e2e |82/82 unit/integration, build exit0,44/44 production E2E38.7s, retries0 |
+| Secret boundary | node scripts/check-secret-boundary.mjs |1018files inspected,0leaks, .env.local ignored/untracked |
+| Publication/deployment | progress.md iteration27 onward | Pending at this local checkpoint |
+
+Computer Browser entry point returned `Unable to load browser request-header policy`, matching the prior three-failure blocker. No interactive browser operation is claimed. Actual UI behavior was exercised with the project's Chromium E2E runner and inspected rendered screenshots. Figma MCP was operational.
+
+---
 # P0 verification matrix
 
 Final local gate (2026-09-21): 59 unit/integration tests, production build, and 32 production-server E2E cases passed. Automated regression uses synthetic data and forced demo mode. Live API and publication are recorded separately.

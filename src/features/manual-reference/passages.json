@@ -1,0 +1,466 @@
+[
+  {
+    "id": "manual-ef831a21ca26",
+    "title": "GS25 투어",
+    "url": "https://youtu.be/1BlNXBzBABg",
+    "excerpt": "점포 외부 홍보물·진열 공간에서 출발해 POS, 카운터 FF, OSC, WIC, RIF, 중앙 매대, 택배 기기와 시식대의 역할을 설명한다. 설비 용어, 상품별 보관 공간, 고객 동선과 청결 관리의 관계를 이해하는 입문 교육이다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-6e82c1c40ddf",
+    "title": "GS25 하루",
+    "url": "https://youtu.be/FWRQiAlhUKw",
+    "excerpt": "오전·오후·야간 교대를 가정해 하루 업무를 설명한다. 인수인계에서는 시재·처리할 상품·특이사항을 확인하고, 시간대별로 발주·정산·공문 확인, 입고 검수, 소비기한 점검, 보충 진열, 청소, 소모품 점검과 미완료 업무 전달을 연결한다. 영상의 특정 마감 시각은 실제 점포의 최신 지침으로 재확인해야 한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-d76d49d4de2d",
+    "title": "불만 VOC 응대",
+    "url": "https://www.youtube.com/watch?v=W9bqatN_WH0&list=PLkotUFTZdQdMHRhfhCQ_-OSVtUejDvMAl",
+    "excerpt": "불만 응대는 감정을 가라앉힌 뒤 경청, 사과·공감, 문제 해결, 재차 사과·감사의 순서로 진행한다. 고객의 상황을 인정하고 정확한 사실을 확인하며, 즉시 해결하기 어렵다면 연락 일정과 후속 대응을 안내하는 것이 핵심이다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-981dcb1fbada",
+    "title": "다빈도 VOC 유형 및 예방",
+    "url": "https://www.youtube.com/watch?v=ZlpWihBaONM&list=PLkotUFTZdQdMHRhfhCQ_-OSVtUejDvMAl&index=2",
+    "excerpt": "근무 태도, 업무 미숙, 점포 운영, 불친절한 말투에서 발생하는 불만을 살펴본다. 친절·청결·상품·선도관리의 기본을 지키고 나이와 무관하게 정중히 응대한다. 단답이나 단정적 거절 대신 확인 계획과 가능한 대안을 덧붙이는 표현을 연습한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-f8c31c06e688",
+    "title": "소비기한 VOC 응대",
+    "url": "https://youtu.be/paDpMGToDS4",
+    "excerpt": "소비기한 관련 불만에 기본 VOC 응대 단계를 적용한다. 상품과 구매 상황, 섭취 여부, 건강 이상 여부를 구분해 확인하고 상황에 맞는 후속 대응을 안내한다. 영상의 교환·환불·보험·보상 사례는 당시 교육 내용이며 최신 법률·점포 정책을 대신하는 확정 지침으로 사용하지 않는다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-61f3a5fcff97",
+    "title": "청소년 주류 불법 구매 예방",
+    "url": "https://youtu.be/04qysM9nM9Q",
+    "excerpt": "신분 확인을 생략하거나 외모만으로 판단하지 않도록 사례를 보여준다. 신분증 요청, 나이·본인 여부 확인, 의심 시 재확인, 확인되지 않을 때 판매 불가 안내의 흐름이다. 영상에 등장하는 연령·처벌·신분증 인정 기준은 현행 지침으로 별도 확인해야 한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-9b87d0479226",
+    "title": "S/T 사용하기",
+    "url": "https://youtu.be/KuikCHbuE6g",
+    "excerpt": "S/T는 바코드 스캔을 통해 검수, 선도관리, 상품 조회와 발주를 돕는 장비다. 휴대전화에 연결하는 블루투스 스캐너의 준비·연결과 상품 스캔 방법도 소개한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-8c001beaf7d6",
+    "title": "상품·선도관리 등록",
+    "url": "https://youtu.be/ZUdZh4j1YO0",
+    "excerpt": "소비기한 캘린더와 S/T 등록을 통한 관리 방식을 설명한다. 상품별 날짜·수량을 등록하고 조회 목록에서 누락을 점검하며, 잘못된 수량은 수정·저장한다. 등록한 정보는 소비기한 임박 상품을 확인하는 데 활용된다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-3f666b55e65d",
+    "title": "상품 검수",
+    "url": "https://youtu.be/frVZswofdA0",
+    "excerpt": "발주·출하 수량과 실제 입고 수량을 대조하고 검수 완료 목록으로 미검수 상품을 확인한다. 미입고 또는 수량 차이는 재확인 후 사유를 등록하며, 사전예약 상품은 일반 판매 재고와 분리해 보관한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-78eb12b90081",
+    "title": "기본 진열 방법",
+    "url": "https://www.youtube.com/watch?v=hodvRGfWG24",
+    "excerpt": "상품의 정면과 상표가 잘 보이도록 정돈하고 빈 공간을 보충한다. 먼저 입고된 상품이 먼저 판매되도록 배치하며 가격표와 상품 위치를 맞춰 고객이 쉽게 고를 수 있게 한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-ccfd0fe80fed",
+    "title": "가격표 발행(S/T)",
+    "url": "https://youtu.be/seHSn7jo1mE",
+    "excerpt": "가격표가 필요한 상품을 앱의 스마트 스캔으로 읽고 가격표 인쇄 목록에 등록한다. 인쇄 전에 목록에서 상품이 정확하게 들어갔는지 확인하는 흐름을 보여준다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-0c6f90b98754",
+    "title": "기기별 적정온도 관리",
+    "url": "https://youtu.be/kXq0_zT_W74",
+    "excerpt": "OSC·WIC 같은 냉장 설비와 ICC·냉동평대·RIF 같은 냉동 설비를 구분해 온도를 점검한다. 과다 적재와 성에 관리도 다룬다. 영상의 온도 범위·점검 주기는 참고 정보이며 실제 설비 지침이나 합성 Seed의 고정 규칙으로 자동 전용하지 않는다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-5404ad46c2b5",
+    "title": "에너지 절감 활동",
+    "url": "https://youtu.be/i9FFRzqrEOs",
+    "excerpt": "냉난방기의 적정 운전, 출입문 관리, OSC 흡입·토출구의 공기 순환 확보, 미사용 집기와 대기전력 정리를 설명한다. 영상의 절감 금액·설비 교체 계획은 당시 사례로 구분한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-687f2740c6ec",
+    "title": "소화기 관리 방법",
+    "url": "https://youtu.be/znDhAsPa-bA",
+    "excerpt": "소화기를 쉽게 찾고 꺼낼 수 있도록 배치하고 압력 게이지, 사용 기간과 안전핀을 점검하는 교육이다. 안전핀·호스·손잡이를 사용하는 기본 동작도 소개한다. 실제 화재 대응은 최신 공식 안전교육을 따른다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-e3954aeac642",
+    "title": "화재사고 예방",
+    "url": "https://www.youtube.com/watch?v=h-TZCH14Lh0",
+    "excerpt": "개별 전열기와 난방기 사용으로 인한 화재 위험을 설명한다. 가연물·과부하·플러그 접촉 상태, 부재 시 전원 차단, 전도·과열 방지장치와 제품 안전표시 확인을 다룬다. 장비별 사용 가능 여부는 점포의 최신 승인 기준을 확인한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-32f18ab55a64",
+    "title": "심폐소생술",
+    "url": "https://youtu.be/v0NU4mvZ_Xw",
+    "excerpt": "응급 상황 발견 시 현장 안전과 환자 반응 확인, 119 신고와 도움 요청, 심폐소생술 및 자동심장충격기 사용을 단계별로 소개한다. 수치와 처치 동작을 이 문서만으로 수행하도록 재작성하지 않으며 최신 소방·응급처치 교육과 신고 상담원의 안내를 따른다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-674582f64ee8",
+    "title": "카운터 FF 관리 업무",
+    "url": "https://youtu.be/Oiy7JOFhNHM",
+    "excerpt": "카운터 FF 업무를 청결·위생과 관련 서류 관리로 나눈다. 재료의 보관·밀봉, 조리 전 손 위생, 조리 직후 상미시간 등록과 보관을 다루며, 근무자 관련 보건 서류의 누락·만료 확인도 설명한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-0a8706c2ee1b",
+    "title": "CAFE25 관리 방법",
+    "url": "https://youtu.be/NWunUKptUzo",
+    "excerpt": "원두 호퍼·추출구·찌꺼기통·센서 세척, 원두의 선입선출과 보충, 세척 알림에 따른 세정, 정수 필터와 환풍구 관리를 설명한다. 기종별 세척 순서와 주기는 제조사·점포 지침 확인이 필요하다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-cfea87393481",
+    "title": "CAFE25 위생관리",
+    "url": "https://youtu.be/Z5ddMQow7q0",
+    "excerpt": "원두·시럽의 개봉 및 보관, 소분 표시, 호퍼·추출구·화면·찌꺼기통·물받이 세척, 세정제 투입과 필터 관리를 다룬다. 다른 CAFE25 영상과 필터 교체 주기 설명이 달라 공통 고정 규칙으로 합치지 않는다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-9ac69b90bc5c",
+    "title": "치킨25 위생관리",
+    "url": "https://youtu.be/QjS8ncquIV8",
+    "excerpt": "원재료의 보관 온도·소비기한·밀봉 상태, 튀김기 분해 세척과 건조·재조립, 작업대·집게·진열장의 위생 관리를 다룬다. 기름 상태 확인, 표시물 관리, 조리 후 상미시간 관리도 설명한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-a6de7b02fe8b",
+    "title": "어묵기",
+    "url": "https://www.youtube.com/watch?v=16s4hws_HAs&list=PLkotUFTZdQdPb3Ibu46q8mSB7QbevIKOa&index=7",
+    "excerpt": "어묵 원재료 보관과 포장 표시 보존, 조리·보온 전환, 상품 상태와 상미시간 확인, 용기 세척을 다룬다. 전원을 차단하고 충분히 식힌 뒤 세척하며 본체에 직접 물을 뿌리거나 빈 용기를 가열하지 않도록 안내한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-d115479e51cb",
+    "title": "사각호빵기 관리",
+    "url": "https://www.youtube.com/watch?v=5Ooo7OjiHc4&list=PLkotUFTZdQdPb3Ibu46q8mSB7QbevIKOa&index=4",
+    "excerpt": "사각 호빵기의 상품 투입·진열, 환기, 상미시간 관리와 물 교체를 설명한다. 채반·커버 분리와 배수 후 세척을 다루며 임의 첨가물로 악취를 없애려 하지 않도록 안내한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-f0e9ded8c736",
+    "title": "원형호빵기 관리",
+    "url": "https://www.youtube.com/watch?v=IwTqXBGx8tA&list=PLkotUFTZdQdPb3Ibu46q8mSB7QbevIKOa&index=5",
+    "excerpt": "원형 호빵기의 상품 관리·환기·물 교체와 세척을 설명한다. 회전부 연결쇠와 중앙 기둥 등 원형 기종의 분해 구조가 사각 기종과 다르므로 기종별 안내를 구분한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-3d585f03a9ff",
+    "title": "군고구마기 A타입",
+    "url": "https://www.youtube.com/watch?v=JZWCMx9Gs8k&list=PLkotUFTZdQdPb3Ibu46q8mSB7QbevIKOa&index=3",
+    "excerpt": "A타입 군고구마기의 원물 보관, 조리·보온 전환, 시간·온도 설정, 상미시간 등록을 다룬다. 냉각 후 커버·구이판을 분리해 이물질을 제거하고 세척·건조하며 열 배출구도 관리한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-2e9c1fda1466",
+    "title": "군고구마기 B타입",
+    "url": "https://www.youtube.com/watch?v=IccnPOWIpBA&list=PLkotUFTZdQdPb3Ibu46q8mSB7QbevIKOa&index=6",
+    "excerpt": "B타입은 선반에 원물을 배치하고 조리 시간과 보온 설정을 조절하며 조리 후 보온부로 옮기는 흐름이다. 이물질 받이와 내부를 청소하고 재가동 전에 수분을 제거한다. 자동 자막의 전원 관련 오인식은 실제 기기 안내로 재확인해야 한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-284d642c9f9d",
+    "title": "POS 장비란?",
+    "url": "https://youtu.be/5_7modVgpKk",
+    "excerpt": "POS의 상품 판매, 서비스 판매, 조회 업무, 영수증 업무와 즐겨찾기 구성을 소개한다. 상품 스캔 판매 외에도 재고·행사 조회, 서비스 접수, 반품, 영수증 발행과 폐기등록에 사용하는 장비임을 설명한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-00510c34a16f",
+    "title": "금고입금",
+    "url": "https://youtu.be/6mJ7fhHhtak",
+    "excerpt": "현금 보관함에 과도한 현금을 두지 않기 위한 금고 입금 기능을 설명한다. 입금 가능액 확인과 기록·실물 대조가 주제이며 실제 금고 위치나 상세 금전 처리 절차는 제품 데이터로 가져오지 않는다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-b9c9826477ce",
+    "title": "인수인계(시재점검)",
+    "url": "https://youtu.be/k4iXLelPA_c",
+    "excerpt": "근무자 교대와 시재 점검을 설명한다. POS상 현금과 실제 보관액을 대조하고 점검표의 준비금·계산상 현금·입력액·차이를 확인해 이전 근무자와 인계한다. 차이의 원인은 점검 없이 단정하지 않는다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-c559881ed8c9",
+    "title": "담배 수불 방법",
+    "url": "https://youtu.be/P0sFEaePdmc",
+    "excerpt": "앱·S/T·POS 조회 또는 재고 조사 용지로 전산 수량과 실물 수량을 대조하는 업무다. 차이가 있는 상품과 수량을 따로 기록해 경영주 및 다음 근무자에게 전달하는 흐름을 다룬다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-ad4817092158",
+    "title": "POS 감열지 교체 방법",
+    "url": "https://youtu.be/9_mnCmrMKDs",
+    "excerpt": "프린터 덮개를 열어 감열지를 올바른 방향으로 넣고 교체한 다음, 영수증을 다시 출력해 정상 인쇄 여부를 확인한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-4b12abe79c8b",
+    "title": "모바일 신분증·운전면허증 조회",
+    "url": "https://youtu.be/-1_TPRxhE10",
+    "excerpt": "연령 확인이 필요한 상품 판매 전에 신분 확인을 하는 POS 기능을 소개한다. 일반 신분증 조회와 모바일 신분증 QR 확인을 구분하며 불일치 결과를 확인한다. 실제 개인정보나 현행 인정 신분증 목록은 이 문서에서 수집·확정하지 않는다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-72226af79811",
+    "title": "임시 프라이스카드 발행",
+    "url": "https://youtu.be/iUDrHeSBtzI",
+    "excerpt": "가격표가 없는 상품의 바코드를 POS 상품 조회에서 확인한 뒤 임시 가격표를 발행하고 진열대에 맞게 부착한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-056e95cb14b6",
+    "title": "카운터 FF 상미시간 발행",
+    "url": "https://youtu.be/KfZAtUfWVg8",
+    "excerpt": "카운터 FF 조리가 끝나면 상품 바코드, 상품명, 제조 일시와 수량을 확인해 상미시간 표지를 발행한다. 발행물은 해당 상품 근처에서 확인할 수 있게 관리한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-66913df02059",
+    "title": "판매 보류",
+    "url": "https://youtu.be/4SC8wTvBYaU",
+    "excerpt": "결제 전 상품 목록을 잠시 보류하고 다른 고객의 결제를 처리한 뒤 기존 목록을 불러와 이어서 결제하는 기능을 설명한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-6d4b58797625",
+    "title": "공병",
+    "url": "https://youtu.be/qd8edg3O6AI",
+    "excerpt": "공병의 종류·상태·수량과 보증금 표기를 확인한 뒤 매입을 처리하고, 회수한 공병을 수불 관리에 등록해 센터 반품으로 연결한다. 영상의 수량·반환 조건은 현재 정책을 별도 확인해야 한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-eb3209e711e6",
+    "title": "폐기등록",
+    "url": "https://youtu.be/598UOsIWa7Y",
+    "excerpt": "소비기한 경과 등으로 판매하지 않을 상품을 스캔해 폐기 수량을 입력하고 실제 수량과 다시 대조한다. 등록한 상품은 판매 재고와 섞이지 않게 분리해 관리한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-2f6631734a9c",
+    "title": "할인·적립 방법",
+    "url": "https://youtu.be/k7GLAXOOoGQ",
+    "excerpt": "상품 등록 후 할인·적립 수단을 확인하고 바코드 등으로 적용한다. 최종 결제 전에 화면에서 할인·적립 반영 결과를 확인하는 흐름이다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-8d3becde2b39",
+    "title": "현금·카드·교통카드",
+    "url": "https://youtu.be/rTkluVkkNc4",
+    "excerpt": "상품을 스캔해 합계 금액을 안내한 뒤 결제수단별 처리를 한다. 현금은 받은 금액과 거스름돈을, 카드·교통카드는 각 결제 화면의 완료 결과를 확인한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-018c605db335",
+    "title": "모바일 상품권·기프티콘",
+    "url": "https://youtu.be/0qog_xAYzms",
+    "excerpt": "상품을 먼저 등록한 뒤 모바일 상품권 또는 해당 상품의 기프티콘 바코드를 스캔하는 결제 흐름을 보여준다. 상품과 교환권의 일치 여부를 구분한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-07a106408ab2",
+    "title": "결제 메뉴(복합결제)",
+    "url": "https://youtu.be/eYVfoqL5KkI",
+    "excerpt": "둘 이상의 결제수단으로 금액을 나누어 처리하는 방식이다. 일부 금액 결제 후 남은 금액을 확인하고 다음 수단으로 결제를 이어간다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-b3976617a72f",
+    "title": "포인트 결제",
+    "url": "https://youtu.be/u0YiKZCBT6c",
+    "excerpt": "통합 결제에서 포인트 종류를 선택하고 화면 안내에 따라 사용 포인트와 결제 금액을 확인하는 방법을 소개한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-6845261d2f28",
+    "title": "종이상품권 결제·회수",
+    "url": "http://youtube.com/watch?v=MT-kIEd4Op8&feature=youtu.be",
+    "excerpt": "종이상품권 결제 메뉴와 상품권별 회수 처리 흐름을 설명한다. 결제만으로 끝나는 업무와 별도 회수 등록·실물 관리가 필요한 업무를 구분한다. 영상에 등장하는 상품권의 현재 사용 가능 여부는 별도 확인이 필요하다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-84a5371db32b",
+    "title": "앱카드·반품앱카드·우리동네GS",
+    "url": "https://www.youtube.com/watch?v=WT63kCA6mIg",
+    "excerpt": "앱카드·우리동네GS로 결제한 거래를 반품할 때 해당 앱의 결제 내역에서 취소용 바코드를 찾아 확인하는 흐름이다. 처음 결제 때의 QR과 반품에 사용할 거래 내역을 혼동하지 않도록 설명한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-b148e76b13f1",
+    "title": "보관",
+    "url": "https://youtu.be/l_iAznLMMbc",
+    "excerpt": "행사 증정품을 나만의 냉장고에 보관할 때 보관 수량과 고객에게 실제 제공할 수량을 구분한다. 고객 식별·앱 확인 후 정상 보관 여부를 확인하고 결제를 완료한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-b19aa36047c4",
+    "title": "꺼내기",
+    "url": "https://youtu.be/ZvJaalv5RCY",
+    "excerpt": "앱에 보관된 상품과 바코드를 확인해 매장에서 꺼내는 흐름이다. 다른 상품과 함께 결제하는 경우와 반품 시 보관 상품 처리까지 별도로 확인해야 하는 경우를 설명한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-4e2a7f145466",
+    "title": "사전예약",
+    "url": "https://youtu.be/Ut0JWdGw8QQ",
+    "excerpt": "앱에서 상품·수령 매장·일시를 확인해 예약하고, 점포에서는 입고된 예약 상품을 별도 보관한다. 고객 QR과 상품을 대조해 전달 처리하는 흐름이다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-80f28213fc68",
+    "title": "반품(현금·카드·교통카드)",
+    "url": "https://youtu.be/pM-1mfbZPL8",
+    "excerpt": "영수증 스캔 또는 날짜·상품·금액 조건으로 원거래를 찾은 뒤 현금·카드·교통카드별 반품을 진행한다. 원래 결제 내역과 수단을 먼저 확인하는 과정이 핵심이다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-ade5cf3e6f73",
+    "title": "반품 후 재판매",
+    "url": "https://youtu.be/F0ViZlw2jTY",
+    "excerpt": "부분 반품이나 결제 후 할인·적립 반영에 쓰는 반품 후 재판매 기능을 설명한다. 기존 거래를 확인한 후 재판매 목록에서 제외할 상품을 정리하고 다시 결제한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-92cf6e0b2cbb",
+    "title": "현금영수증 발행",
+    "url": "https://youtu.be/fNfpozUpeos",
+    "excerpt": "개인용·사업자용을 확인하고 고객이 직접 입력할 수 있는 방식으로 현금영수증을 발급한다. 결제 직후 발행과 나중에 원거래를 찾아 발행하는 경우를 구분한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-9bbc5f737316",
+    "title": "일반·반값택배",
+    "url": "https://youtu.be/5nYtL3JYacw",
+    "excerpt": "일반택배와 점포 간 반값택배, 예약 접수와 현장 접수를 구분한다. 접수 정보·무게 확인, 운송장 부착, 카운터 결제와 안내를 거쳐 서비스 종류별로 물품을 분리 보관한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-219c24d4ea1b",
+    "title": "택배 픽업",
+    "url": "https://youtu.be/ncXixYAv-G8",
+    "excerpt": "입고된 택배를 등록·분리 보관하고 고객의 송장·주문번호를 실물과 대조한 뒤 전달 처리한다. QR 확인이 어려울 때 재발송을 요청하는 흐름과 등록 불가 건의 확인 요청도 다룬다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-b865ba49cd79",
+    "title": "교통카드·하이패스 충전 및 충전 취소",
+    "url": "https://youtu.be/K0KqlF18I40",
+    "excerpt": "교통카드 브랜드, 충전액과 결제수단을 확인하는 충전 업무와 직전 충전 취소를 구분한다. 현금 수령 및 입력 금액 확인, 취소 대상 거래 확인을 강조한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-c7ba8937fbc8",
+    "title": "교통카드 환불",
+    "url": "https://youtu.be/ORel_1_DMGA",
+    "excerpt": "교통카드 브랜드와 잔액을 확인하고 환불 수수료를 사전에 안내한 뒤 환불하는 흐름이다. 영상에 표시된 수수료는 현재 요금으로 단정하지 않는다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-0012fcb568c3",
+    "title": "편의점캐시",
+    "url": "https://youtu.be/3RV-_K8Aa-c",
+    "excerpt": "온라인 콘텐츠용 캐시의 종류·금액을 선택하고 결제 후 이용 번호가 담긴 영수증을 전달하는 흐름이다. 구매 목적과 사기 경고를 확인하고, 사용 여부를 확인한 뒤 반품 가능성을 판단하는 과정도 설명한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-fb80a7da472c",
+    "title": "요금수납",
+    "url": "https://www.youtube.com/watch?v=o40DCTlCT80&feature=youtu.be",
+    "excerpt": "고지서의 일반 바코드와 2차원 바코드 유형을 구분해 정보를 읽고 요금을 수납하는 방법을 소개한다. 결제수단 제한은 영상 당시 안내로 보고 현재 정책을 확인한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-448ef0ba6f51",
+    "title": "쇼핑몰 결제",
+    "url": "https://www.youtube.com/watch?v=mknwDBKOe4s",
+    "excerpt": "온라인 주문의 편의점 결제 바코드를 확인해 수납하는 서비스다. 영상에서는 수납 후 취소 제한을 고객에게 먼저 설명하고 동의를 확인하는 과정을 강조한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-363eadcae57e",
+    "title": "네이버페이 충전",
+    "url": "https://youtu.be/0x5hCqGOoc8",
+    "excerpt": "제목은 네이버페이 결제이지만 실제 내용은 포인트 충전과 환불이다. 고객 앱의 충전 바코드, 충전액과 수령액, 처리 후 잔액을 확인한다. 환불 대상 거래와 전체 취소 조건, 점포 현금 부족 시 확인 절차를 다루며 기간·정책은 현재 기준을 별도 확인한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  },
+  {
+    "id": "manual-466d634d82a3",
+    "title": "와인25플러스",
+    "url": "https://youtu.be/G-ik8C_Veu0",
+    "excerpt": "앱의 주문·수령 정보 확인부터 점포 입고 등록, 수량 대조와 분리 보관, 고객 QR·상품 및 신분 확인 후 전달까지 연결한다. 미입고·수량 불일치는 확인 요청 대상으로 처리한다.",
+    "status": "본문 요약 확보",
+    "origin": "bundled"
+  }
+]

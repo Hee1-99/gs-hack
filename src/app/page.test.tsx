@@ -1,9 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
 import Home from './page';
-it('offers distinct routes for both demo roles with an honest notice', () => {
+it('starts with practice and hiring test, without an owner start mode', () => {
   render(<Home />);
-  expect(screen.getByRole('link', { name: /스토어 매니저로 시작/ })).toHaveAttribute('href', '/crew');
-  expect(screen.getByRole('link', { name: /경영주로 시작/ })).toHaveAttribute('href', '/manager/manual');
-  expect(screen.getByText(/데모용 역할 전환/)).toBeVisible();
+  expect(screen.getByRole('link', { name: /연습 시작하기/ })).toHaveAttribute('href', '/crew/simulation');
+  expect(screen.getByRole('link', { name: /테스트 시작하기/ })).toHaveAttribute('href', '/crew/simulation?mode=test');
+  expect(screen.queryByText('경영주로 시작')).not.toBeInTheDocument();
+  expect(screen.getByRole('link', { name: /매장 Q&A/ })).toHaveAttribute('href', '/crew/questions');
 });

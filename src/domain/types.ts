@@ -41,7 +41,9 @@ export const checklistItemSchema = checklistItemInputSchema.extend({ id });
 export const checklistStatusSchema = z.enum(['pending', 'done', 'needs_manager']);
 export const checklistProgressSchema = z.object({ itemId: id, status: checklistStatusSchema, updatedAt: timestamp });
 // One answer includes both 2,000-character manual fields plus structured fact clauses.
-export const questionSchema = z.object({ id, question: text.max(500), answer: z.string().trim().min(1).max(6000), rules: z.array(ruleSchema), status: z.enum(['resolved', 'unresolved']), mode: z.enum(['demo', 'live']), createdAt: timestamp });
+export const manualSourceSchema = z.object({ id, title: text.max(100), url: z.url().refine(value => /^https?:\/\//.test(value)).optional(), excerpt: text, status: text.max(100), origin: z.enum(['bundled', 'upload']) });
+export type ManualSource = z.infer<typeof manualSourceSchema>;
+export const questionSchema = z.object({ id, question: text.max(500), answer: z.string().trim().min(1).max(6000), rules: z.array(ruleSchema), sources: z.array(manualSourceSchema).max(3).optional(), status: z.enum(['resolved', 'unresolved']), mode: z.enum(['demo', 'live']), createdAt: timestamp });
 export const stateSchema = z.object({
   schemaVersion: z.literal(1), store: z.object({ id, name: text.max(100), synthetic: z.literal(true) }),
   rules: z.array(ruleSchema).min(1), products: z.array(productSchema).length(3), promotions: z.array(promotionSchema).length(1), scenarios: z.array(scenarioSchema).length(2),

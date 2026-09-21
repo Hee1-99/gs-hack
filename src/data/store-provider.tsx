@@ -1,5 +1,5 @@
 'use client';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { createLocalStoreRepository } from './local-store-repository';
 import type { PersistenceStatus, StoreRepository } from './store-repository';
 import type { StoreState } from '@/domain/types';
@@ -7,13 +7,15 @@ import type { StoreState } from '@/domain/types';
 type StoreContextValue = { repo: StoreRepository; state: StoreState; persistence: PersistenceStatus };
 const StoreContext = createContext<StoreContextValue | null>(null);
 export function StoreProvider({ children, initialRepository }: { children: React.ReactNode; initialRepository?: StoreRepository }) {
+  const browserRepository = useRef<StoreRepository | null>(null);
   const [value, setValue] = useState<StoreContextValue | null>(() => initialRepository ? { repo: initialRepository, state: initialRepository.getSnapshot(), persistence: initialRepository.getPersistenceStatus() } : null);
   useEffect(() => {
-    let repo = initialRepository;
+    let repo = initialRepository ?? browserRepository.current;
     if (!repo) {
       let storage: Storage | null = null;
       try { storage = window.localStorage; } catch { /* blocked storage uses explicit memory mode */ }
       repo = createLocalStoreRepository(storage);
+      browserRepository.current = repo;
     }
     const activeRepo = repo;
     const update = () => setValue({ repo: activeRepo, state: activeRepo.getSnapshot(), persistence: activeRepo.getPersistenceStatus() });

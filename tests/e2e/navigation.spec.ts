@@ -3,11 +3,12 @@ test('production direct routes, refresh and back navigation preserve state witho
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.name));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
-  page.on('response', response => { if (response.status() >= 400 && new URL(response.url()).origin === 'http://127.0.0.1:3100') errors.push(`${response.status()} ${new URL(response.url()).pathname}`); });
+  page.on('response', response => { if (response.status() >= 400 && new URL(response.url()).origin === new URL(page.url()).origin) errors.push(`${response.status()} ${new URL(response.url()).pathname}`); });
   const routes = ['/manager/manual', '/manager/checklist', '/manager/dashboard', '/crew', '/crew/checklist', '/crew/questions', '/crew/simulation'];
   for (const route of routes) { await page.goto(route); await expect(page.locator('h1')).toBeVisible(); }
   await page.goto('/crew/support');
   await expect(page).toHaveURL(/\/crew\/questions$/);
+  await page.locator('summary').filter({ hasText: '매장 추가 규칙' }).click();
   await page.getByRole('button', { name: '행사 문의는 POS 확인 후 안내', exact: true }).click();
   await expect(page.getByTestId('question-log')).toHaveCount(1);
   await page.getByRole('link', { name: '체크리스트', exact: true }).click();

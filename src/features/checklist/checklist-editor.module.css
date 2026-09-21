@@ -1,0 +1,19 @@
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:4px 0 16px;border-bottom:1px solid var(--line)}
+.toolbar>span{display:flex;align-items:center;gap:8px;font-size:14px}
+.items{display:grid;gap:12px;margin-top:18px}
+.item{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.item summary{display:flex;align-items:center;gap:18px;padding:22px;cursor:pointer;list-style:none;min-height:100px}
+.item summary::-webkit-details-marker{display:none}
+.item[open] summary{border-bottom:1px solid var(--line)}
+.number{font-size:13px;font-weight:700;color:var(--muted);align-self:flex-start;padding-top:4px}
+.copy{display:grid;gap:3px;flex:1;min-width:0}
+.copy strong{font-size:17px;word-break:keep-all}
+.description{font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.edit{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
+.item[open] .edit svg{transform:rotate(180deg)}
+.form{padding:0 22px 22px}
+.newItem{margin:20px 0}
+.newItem h2{font-weight:700;font-size:18px;margin:0}
+.newItem .form{padding:0}
+.note{font-size:12px;color:var(--muted);margin-top:20px}
+@media(max-width:600px){.toolbar{align-items:flex-start;flex-direction:column;gap:0}.item summary{padding:18px;gap:12px}.copy strong{font-size:15px}.form{padding:0 18px 18px}.edit{font-size:0}}

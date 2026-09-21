@@ -1,7 +1,8 @@
 import { expect, test } from '@playwright/test';
 test('edits all fields and creates a missing rule, retaining both after refresh', async ({ page }, testInfo) => {
   await page.goto('/');
-  await page.getByRole('link', { name: /경영주로 시작/ }).click();
+  await page.getByRole('link', { name: '경영주 관리', exact: true }).click();
+  await page.getByRole('link', { name: '추가 매장 규칙', exact: true }).click();
   const form = page.getByRole('form', { name: '행사 문의는 POS 확인 후 안내' });
   await form.getByLabel('규칙 제목').fill('행사 안내 순서');
   await form.getByLabel('규칙 내용').fill('조회 후 고객에게 행사 조건을 차근차근 안내합니다.');
@@ -25,6 +26,7 @@ test('edits all fields and creates a missing rule, retaining both after refresh'
   await page.reload();
   await expect(page.getByRole('form', { name: '우산 보관' })).toBeVisible();
   await page.screenshot({ path: `docs/evidence/manual-${testInfo.project.name}.png`, fullPage: true });
-  await page.getByRole('link', { name: '스토어 매니저로 전환' }).click();
-  await expect(page.getByRole('heading', { name: '오늘의 첫걸음' })).toBeVisible();
+  await page.getByRole('link', { name: '시작 화면', exact: true }).click();
+  await page.getByRole('link', { name: '연습 시작하기', exact: true }).click();
+  await expect(page.getByRole('heading', { name: '첫 근무, 미리 해보세요.' })).toBeVisible();
 });

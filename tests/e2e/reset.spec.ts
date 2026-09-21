@@ -1,0 +1,26 @@
+import { expect, test } from '@playwright/test';
+test('confirmed reset clears training, uploaded manual and legacy state, preserving unrelated keys', async ({ page }) => {
+  await page.goto('/crew/simulation?mode=test');
+  await page.getByLabel('테스트 참여자 별칭').fill('초기화 연습');
+  await page.getByRole('button', { name: '테스트 시작하기', exact: true }).click();
+  await page.getByRole('heading', { name: '인수인계 확인', exact: true }).waitFor();
+  await page.goto('/crew/questions');
+  await page.getByText('매뉴얼 업로드 · 자료 안내', { exact: true }).click();
+  await page.getByLabel(/내 매뉴얼 선택/).setInputFiles({ name: 'manual.md', mimeType: 'text/markdown', buffer: Buffer.from('# 검수\n입고된 상자와 점검표를 대조합니다.') });
+  await expect(page.getByRole('status')).toContainText('업로드한 매뉴얼');
+  await page.evaluate(() => localStorage.setItem('unrelated-site-data', 'keep'));
+  await page.goto('/crew/checklist');
+  await page.getByLabel('입고 상품 확인 상태').selectOption('done');
+  await page.getByRole('button', { name: '데모 데이터 초기화', exact: true }).click();
+  await page.getByRole('button', { name: '취소', exact: true }).click();
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('firstday-training-v1')!).attempts)).toHaveLength(1);
+  await page.getByRole('button', { name: '데모 데이터 초기화', exact: true }).click();
+  await page.getByRole('button', { name: '초기화하기', exact: true }).click();
+  await expect(page.getByText('기본 가상 매장으로 초기화했어요.')).toBeVisible();
+  await expect(page.getByLabel('입고 상품 확인 상태')).toHaveValue('pending');
+  expect(await page.evaluate(() => ({ attempts: JSON.parse(localStorage.getItem('firstday-training-v1')!).attempts, manual: localStorage.getItem('firstday-uploaded-manual-v1'), unrelated: localStorage.getItem('unrelated-site-data') }))).toEqual({ attempts: [], manual: null, unrelated: 'keep' });
+  await page.getByRole('link', { name: '경영주 관리', exact: true }).click();
+  await expect(page.getByTestId('training-count')).toHaveText('0회');
+  await page.reload();
+  await expect(page.getByText('아직 연습 기록이 없어요')).toBeVisible();
+});

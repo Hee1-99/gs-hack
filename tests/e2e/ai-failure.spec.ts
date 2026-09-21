@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { trainingSteps } from '../../src/features/training/training-data';
 test('HTTP failure retains question and retry resolves once; pending prevents duplicates', async ({ page }) => {
   await page.goto('/crew/questions');
   await page.route('**/api/ai/qa', route => route.fulfill({ status: 503, body: 'SYNTHETIC_ERROR_CANARY' }));
@@ -20,15 +21,24 @@ test('HTTP failure retains question and retry resolves once; pending prevents du
   await expect(page.getByTestId('question-log')).toContainText('데모 모드');
   expect(calls).toBe(1);
 });
-test('customer HTTP failure keeps playable session and restores same session on retry', async ({ page }) => {
-  await page.route('**/api/ai/customer', route => route.fulfill({ status: 503, body: 'SYNTHETIC_PROVIDER_CANARY' }));
-  await page.goto('/crew/simulation');
-  await page.getByRole('button', { name: '연습 시작', exact: true }).click();
-  await expect(page.getByRole('alert').filter({ hasText: '연습 기록은 유지' })).toBeVisible();
-  await expect(page.getByLabel('고객에게 할 말')).toBeEnabled();
-  await page.unroute('**/api/ai/customer');
-  await page.getByRole('button', { name: '응답 다시 불러오기' }).click();
-  await expect(page.getByRole('button', { name: '응답 다시 불러오기' })).toHaveCount(0);
-  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('firstday.zip')!).sessions.length)).toBe(1);
+test('the complete scored quiz remains available when every AI endpoint is unavailable', async ({ page }) => {
+  let aiCalls = 0;
+  await page.route('**/api/ai/**', route => { aiCalls++; return route.fulfill({ status: 503, body: 'SYNTHETIC_PROVIDER_CANARY' }); });
+  await page.goto('/crew/simulation?mode=test');
+  await page.getByRole('button', { name: '테스트 시작하기', exact: true }).click();
+  for (const [index, step] of trainingSteps.entries()) {
+    await expect(page.getByRole('heading', { name: step.title, exact: true })).toBeVisible();
+    const choice = step.choices.find(choice => choice.id === step.correctChoiceId)!;
+    await page.locator('.pos-action').filter({ hasText: choice.label }).click();
+    await page.getByRole('button', { name: index === trainingSteps.length - 1 ? '제출하고 점수 보기' : '답 제출하고 다음 단계', exact: true }).click();
+  }
+  await expect(page.getByRole('heading', { name: '끝까지 해냈어요!' })).toBeVisible();
+  await expect(page.locator('.score-display')).toContainText('100');
+  expect(aiCalls).toBe(0);
   await expect(page.locator('body')).not.toContainText('SYNTHETIC_PROVIDER_CANARY');
+});
+test('invalid manual requests fail safely without leaking request data', async ({ request }) => {
+  const response = await request.post('/api/ai/qa', { data: { question: 'SYNTHETIC_INPUT_CANARY', rules: [], manual: { name: 'bad.txt', text: 'a'.repeat(20_001) } } });
+  expect(response.status()).toBe(400);
+  expect(await response.text()).not.toContain('SYNTHETIC_INPUT_CANARY');
 });

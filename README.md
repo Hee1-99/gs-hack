@@ -1,52 +1,49 @@
 # 첫날.zip
 
-처음 근무하는 스토어 매니저의 고객 응대 연습과 매장 규칙 확인을 돕는 합성 데이터 데모입니다. 실제 GS25 운영 시스템이나 공식 매뉴얼이 아닙니다.
+첫 근무를 준비하는 스토어 매니저가 매장 상황을 12단계 퀴즈로 연습하는 앱입니다. 공개 GS25 교육 자료의 확인된 요약을 사용하며, 상품·가격·POS 화면은 교육용 합성 데이터입니다.
 
-## 개발
+## 실행과 검증
 
-Node.js 24 이상에서 `npm ci` 후 `npm run dev`로 시작합니다. `.env.example`을 참고하여 서버 전용 설정을 `.env.local`에 둡니다. 키를 Git이나 브라우저 코드에 넣지 않습니다.
-
-## 검증
-
-PowerShell:
+Node.js24에서 `npm ci`, `npm run dev`. 서버 전용 Gemini 설정은 `.env.local`에만 둡니다. `.env.example`을 참고하세요.
 
 ```powershell
 $env:AI_DEMO_MODE='true'
 npm test
 npm run build
-npx playwright install chromium
 npm run test:e2e
 ```
 
-E2E는 기존 개발 서버를 재사용하지 않고 포트 3100에서 프로덕션 서버를 시작합니다. 실제 Gemini 검증은 자동 회귀와 분리합니다.
+E2E는 포트3100의 생산 서버를 새로 시작하고 데스크톱1440×900/모바일390×844를 검증합니다. 재시도0회, 실패 trace는 `test-results/`, 보고서는 `playwright-report/`입니다. 개발 서버는 빌드 전에 종료하세요. 빌드 출력은 `.firstday-build`입니다.
 
-각 E2E는 별도 브라우저 컨텍스트와 저장소를 사용합니다. 데스크톱 1440×900과 모바일 390×844에서 실행하며 재시도는 0회입니다. 실패 시 `test-results/`에 스크린샷·trace, `playwright-report/`에 보고서를 남깁니다. `npx playwright show-trace <trace.zip 경로>`로 실패 시점을 확인합니다. 확인용 화면은 `docs/evidence/`에 저장됩니다. 빌드 출력 경로는 `.firstday-build`이며, 환경값이 디스크 캐시에 남는 것을 막기 위해 Turbopack 파일 캐시를 사용하지 않습니다. 예전 `.next` 출력은 실행·게시하지 않습니다.
+## 사용 순서
 
-`AI_DEMO_MODE=true`이면 키가 있어도 외부 호출이 없습니다. 명시적으로 `false`일 때만 Gemini를 사용하며, 키 누락·12초 초과·할당량·출력 오류는 데모 응답으로 복구합니다. SDK에는 API의 최소 제한(10초)보다 긴 15초를 전달하고 브라우저는 최대 20초 대기합니다. `GEMINI_MODEL` 기본값은 `gemini-3.8-flash`입니다. 실호출은 별도 서버에서 `node scripts/live-smoke.mjs`로 검증합니다. 2026-09-21 고객·코치·Q&A 실제 호출이 모두 성공했습니다. 이전 HTTP 400은 앱이 API 최소 10초보다 짧은 8초 deadline을 보낸 것이 원인이었으며 수정했습니다. 자동 회귀와 실호출 결과는 분리해 기록합니다.
+1. 첫 화면의 **연습 시작하기** → **연습 시작하기**를 누릅니다.
+2. 고객 상황을 읽고 POS의 행동을 선택합니다. 각 단계의 해설을 확인하고 12단계를 마치면 점수가 나옵니다.
+3. **테스트 시작하기**는 면접용입니다. 별칭을 입력할 수 있으며 해설은 종료 후 표시됩니다.
+4. **매장 Q&A**에서 상품 검수 등 업무를 질문하면 매뉴얼 출처와 함께 답합니다. 자료 안내를 펼쳐 `.md`/`.txt`를 올릴 수 있습니다.
+5. **체크리스트**에서 오늘 할 일을 표시합니다.
+6. 상단 **경영주 관리**에서 연습·테스트 기록과 점수, 단계별 답변을 봅니다. **체크리스트 설정**에서 항목을 편집합니다. 추가 매장 규칙은 보조 기능입니다.
 
-## 데모 순서
+## 매뉴얼과 AI
 
-1. 경영주 대시보드에서 데모 데이터를 초기화하고 매장 매뉴얼의 행사 규칙을 수정합니다.
-2. 스토어 매니저로 전환해 응대 연습을 시작합니다. POS 없이 4,500원으로 답하면 정답과 확인 절차 모두 보완이 필요합니다.
-3. 같은 상황을 다시 연습합니다. 캔커피 A를 조회하고 3,000원으로 답하면 절차를 지킨 결과와 이전 시도 비교가 나타납니다.
-4. 매장 Q&A의 행사 규칙 버튼을 눌러 수정된 내용과 버전을 확인하고, 매뉴얼에 없는 택배 질문을 남깁니다.
-5. 체크리스트에서 입고 확인을 완료, 소비기한 확인을 경영주 확인 필요로 선택합니다.
-6. 경영주 대시보드에서 완료 연습 2회, 완료 업무 1/4, 질문 2개, 확인 필요 2개를 확인합니다.
+- `docs/gs25-store-manager-training-map.md`에서 확인된 본문 요약58개를 `node scripts/generate-manual-reference.mjs`로 생성합니다. 본문 미확보20개는 사용하지 않습니다.
+- 매뉴얼 검색은 보수적 키워드 검색입니다. 표현에 따라 답을 못 찾을 수 있으며, 근거가 없으면 경영주 확인으로 남깁니다.
+- 업로드는 UTF-8 `.md`/`.txt`20KB 이하입니다. PDF/HWP는 텍스트로 내보내야 합니다. 업로드된 문서는 브라우저에 저장되고 질문할 때 서버와 Gemini에 전달됩니다.
+- Gemini는 검색된 근거로 답변을 작성하고 출처 ID/숫자를 검사합니다. API 실패·시간 초과·출력 오류는 근거 요약으로 대체합니다. UI에 Gemini/데모 모드를 구분합니다.
+- `AI_DEMO_MODE=true`이면 외부 API를 부르지 않습니다. 실제 연결 검증은 별도 live 서버 또는 배포에서 `node scripts/live-manual-smoke.mjs <URL>`로1회 실행합니다.
+- 퀴즈 점수는 AI 없이 결정론적으로 계산합니다. 직원의 채용 적합성을 자동 판정하지 않습니다.
 
-## 데이터와 한계
+## 저장과 한계
 
-- 가상 매장 1개, 합성 상품 3개, 행사 1개, 기본/혼합 상품 상황 2개를 제공합니다. 실제 GS25 데이터·공식 매뉴얼·로고를 사용하지 않습니다.
-- 인증 없는 역할 전환 데모입니다. 같은 브라우저의 `firstday.zip` localStorage에만 저장하며, 다른 기기·동시 탭 동기화와 실제 POS 연동은 지원하지 않습니다. 저장이 불가능하면 임시 상태임을 표시합니다.
-- 가격·행사 계산·평가는 코드와 구조화된 데이터가 결정합니다. Gemini는 허용된 소개 문구와 사실 문장의 순서를 선택합니다. 자유로운 사실 생성이나 자유문장 채점은 하지 않습니다. UI에 선택한 안내 유형과 금액으로 평가한다는 점을 표시합니다.
-- Q&A는 작은 매뉴얼에 맞춘 보수적인 검색입니다. 근거가 없거나 여러 규칙이 동시에 맞으면 경영주 확인으로 남깁니다. 과거 답변·미해결 기록과 진행 중 연습의 규칙 사본은 이후 수정으로 바뀌지 않습니다.
-- 대시보드의 연습 수는 재도전을 포함한 완료 시도 수, 업무 수는 현재 항목 중 완료 수, 질문 수는 누적 기록 수입니다. 확인 필요 수는 과거 미해결 질문과 현재 확인 요청 업무의 합입니다. 역할극의 확인 요청은 업무 요청에 포함하지 않습니다.
-- 데이터 초기화는 확인 후 이 앱의 저장 키만 덮어씁니다. 브라우저 데이터를 지우면 기록이 사라집니다.
+로그인 없는 체험판입니다. 같은 브라우저에만 기록되며 다른 기기와 공유되지 않습니다. 실제 채용용 인증·부정행위 방지·실제 POS 연동은 없습니다. 자료는 최신 점포 정책을 보장하지 않습니다.
 
-현재 구현 단계와 실제 검증 결과는 `progress.md`와 `docs/verification-matrix.md`를 참조하세요. 테스트 결과를 실서비스·실제 Gemini 검증으로 해석하지 않습니다.
+규칙/체크리스트/Q&A는 `firstday.zip`, 퀴즈는 `firstday-training-v1`, 업로드 문서는 `firstday-uploaded-manual-v1`에 저장합니다. 체크리스트 하단에서 확인 후 초기화하면 앱의 세 저장 영역을 초기화합니다. 이전 버전의 대화형 연습 자료는 내부 호환성을 위해 남지만 새 점수 기록과 합산하지 않습니다.
 
-## Published demo
+## 디자인과 배포
 
+- Figma: https://www.figma.com/design/KYOkEnYcKTRuPpe6hi3QPW
 - App: https://gs-hack-seven.vercel.app
 - Source: https://github.com/Hee1-99/gs-hack
-- Production uses real Gemini with deterministic fallback; automated regression stays forced demo. Verified customer, coach and grounded Q&A live, plus full desktop/mobile deployed journeys on2026-09-21. Data remains local to each browser.
-- Vercel uses the Next.js preset and `.firstday-build` output. Deploy with `vercel deploy --prod --build-env AI_DEMO_MODE=true --env AI_DEMO_MODE=false`; configure the existing key as a sensitive server-side production variable. Never upload `.env.local`.
+- 기존 프로젝트에 `vercel deploy --prod --build-env AI_DEMO_MODE=true --env AI_DEMO_MODE=false`로 배포합니다. `.env.local`은 업로드하지 않습니다.
+
+최신 실제 검증 결과는 `progress.md`, `docs/verification-matrix.md`를 확인하세요. 로컬 테스트, 실제 Gemini와 배포 검증은 서로 구분합니다.

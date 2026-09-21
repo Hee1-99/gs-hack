@@ -411,3 +411,16 @@ These are not part of this long-running P0 prompt. Do not automatically consume 
 - [ ] Question-topic classification and repeated-question trends
 - [ ] More advanced before/after training behavior comparison
 - [ ] Supabase repository adapter and production role permissions
+
+## Task 17: Simulator-first Product Revision (2026-09-21 user request)
+
+**Depends on:** Task 16
+
+**Deliverable:** One coherent revised user flow. The user explicitly authorizes parallel agents for simulator, Q&A and owner UI. This revision supersedes the earlier role-choice landing, no-score requirement and reference-only use of confirmed public manual summaries.
+
+- [x] **Step 1: Replace role selection and duplicate first-step/chat pages with a clear practice/test landing and unified simulator navigation; inspect a Figma design and rendered browser screens.**
+- [x] **Step 2: Deliver 12 source-linked sequential quiz stages with graphic customer/POS, deterministic final score, incorrect attempt/retry, refresh recovery and a test mode with feedback only at completion.**
+- [x] **Step 3: Ground Q&A in confirmed supplied manual passages and uploaded text, call Gemini server-side, preserve sources, and refuse unsupported questions; verify fallback and one bounded real call.**
+- [x] **Step 4: Limit owner primary UI to training/test history, scores and checklist configuration; keep additional rules secondary and reset all relevant app stores coherently.**
+- [x] **Step 5: Run full unit/integration suite, forced-demo production build and complete production-server desktop/mobile E2E; perform bounded residual review and visual inspection.**
+- [ ] **Step 6: Publish verified source to the existing repository/project, verify deployment and real manual Q&A separately, and record measured timing and any concrete remaining limitations.**
