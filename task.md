@@ -499,4 +499,4 @@ These are not part of this long-running P0 prompt. Do not automatically consume 
 - [x] **Step 2: Gate the owner workspace so a signed-out visitor receives only an explanation and login action.**
 - [x] **Step 3: Verify loading, signed-out, crew and owner states with focused and full automated tests.**
 - [x] **Step 4: Run the production build and inspect the landing-to-owner flow in a real signed-out browser.**
-- [ ] **Step 5: Publish, deploy and verify the corrected production owner entry.**
+- [x] **Step 5: Publish, deploy and verify the corrected production owner entry.**

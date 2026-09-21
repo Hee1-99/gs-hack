@@ -523,3 +523,12 @@
 - Read-only browser verification found none of `완료한 연습·테스트`, `평균 점수`, `체크리스트 완료 현황`, `체험 스토어 매니저` or `최근 기록`. The production server on port3101 was stopped after verification.
 - Timing: originalrunStartedAt2026-09-21T09:05:58.258Z; lastCheckpointAt:2026-09-22T02:03:13.6912472+09:00; measuredactiveinterval:4.47 minutes; cumulativeactiveWorkMinutes:243.89. The earlier unmeasured diagnosis interval remains excluded.
 - Exact next checkbox: Task23 Step5 stage only tracked correction/docs, publish to `origin/main`, deploy the linked Vercel production target and repeat the signed-out owner check on the production alias. User-owned untracked crawl audit remains untouched.
+
+### Iteration47 — 2026-09-22T02:06:19+09:00 — Task23 published and live
+
+- Published application commit `6afe0997e88e6f657fc4fdd85e56e9cdcbcdac8c` to `origin/main`; `git ls-remote` confirmed the remote ref matched. User-owned untracked `docs/evidence/gs25-training-crawl-audit.json` remained excluded.
+- Vercel production deployment `dpl_7EGtCsg9vVjcJHAkHpNiJV9KfNmT` reached READY. Immutable deployment: https://gs-hack-a81k5heap-hee1-99s-projects.vercel.app ; alias: https://gs-hack-seven.vercel.app .
+- A fresh signed-out Edge Computer Use session opened the production `/manager/dashboard`. It showed the explanation and `경영주로 로그인`; a read-only rendered-text check found none of the five data labels used in local verification. A separately authenticated crew session showed the existing `경영주 전용 화면이에요` denial, so both unauthenticated and wrong-role boundaries remain closed.
+- Task23 all five checkboxes are verified. Outcome: completed-before-duration-target; the requested signed-out empty state, regression coverage, publication and production verification are complete.
+- Timing: originalrunStartedAt2026-09-21T09:05:58.258Z; lastCheckpointAt:2026-09-22T02:06:19.9666983+09:00; measuredactiveinterval:3.10 minutes; cumulativeactiveWorkMinutes:246.99. Stopped and previously unmeasured gaps remain excluded.
+- Nextcheckbox:none. Finalaction:push this documentation-only closure and verify the remote SHA; no application redeploy is needed because deployment `dpl_7EGtCsg9vVjcJHAkHpNiJV9KfNmT` already contains `6afe099`.
