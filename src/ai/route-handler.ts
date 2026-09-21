@@ -5,12 +5,12 @@ import { generateCoaching, generateCustomerReply } from './gemini-client';
 import type { AiOptions } from './types';
 import { PROVIDER_REQUEST_TIMEOUT_MS } from './timeouts';
 
-export function routeAiOptions(): AiOptions {
+export function routeAiOptions(settings: { maxOutputTokens?: number } = {}): AiOptions {
   const apiKey = process.env.GEMINI_API_KEY?.trim();
   return { apiKeyPresent: !!apiKey, demoMode: process.env.AI_DEMO_MODE !== 'false', provider: async (prompt, schema, signal) => {
     // Called lazily inside a route request; forced demo never initializes the SDK.
     const client = new GoogleGenAI({ apiKey });
-    const response = await client.models.generateContent({ model: process.env.GEMINI_MODEL || 'gemini-3.8-flash', contents: prompt, config: { responseMimeType: 'application/json', responseJsonSchema: schema, abortSignal: signal, httpOptions: { timeout: PROVIDER_REQUEST_TIMEOUT_MS }, maxOutputTokens: 1024 } });
+    const response = await client.models.generateContent({ model: process.env.GEMINI_MODEL || 'gemini-3.8-flash', contents: prompt, config: { responseMimeType: 'application/json', responseJsonSchema: schema, abortSignal: signal, httpOptions: { timeout: PROVIDER_REQUEST_TIMEOUT_MS }, maxOutputTokens: Math.min(4096, Math.max(256, settings.maxOutputTokens ?? 1024)) } });
     return response.text ?? '';
   } };
 }

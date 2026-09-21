@@ -42,8 +42,8 @@ it('answers from supplied manual with no manager rules and preserves evidence', 
   expect(answer.sources).toHaveLength(1);
   expect(answer.rules).toEqual([]);
 });
-it('does not guess absent topics or pending source bodies', async () => {
-  expect((await answerQuestion('쿠션언어', [], demo)).status).toBe('unresolved');
+it('offers clearly general advice without claiming pending source bodies were read', async () => {
+  expect(await answerQuestion('쿠션언어', [], demo)).toMatchObject({ answerKind: 'general', sources: [], rules: [] });
   expect((await answerQuestion('직원 급여 정산 계좌', [], demo)).status).toBe('unresolved');
   expect((await answerQuestion('상품 검수 비밀번호', [], demo)).status).toBe('unresolved');
 });

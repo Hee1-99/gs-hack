@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { trainingSteps } from '../../src/features/training/training-data';
+import { enterTrainingAnswer } from './training-actions';
 
 test('manager checklist edits preserve progress and reset requires confirmation', async ({ page }, testInfo) => {
   await page.goto('/crew/checklist');
@@ -43,12 +44,12 @@ test('manager checklist edits preserve progress and reset requires confirmation'
 });
 
 test('manager reviews complete test scores, stage answers and in-progress records after refresh', async ({ page }) => {
+  test.setTimeout(90_000);
   await page.goto('/crew/simulation?mode=test');
   await page.getByLabel('테스트 참여자 별칭').fill('지원자 A');
   await page.getByRole('button', { name: '테스트 시작하기', exact: true }).click();
   for (const [index, step] of trainingSteps.entries()) {
-    const choice = step.choices.find(item => index === 0 ? item.id !== step.correctChoiceId : item.id === step.correctChoiceId)!;
-    await page.getByRole('group', { name: 'POS 행동 선택' }).getByRole('button', { name: new RegExp(choice.label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')) }).click();
+    await enterTrainingAnswer(page, step, index === 0);
     await page.getByRole('button', { name: index === trainingSteps.length - 1 ? '제출하고 점수 보기' : '답 제출하고 다음 단계', exact: true }).click();
   }
   await expect(page.getByRole('heading', { name: '끝까지 해냈어요!' })).toBeVisible();
@@ -57,7 +58,7 @@ test('manager reviews complete test scores, stage answers and in-progress record
   await expect(page).toHaveURL(/\/manager\/dashboard$/);
   await page.reload();
   await expect(page.getByTestId('training-count')).toHaveText('1회');
-  await expect(page.getByTestId('training-average')).toContainText('92');
+  await expect(page.getByTestId('training-average')).toContainText('97');
   await expect(page.getByText('진행 중', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: '구인 테스트', exact: true }).click();
   const records = page.locator('details').filter({ has: page.locator('summary', { hasText: '지원자 A' }) });

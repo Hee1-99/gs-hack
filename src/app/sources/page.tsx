@@ -1,0 +1,6 @@
+import Link from 'next/link';
+import { ArrowLeft, BookOpenCheck, ExternalLink } from 'lucide-react';
+import passages from '@/features/manual-reference/passages.json';
+export default function SourcesPage() {
+  return <div className="container source-page"><Link className="switch-role" href="/"><ArrowLeft size={15} aria-hidden/>GStep 홈</Link><div className="page-heading"><p className="eyebrow">GS25 공개 교육 자료 기반</p><h1>우리가 배우는 매뉴얼</h1><p>막연한 정답 대신, 실제 교육 자료에서 확인한 업무의 순서를 연습해요.</p></div><div className="source-intro"><BookOpenCheck size={34} aria-hidden/><div><h2>본문을 확인한 {passages.length}개 교육 자료</h2><p>공개된 GS25 스토어 매니저 교육맵과 영상의 확인된 본문 요약을 사용합니다. 각 퀴즈와 매뉴얼 답변에서 출처를 다시 확인할 수 있어요.</p><a href="https://hpimg.gsretail.com/images/gs25/winwin/web/store_manager_map.html" target="_blank" rel="noreferrer">공식 교육맵 열기 <ExternalLink size={14} aria-hidden/></a></div></div><p className="source-limits">확인일 2026.09.21 · 아직 본문을 확보하지 못한 20개 영상은 근거에서 제외했습니다. 공개 교육의 요약이며 최신 내부 지침 전체를 대체하지 않습니다. 가격·상품·POS 그래픽은 가상 연습용이고, GStep은 GS25 공식 서비스가 아닙니다.</p><details className="source-directory"><summary>교육 자료 {passages.length}개와 원문 링크 보기</summary><ol>{passages.map(source=><li key={source.id}><h2><a href={source.url} target="_blank" rel="noreferrer">{source.title}<ExternalLink size={14} aria-hidden/></a></h2><p>{source.excerpt}</p></li>)}</ol></details></div>;
+}

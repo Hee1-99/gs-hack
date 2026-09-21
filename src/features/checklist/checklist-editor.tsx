@@ -9,23 +9,25 @@ import styles from './checklist-editor.module.css';
 
 function ItemForm({ item, repo, onCreated }: { item?: ChecklistItem; repo: StoreRepository; onCreated?: () => void }) {
   const [message, setMessage] = useState('');
+  const [saving, setSaving] = useState(false);
   const prefix = item?.id ?? 'new-item';
-  return <form className={styles.form} aria-label={item ? `${item.title} 수정` : '새 체크리스트 항목'} onSubmit={event => {
+  return <form className={styles.form} aria-label={item ? `${item.title} 수정` : '새 체크리스트 항목'} onSubmit={async event => {
     event.preventDefault();
     const parsed = checklistItemInputSchema.safeParse(Object.fromEntries(new FormData(event.currentTarget)));
     if (!parsed.success) { setMessage('항목 이름, 분류, 확인할 내용을 입력해 주세요.'); return; }
+    setSaving(true);
     try {
-      const result = repo.saveChecklistItem(parsed.data, item?.id);
+      const result = await repo.saveChecklistItem(parsed.data, item?.id);
       setMessage(result.persisted ? '체크리스트에 저장했어요.' : '현재 화면에 적용했어요. 브라우저에 저장하지 못해 새로고침하면 사라질 수 있어요.');
       if (!item && result.persisted) onCreated?.();
-    } catch { setMessage('저장하지 못했어요. 입력을 확인하고 다시 시도해 주세요.'); }
+    } catch { setMessage('저장하지 못했어요. 입력을 확인하고 다시 시도해 주세요.'); } finally { setSaving(false); }
   }}>
     <div className="two-fields">
       <label htmlFor={`${prefix}-title`}>항목 이름<input id={`${prefix}-title`} name="title" defaultValue={item?.title} required maxLength={100} placeholder="예: 냉장 진열대 소비기한 확인" /></label>
       <label htmlFor={`${prefix}-category`}>분류<input id={`${prefix}-category`} name="category" defaultValue={item?.category} required maxLength={50} placeholder="예: 상품 관리" /></label>
     </div>
     <label htmlFor={`${prefix}-description`}>확인할 내용<textarea id={`${prefix}-description`} name="description" defaultValue={item?.description} required maxLength={2000} rows={2} placeholder="어디에서 무엇을 확인하는지 적어 주세요." /></label>
-    <div className="form-actions"><button className="button" type="submit"><Check size={16} aria-hidden />{item ? '항목 저장' : '항목 등록'}</button><span className="save-message" role="status">{message}</span></div>
+    <div className="form-actions"><button className="button" type="submit" disabled={saving}><Check size={16} aria-hidden />{item ? '항목 저장' : '항목 등록'}</button><span className="save-message" role="status">{message}</span></div>
   </form>;
 }
 

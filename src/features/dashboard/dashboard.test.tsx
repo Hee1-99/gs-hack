@@ -18,7 +18,7 @@ it('shows a real empty state without an invented score', async () => {
 it('reads saved test scores and reveals the selected answer and source for every completed step', async () => {
   let completed = createTrainingAttempt('test', '테스트 A');
   for (const [index, step] of trainingSteps.entries()) {
-    completed = answerTrainingStep(completed, step.id, index === 0 ? step.choices.find(choice => choice.id !== step.correctChoiceId)!.id : step.correctChoiceId);
+    completed = answerTrainingStep(completed, step.id, index === 0 ? step.choices.find(choice => choice.id !== step.correctChoiceId)!.id : step.correctChoiceId, step.kind === 'short-answer' ? { answerText: step.sampleAnswer, accuracyPoints: 100, gradingMode: 'demo', elapsedMs: 1000 } : { elapsedMs: 1000 });
   }
   const active = createTrainingAttempt('practice', '연습 B');
   localStorage.setItem(TRAINING_STORAGE_KEY, JSON.stringify({ version: 1, attempts: [completed, active] }));
@@ -34,4 +34,6 @@ it('reads saved test scores and reveals the selected answer and source for every
   expect(within(record).getAllByRole('listitem')).toHaveLength(trainingSteps.length);
   expect(within(record).getByText('오답')).toBeInTheDocument();
   expect(within(record).getAllByRole('link')[0]).toHaveAttribute('href', trainingSteps[0].source.url);
+  expect(within(record).getByText(trainingSteps.find(step => step.kind === 'short-answer')!.sampleAnswer!)).toBeInTheDocument();
+  expect(within(record).getByText(/정확도 .*응답 시간/)).toBeInTheDocument();
 });

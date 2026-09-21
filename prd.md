@@ -49,3 +49,13 @@ A first-shift simulator for a `스토어 매니저`: choose a concrete action in
 ## Reference-driven visual revision — Task18
 
 The user's three mobile app screenshots define the revised visual direction: cyan highlights, a pale lavender canvas, large rounded white service cards, original dimensional store/tool illustrations and fixed mobile bottom navigation with a raised simulator action. PRODUCT.md and DESIGN.md record this direction. Existing practice/test, source-grounded Q&A, checklist and owner workflows remain unchanged. Mobile navigation must not obstruct controls, and all primary pages must remain usable at 390×844 and 1440×900 with keyboard access and reduced motion.
+
+## GStep expansion — Task19 (authoritative current request)
+
+GStep replaces the prior brand. Highlight actual supplied GS25 public training/manual sources on the landing, without implying a complete current internal manual or official affiliation. Retain the cyan reference identity with a new original step logo.
+
+The course expands across confirmed manual processes and includes objective decisions plus free-text customer responses. Gemini grades free text with a validated rubric and explains its score; objective correctness remains deterministic. Timing adds at most10% of score and cannot reward an incorrect answer. Record per-step elapsed time and show accuracy/time breakdown. Do not present a local/demo result as real AI evaluation. A separate multi-turn Gemini customer-chat simulator supports practice and feedback. Scores support learning, never automatic hiring decisions.
+
+Q&A adopts a diligent, warm store-manager persona. It may answer general questions using model knowledge, clearly marked as general AI guidance; only cited manual passages are labeled manual-grounded. Do not invent exact store-specific policies or source citations when missing. Add varied FAQ examples.
+
+Supabase replaces browser-only persistence for signed-in users: email/password accounts, 스토어 매니저/경영주 roles, store-scoped sharing, owner settings and team training history. Enforce data access in RLS rather than merely hiding UI. Preserve a clearly labeled local demo when unconfigured or signed out. Existing training histories require version-safe handling. Live auth/database verification is separate from tests and requires the intended project's connection settings.

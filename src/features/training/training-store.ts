@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { answerTrainingStep, createTrainingAttempt, parseTrainingState, type TrainingState } from './training-engine';
+import { answerTrainingStep, createTrainingAttempt, parseTrainingState, validateTrainingAttempt, type AnswerDetails, type TrainingState } from './training-engine';
 import type { TrainingMode } from './training-data';
 export type { TrainingAttempt, TrainingAnswer } from './training-engine';
 
@@ -9,12 +9,13 @@ const TRAINING_EVENT = 'firstday-training-change';
 let memory: TrainingState = { version: 1, attempts: [] };
 let persistence: 'local' | 'memory' | 'recovered' = 'local';
 let initialized = false;
+let activeStorageKey = TRAINING_STORAGE_KEY;
 
 function read(force = false) {
   if (initialized && !force) return memory;
   initialized = true;
   try {
-    const raw = window.localStorage.getItem(TRAINING_STORAGE_KEY);
+    const raw = window.localStorage.getItem(activeStorageKey);
     const next = parseTrainingState(raw);
     persistence = raw && !next.attempts.length && raw !== JSON.stringify({ version: 1, attempts: [] }) ? 'recovered' : 'local';
     memory = next;
@@ -23,12 +24,24 @@ function read(force = false) {
 }
 function write(state: TrainingState) {
   memory = state;
-  try { window.localStorage.setItem(TRAINING_STORAGE_KEY, JSON.stringify(state)); persistence = 'local'; }
+  try { window.localStorage.setItem(activeStorageKey, JSON.stringify(state)); persistence = 'local'; }
   catch { persistence = 'memory'; }
   window.dispatchEvent(new Event(TRAINING_EVENT));
 }
 
 export function resetTrainingData(): boolean { write({ version: 1, attempts: [] }); return persistence === 'local'; }
+export function getTrainingSnapshot() { return memory; }
+export function setTrainingScope(scope: string | null) {
+  const nextKey = scope ? `gstep-training:${scope}` : TRAINING_STORAGE_KEY;
+  if (nextKey === activeStorageKey) return;
+  activeStorageKey = nextKey; initialized = false; memory = { version: 1, attempts: [] };
+  read(); window.dispatchEvent(new Event(TRAINING_EVENT));
+}
+export function mergeTrainingAttempts(items: unknown[]) {
+  const merged = new Map(memory.attempts.map(attempt => [attempt.id, attempt]));
+  for (const item of items) { const next = validateTrainingAttempt(item); if (!next) continue; const old = merged.get(next.id); if (!old || next.answers.length > old.answers.length) merged.set(next.id, next); }
+  write({ version: 1, attempts: [...merged.values()].sort((a,b) => a.startedAt.localeCompare(b.startedAt)).slice(-500) });
+}
 
 export function useTrainingStore() {
   const [state, setState] = useState<TrainingState>({ version: 1, attempts: [] });
@@ -37,23 +50,28 @@ export function useTrainingStore() {
   useEffect(() => {
     setState(read()); setStatus(persistence); setReady(true);
     const update = () => { setState(memory); setStatus(persistence); };
-    const storage = (event: StorageEvent) => { if (event.key === TRAINING_STORAGE_KEY || event.key === null) { read(true); update(); } };
+    const storage = (event: StorageEvent) => { if (event.key === activeStorageKey || event.key === null) { read(true); update(); } };
     window.addEventListener(TRAINING_EVENT, update);
     window.addEventListener('storage', storage);
     return () => { window.removeEventListener(TRAINING_EVENT, update); window.removeEventListener('storage', storage); };
   }, []);
 
-  function start(mode: TrainingMode, name: string) {
-    const attempt = createTrainingAttempt(mode, name);
+  function start(mode: TrainingMode, name: string, chapter?: string) {
+    const attempt = createTrainingAttempt(mode, name, chapter);
     write({ version: 1, attempts: [...memory.attempts, attempt].slice(-500) });
     return attempt;
   }
-  function answer(attemptId: string, stepId: string, choiceId: string) {
+  function answer(attemptId: string, stepId: string, choiceId: string, details?: AnswerDetails) {
     const existing = memory.attempts.find(attempt => attempt.id === attemptId);
     if (!existing) return null;
-    const next = answerTrainingStep(existing, stepId, choiceId);
+    const next = answerTrainingStep(existing, stepId, choiceId, details);
     if (next !== existing) write({ version: 1, attempts: memory.attempts.map(attempt => attempt.id === attemptId ? next : attempt) });
     return next;
   }
-  return { ...state, ready, persistence: status, active: [...state.attempts].reverse().find(attempt => attempt.status === 'active') ?? null, start, answer };
+  function beginStep(attemptId: string) {
+    const existing = memory.attempts.find(attempt => attempt.id === attemptId);
+    if (!existing || existing.courseVersion === 1 || existing.status === 'completed' || existing.stageStartedAt) return;
+    write({ version: 1, attempts: memory.attempts.map(attempt => attempt.id === attemptId ? { ...attempt, stageStartedAt: new Date().toISOString() } : attempt) });
+  }
+  return { ...state, ready, persistence: status, active: [...state.attempts].reverse().find(attempt => attempt.status === 'active') ?? null, start, answer, beginStep };
 }

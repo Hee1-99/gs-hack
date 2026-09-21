@@ -1,4 +1,5 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
+import { trainingSteps } from '../../src/features/training/training-data';
 async function tabTo(page: Page, target: Locator) {
   await expect(target).toBeVisible(); await expect(target).toBeEnabled();
   for (let index = 0; index < 100; index++) {
@@ -13,7 +14,7 @@ async function tabTo(page: Page, target: Locator) {
 }
 async function activate(page: Page, target: Locator) { await tabTo(page, target); await page.keyboard.press('Enter'); }
 test('primary pages and active POS fit mobile and desktop without horizontal overflow', async ({ page }, info) => {
-  for (const route of ['/', '/manager/manual', '/manager/checklist', '/crew', '/crew/questions', '/crew/checklist', '/manager/dashboard']) {
+  for (const route of ['/', '/manager/manual', '/manager/checklist', '/crew', '/crew/questions', '/crew/checklist', '/manager/dashboard', '/crew/chat', '/login', '/sources']) {
     await page.goto(route); await expect(page.locator('h1')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), route).toBe(true);
     await page.screenshot({ path: `docs/evidence/revision-${route.replaceAll('/', '-') || 'home'}-${info.project.name}.png`, fullPage: true, animations: 'disabled' });
@@ -33,7 +34,7 @@ test('keyboard-only quiz, Q&A, checklist and reset focus flow', async ({ page })
   await activate(page, page.getByRole('button', { name: /시재·처리할 상품·특이사항 함께 확인/ }));
   await activate(page, page.getByRole('button', { name: '이 행동으로 진행' }));
   await activate(page, page.getByRole('button', { name: '다음 단계', exact: true }));
-  await expect(page.getByRole('heading', { name: '시재 차이 확인', exact: true })).toBeFocused();
+  await expect(page.getByRole('heading', { name: trainingSteps[1].title, exact: true })).toBeFocused();
   await activate(page, page.getByRole('link', { name: '매장 Q&A', exact: true }));
   await activate(page, page.getByRole('button', { name: '상품 검수', exact: true }));
   await expect(page.getByTestId('question-log')).toContainText('매뉴얼 근거 있음');

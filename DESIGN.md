@@ -21,3 +21,7 @@ Desktop header plus contextual tabs. Mobile persistent bottom bar: home, Q&A, ce
 ## Motion and graphics
 
 Original rounded dimensional SVG store/clipboard/message/assessment graphics. Cyan cap and uniform, pastel backdrop, soft depth. Short state transitions only; reduced-motion supported. No official logos, real POS asset or copied mascot.
+
+## GStep expansion
+
+The ascending-step G symbol and two-tone wordmark replace the previous name. The landing hero leads with confirmed manual provenance and offers a distinct lavender Gemini conversation card. The source page distinguishes 58 collected summaries from 20 missing bodies. AI requests, deterministic checks and demo feedback have distinct labels. Course selection, short-answer inputs and final accuracy/time breakdown keep the same visual controls. Accounts use ID/password without email verification; account and store state must be confirmed before rendering private records.

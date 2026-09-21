@@ -4,7 +4,7 @@ test('production direct routes, refresh and back navigation preserve state witho
   page.on('pageerror', error => errors.push(error.name));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
   page.on('response', response => { if (response.status() >= 400 && new URL(response.url()).origin === new URL(page.url()).origin) errors.push(`${response.status()} ${new URL(response.url()).pathname}`); });
-  const routes = ['/manager/manual', '/manager/checklist', '/manager/dashboard', '/crew', '/crew/checklist', '/crew/questions', '/crew/simulation'];
+  const routes = ['/manager/manual', '/manager/checklist', '/manager/dashboard', '/crew', '/crew/checklist', '/crew/questions', '/crew/simulation', '/crew/chat', '/login', '/sources'];
   for (const route of routes) { await page.goto(route); await expect(page.locator('h1')).toBeVisible(); }
   await page.goto('/crew/support');
   await expect(page).toHaveURL(/\/crew\/questions$/);

@@ -2,7 +2,10 @@ export type TrainingMode = 'practice' | 'test';
 export type TrainingSource = { title: string; url: string };
 export type TrainingStep = {
   id: string;
-  chapter: '근무 준비' | 'POS 판매' | '문제 해결';
+  chapter: string;
+  kind?: 'choice' | 'short-answer';
+  rubric?: { id: string; label: string; keywords: string[] }[];
+  sampleAnswer?: string;
   title: string;
   situation: string;
   customer: string;
@@ -20,7 +23,7 @@ export const trainingTotal = trainingSubtotal - trainingTransaction.discount;
 
 // Only confirmed body summaries in docs/gs25-store-manager-training-map.md are used.
 // Transactions, prices and screen graphics are synthetic practice fixtures.
-export const trainingSteps: TrainingStep[] = [
+export const legacyTrainingSteps: TrainingStep[] = [
   {
     id: 'handover', chapter: '근무 준비', title: '인수인계 확인', screen: 'handover',
     situation: '이전 근무자가 퇴근을 준비하고 있어요. 교대 전, 전달받을 내용을 확인해요.',
@@ -119,4 +122,50 @@ export const trainingSteps: TrainingStep[] = [
   },
 ];
 
-export const trainingChapters = ['근무 준비', 'POS 판매', '문제 해결'] as const;
+export const trainingChapters = ['근무 준비', '상품 관리', 'POS 판매', '결제·서비스', '위생·안전', '고객 응대'] as const;
+function base(id: string, chapter: string): TrainingStep { return { ...legacyTrainingSteps.find(step => step.id === id)!, chapter, kind: 'choice' }; }
+function choice(id: string, chapter: string, title: string, situation: string, question: string, labels: [string,string,string], explanation: string, sourceTitle: string, video: string, screen: TrainingStep['screen'] = 'report'): TrainingStep {
+  const choices = labels.map((label,index) => ({ id: index === 0 ? 'correct' : `other-${index}`, label }));
+  const offset = id.length % 3;
+  return { id,chapter,title,situation,question,customer:situation,choices:[...choices.slice(offset),...choices.slice(0,offset)],correctChoiceId:'correct',explanation,source:{title:sourceTitle,url:`https://youtu.be/${video}`},screen,kind:'choice' };
+}
+function written(id: string, title: string, situation: string, source: TrainingSource, explanation: string, rubric: NonNullable<TrainingStep['rubric']>, sampleAnswer: string, chapter = '고객 응대'): TrainingStep {
+  return {id,title,chapter,situation,customer:situation,question:'고객이나 다음 근무자에게 어떻게 설명할까요?',choices:[],correctChoiceId:'written',explanation,source,screen:'complaint',kind:'short-answer',rubric,sampleAnswer};
+}
+
+export const trainingSteps: TrainingStep[] = [
+  base('handover','근무 준비'), base('cash-check','근무 준비'),
+  choice('scanner-ready','근무 준비','S/T 스캐너 준비','입고 상품을 검수하기 전 스캐너를 준비해요.','스캐너를 사용하기 전 확인할 것은?', ['기기 연결을 확인하고 상품 바코드 스캔','연결 확인 없이 임의 수량 입력','상품명만 보고 검수 완료'], 'S/T는 바코드 스캔으로 검수·선도관리·상품 조회를 도와요. 휴대전화와 블루투스 스캐너의 준비·연결 상태부터 확인해요.','S/T 사용하기','KuikCHbuE6g'),
+  choice('receiving','근무 준비','입고 수량 검수','전산 출하 수량과 실제 도착 수량이 달라 보여요.','검수를 마치기 전 어떤 확인이 필요할까요?', ['발주·출하·실물 수량을 대조하고 차이 재확인','전산 수량이 항상 맞으니 그대로 완료','도착한 상자 수만 세고 완료'], '발주·출하 수량과 실제 입고 수량을 대조해요. 미입고나 차이는 재확인 후 사유를 등록하고 미검수 목록도 확인해요.','상품 검수','frVZswofdA0'),
+  choice('reserved-stock','근무 준비','사전예약 상품 보관','사전예약 표시가 있는 상품이 일반 상품과 함께 입고됐어요.','이 상품은 어떻게 보관할까요?', ['일반 판매 재고와 분리해 예약 수령까지 보관','일반 매대에 진열해 먼저 온 고객에게 판매','예약 여부 확인 없이 폐기'], '예약 상품은 일반 판매 재고와 분리해 보관해요. 고객의 QR과 상품을 대조한 뒤 전달해요.','사전예약','Ut0JWdGw8QQ'),
+  written('handover-note','미완료 업무 전달','다음 근무자가 왔어요. 입고 수량 차이를 재확인 중이고 아직 결과가 없어요.', {title:'GS25 하루',url:'https://youtu.be/FWRQiAlhUKw'},'미완료 업무와 특이사항을 구체적으로 남기고 다음 확인 행동을 전달해요.',[{id:'unfinished',label:'미완료 상태를 명확히 전달',keywords:['미완료','아직','확인 중']},{id:'detail',label:'수량 차이와 확인할 내용을 전달',keywords:['수량','차이','입고']},{id:'next',label:'후속 확인과 인계를 요청',keywords:['다시 확인','재확인','이어','전달']}],'입고 수량에 차이가 있어 아직 확인 중입니다. 전산과 실물을 다시 확인해 주시고 결과를 다음 근무자에게 전달해 주세요.','근무 준비'),
+
+  choice('expiry-register','상품 관리','소비기한 등록','새 상품의 소비기한을 관리 목록에 등록해요.','등록 후 누락을 막으려면?', ['상품별 날짜·수량을 저장하고 조회 목록 확인','날짜만 기억하고 등록하지 않기','모든 상품을 같은 날짜로 등록'], '소비기한 캘린더와 S/T로 상품별 날짜·수량을 등록해요. 조회 목록에서 누락을 점검하고 잘못된 수량은 수정·저장해요.','상품·선도관리 등록','ZUdZh4j1YO0'),
+  choice('display-fifo','상품 관리','선입선출 진열','같은 상품의 기존 재고와 새 입고분을 진열해요.','올바른 진열은?', ['먼저 입고된 상품부터 판매되도록 배치','새로 들어온 상품만 앞쪽에 배치','가격표와 다른 위치에 임시로 적재'], '상품 정면과 상표가 보이게 정돈하고 먼저 입고된 상품이 먼저 판매되도록 배치해요. 가격표와 상품 위치도 맞춰요.','기본 진열 방법','hodvRGfWG24'),
+  choice('price-label','상품 관리','가격표 목록 확인','가격표가 없는 상품을 스캔했어요.','인쇄하기 전에 무엇을 확인할까요?', ['인쇄 목록의 상품이 실제 상품과 일치하는지','비슷한 이름이면 바로 인쇄','가격표 없이 상품만 진열'], '스마트 스캔으로 상품을 읽고 인쇄 목록에 등록한 뒤, 정확한 상품이 들어갔는지 확인해요.','가격표 발행(S/T)','seHSn7jo1mE'),
+  base('waste','상품 관리'),
+  choice('equipment-temperature','상품 관리','냉장·냉동 설비 점검','냉장고 앞에 상품이 과하게 쌓여 있어요.','어떤 점검을 할까요?', ['설비 종류·온도 표시·과다 적재·성에 확인','모든 기기에 같은 온도 기준 임의 적용','표시를 확인하지 않고 전원만 반복 조작'], '냉장·냉동 설비를 구분해 온도와 적재·성에를 확인해요. 구체적 온도와 주기는 해당 설비의 최신 지침을 확인해요.','기기별 적정온도 관리','kXq0_zT_W74'),
+  choice('stock-difference','상품 관리','전산·실물 재고 대조','재고 조사 중 전산 수량과 실물 수량이 달라요.','차이가 있는 상품은 어떻게 할까요?', ['상품·차이 수량을 기록해 경영주와 다음 근무자에게 전달','원인을 확인하지 않고 임의 수량으로 맞추기','차이가 작으면 기록하지 않기'], '전산 수량과 실물을 대조하고 차이가 있는 상품과 수량을 따로 기록해 경영주와 다음 근무자에게 전달해요.','담배 수불 방법','P0sFEaePdmc'),
+
+  ...['scan','promotion','discount','payment','receipt','hold'].map(id => base(id,'POS 판매')),
+
+  choice('mobile-coupon','결제·서비스','모바일 교환권 확인','고객이 모바일 교환권을 보여 줬어요.','어떤 순서로 처리할까요?', ['상품 등록 후 교환권 바코드와 상품 일치 확인','교환권 그림만 보고 다른 상품으로 교환','상품 등록 없이 결제 완료'], '상품을 먼저 등록한 뒤 상품권·기프티콘 바코드를 스캔해요. 교환권과 상품의 일치 여부를 구분해 확인해요.','모바일 상품권·기프티콘','0qog_xAYzms','payment'),
+  choice('split-payment','결제·서비스','복합결제 잔액 확인','고객이 일부 금액을 먼저 결제했어요.','다음 수단으로 결제하기 전 할 일은?', ['이미 결제된 금액과 남은 금액 확인','전체 금액을 다음 수단으로 다시 결제','일부만 결제됐어도 완료로 표시'], '일부 금액을 결제한 뒤 남은 금액을 확인하고 다음 결제수단으로 이어가요.','결제 메뉴(복합결제)','eYVfoqL5KkI','payment'),
+  choice('return-original','결제·서비스','반품 원거래 확인','고객이 구매 상품의 반품을 요청했어요.','반품 처리 전에 무엇부터 확인할까요?', ['영수증 또는 거래 조건으로 원거래와 결제수단 확인','상품 가격만 보고 임의 환불','원래 수단과 무관하게 새 거래 생성'], '영수증이나 날짜·상품·금액 조건으로 원거래를 찾고 원래 결제 내역과 수단을 먼저 확인해요. 실제 가능 여부는 최신 지침에 따라 확인해요.','반품(현금·카드·교통카드)','pM-1mfbZPL8','receipt'),
+  choice('cash-receipt','결제·서비스','현금영수증 안내','고객이 현금영수증 발행을 요청해요.','필요한 안내는?', ['개인용·사업자용을 확인하고 고객이 직접 입력하도록 안내','직원 개인 번호로 대신 발행','사용 목적을 묻지 않고 임의 발급'], '개인용·사업자용을 확인하고 고객이 직접 입력할 수 있는 방식으로 발급해요. 결제 후 발행은 원거래를 먼저 찾아요.','현금영수증 발행','fNfpozUpeos','receipt'),
+  choice('parcel-accept','결제·서비스','택배 접수·보관','접수할 택배의 서비스 종류가 서로 달라요.','접수 이후 어떤 흐름으로 처리할까요?', ['접수 정보·무게·운송장을 확인하고 종류별 분리 보관','운송장 없이 모든 물품을 한곳에 쌓기','서비스 종류를 확인하지 않고 임의 결제'], '서비스 종류와 접수 정보·무게를 확인하고 운송장을 부착해요. 결제·안내를 거쳐 서비스 종류별로 물품을 분리 보관해요.','일반·반값택배','5nYtL3JYacw'),
+  choice('parcel-pickup','결제·서비스','택배 픽업 대조','고객이 보관 중인 택배를 찾으러 왔어요.','전달 전에 무엇을 대조할까요?', ['송장·주문번호와 보관된 실물','상자 크기와 고객의 인상','방문 순서와 선반 위치만'], '고객의 송장·주문번호를 실물과 대조한 뒤 전달 처리해요. QR 확인이 어렵거나 등록 불가인 경우에는 재발송·확인을 요청해요.','택배 픽업','ncXixYAv-G8'),
+
+  choice('ff-hygiene','위생·안전','조리 전 위생','카운터 조리를 시작하려고 해요.','조리 전에 확인할 것은?', ['손 위생과 재료 보관·밀봉 상태','손 위생은 마감 때 한 번만','재료 상태와 관계없이 바로 조리'], '카운터 FF 업무는 청결·위생이 기본이에요. 조리 전 손 위생, 재료 보관·밀봉 상태를 확인해요.','카운터 FF 관리 업무','Oiy7JOFhNHM'),
+  choice('ff-label','위생·안전','조리 후 표시 발행','카운터 상품의 조리가 끝났어요.','상미시간 표지를 발행할 때 확인할 것은?', ['상품 바코드·상품명·제조 일시·수량','어제 발행한 표지를 그대로 재사용','상품명 없이 시간만 추정해 기록'], '조리 후 상품 바코드·상품명·제조 일시·수량을 확인해 표지를 발행하고 해당 상품 근처에서 볼 수 있게 관리해요.','카운터 FF 상미시간 발행','KfZAtUfWVg8'),
+  choice('coffee-clean','위생·안전','커피 기기 관리','커피 기기에 세척 알림이 표시됐어요.','어떻게 확인할까요?', ['기종별 지침에 따라 추출구·찌꺼기통·센서 등 관리','알림을 무시하고 계속 판매','다른 기종의 절차와 주기를 그대로 적용'], '원두 호퍼·추출구·찌꺼기통·센서 등을 관리해요. 세척 순서와 주기는 기종별 제조사·점포 지침으로 확인해요.','CAFE25 관리 방법','NWunUKptUzo'),
+  choice('hotpot-clean','위생·안전','열탕기 세척 준비','열탕기 세척을 준비하고 있어요.','안전한 세척 준비는?', ['전원을 차단하고 충분히 식힌 뒤 세척','뜨거운 상태에서 본체에 직접 물 분사','빈 용기를 가열하며 청소'], '열탕기는 전원을 차단하고 충분히 식힌 뒤 세척해요. 본체에 직접 물을 뿌리거나 빈 용기를 가열하지 않아요.','어묵기','16s4hws_HAs'),
+  choice('extinguisher-check','위생·안전','소화기 접근·상태 점검','소화기 앞에 상자가 놓여 있어요.','평소 점검에서 필요한 행동은?', ['쉽게 꺼낼 수 있게 확보하고 게이지·기간·안전핀 확인','상자로 가려도 위치만 알면 그대로 두기','안전핀을 제거한 상태로 보관'], '소화기를 쉽게 찾고 꺼낼 수 있도록 배치하고 압력 게이지·사용 기간·안전핀을 점검해요. 실제 화재 대응은 최신 공식 안전교육을 따라요.','소화기 관리 방법','znDhAsPa-bA'),
+  choice('emergency-call','위생·안전','응급 상황 도움 요청','매장에 쓰러진 사람이 있어요.','앱의 퀴즈보다 우선해야 할 대응은?', ['현장 안전·반응 확인 후 119와 주변 도움 요청','혼자 해결하려고 신고를 미루기','앱에서 진단 결과가 나올 때까지 기다리기'], '현장 안전과 반응을 확인하고 119 신고와 도움을 요청해요. 처치 수치나 동작을 이 앱으로 대신 배우지 말고 신고 상담원과 최신 공식 교육을 따라요.','심폐소생술','v0NU4mvZ_Xw'),
+
+  base('complaint','고객 응대'),base('expiry','고객 응대'),
+  written('complaint-reply','불만 고객에게 답하기','아까 산 상품 때문에 불편했어요. 어떻게 해 주실 건가요?', {title:'불만 VOC 응대',url:'https://youtu.be/W9bqatN_WH0'},'경청과 사과·공감 후 사실을 확인하고 확인 가능한 조치 또는 후속 대응을 안내해요.',[{id:'empathy',label:'불편에 대한 사과·공감',keywords:['죄송','불편','공감']},{id:'facts',label:'상황과 상품 사실 확인',keywords:['확인','상품','상황']},{id:'followup',label:'해결 또는 후속 확인 안내',keywords:['안내','경영주','조치','다시']}],'불편을 드려 죄송합니다. 상품과 구매 상황을 먼저 확인하겠습니다. 바로 해결하기 어려우면 경영주에게 확인한 뒤 가능한 조치를 안내해 드리겠습니다.'),
+  written('expiry-reply','섭취한 상품 문의에 답하기','이 상품 날짜가 이상해요. 조금 먹었는데 괜찮은 건가요?', {title:'소비기한 VOC 응대',url:'https://youtu.be/paDpMGToDS4'},'상품·구매 상황과 섭취·건강 이상 여부를 구분해 확인해요. 건강 상태나 보상을 단정하지 않아요.',[{id:'facts',label:'상품·구매 상황 확인',keywords:['상품','구매','날짜']},{id:'health',label:'섭취·건강 이상 여부 확인',keywords:['드셨','섭취','이상','불편한']},{id:'escalate',label:'확인 후 후속 대응 안내',keywords:['경영주','확인한 뒤','단정','안내']}],'걱정되셨겠어요. 상품과 구매 날짜, 얼마나 드셨는지, 몸에 이상은 없는지 확인하겠습니다. 건강 상태를 단정하지 않고 경영주에게 확인한 뒤 후속 대응을 안내하겠습니다.'),
+  written('pickup-reply','QR 확인이 어려울 때','택배를 찾으러 왔는데 QR이 안 보여요. 그냥 제 상자 주세요.', {title:'택배 픽업',url:'https://youtu.be/ncXixYAv-G8'},'송장·주문번호와 실물을 확인하고 QR 확인이 어려우면 재발송 또는 확인을 요청해요. 확인 전에 임의 전달하지 않아요.',[{id:'match',label:'주문번호·송장과 실물 대조',keywords:['주문번호','송장','실물']},{id:'resend',label:'재발송 또는 추가 확인 요청',keywords:['재발송','다시','확인 요청']},{id:'wait',label:'확인 후 전달 안내',keywords:['확인 후','확인되면','확인한 뒤','확인된 뒤']}],'주문번호나 송장을 실물과 먼저 대조하겠습니다. QR 재발송을 요청해 주시고 확인된 뒤 전달해 드리겠습니다.'),
+  written('report','다음 근무자에게 전달','교대 시간이에요. 고객 문의는 경영주 답변을 기다리고 있고 정리할 상품도 남아 있어요.', {title:'GS25 하루',url:'https://youtu.be/FWRQiAlhUKw'},'미완료 업무와 특이사항, 이어서 확인할 내용을 다음 근무자에게 전달해요.',[{id:'pending',label:'답변 대기·미완료 상태 전달',keywords:['대기','아직','미완료','기다리']},{id:'tasks',label:'남은 상품·고객 문의 명시',keywords:['상품','고객','문의']},{id:'next',label:'후속 확인 요청',keywords:['확인','전달','이어']}],'고객 문의는 경영주 답변을 기다리는 중이고 정리할 상품이 남아 있습니다. 답변을 확인해 고객에게 전달하고 남은 업무를 이어서 처리해 주세요.'),
+];

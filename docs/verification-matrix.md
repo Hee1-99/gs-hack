@@ -97,3 +97,17 @@ Historical tables above describe the initial release. The current simulator-firs
 | Screenshot-reference theme, fixed mobile navigation, card spacing and control clearance | tests/e2e/reference-design.spec.ts; revision---mobile.png and revision--crew-checklist-mobile.png |
 | All routes at mobile/desktop sizes and keyboard operation | tests/e2e/usability.spec.ts; revision-*.png |
 | Actual external release status and measured duration | Latest Task18 checkpoint in progress.md (local and remote checks recorded separately) |
+
+## GStep revision (Task19)
+
+| Requirement | Evidence |
+|---|---|
+| GStep identity, public manual provenance, source limits and AI entry points | page.test.tsx; smoke.spec.ts; gstep-home-mobile/desktop.png; /sources |
+| Six chapters,36steps,5written answers; legacy12 retained; accuracy/time breakdown | training-v2.test.ts, training-engine.test.ts, training-store.test.tsx; simulation.spec.ts |
+| Validated server Gemini grading; AI latency excluded; retry retains input | training-grader.test.ts; simulation.spec.ts; live-training-grade-smoke.mjs actual200/gemini |
+| Freeform AI customer, four rubric criteria, scoped records and useful general Q&A | chat-training tests and E2E; general-question.test.ts; actual live chat reply/finish and generalQA200 |
+| ID/password signup without email verification; roles and account boundaries | username-login.test.tsx; auth-isolation.test.tsx; auth.spec.ts demo fallback |
+| Scoped cloud state; queue identity remains correct across account switches | cloud-store-repository.test.ts actualSDK/custom-fetch header test; training-cloud-sync.test.tsx |
+| Store/member/record RLS and invite restrictions | supabase/verify-rls.mjs exact migration executed locally11checks; live evidence separately recorded in progress.md |
+| Final local regression |125unit/integration, production build and56desktop/mobile E2E pass; full gate after ID/password and race fix |
+| Actual remote account journey and deployed AI | Latest Task19 release checkpoint in progress.md; never inferred from local results |

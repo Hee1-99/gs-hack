@@ -21,3 +21,17 @@ test('answers from the latest rule and preserves unsupported questions', async (
   await expect(page.getByTestId('question-log').last()).toContainText('경영주 확인 필요');
   await page.screenshot({ path: `docs/evidence/qa-${testInfo.project.name}.png`, fullPage: true });
 });
+test('general advice is useful and explicitly distinct from manual evidence with categorized examples', async ({ page }) => {
+  await page.goto('/crew/questions');
+  await page.getByRole('button', { name: '첫 출근이라 긴장돼요', exact: true }).click();
+  const latest = page.getByTestId('question-log').first();
+  await expect(latest).toContainText('일반 AI 안내');
+  await expect(latest).toContainText('메모');
+  await expect(latest).not.toContainText('매뉴얼 근거 있음');
+  await page.getByRole('button', { name: '응대·소통', exact: true }).click();
+  await expect(page.getByRole('button', { name: '동료와 친해지는 방법', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'POS·상품', exact: true }).click();
+  await page.getByRole('button', { name: '판매 보류', exact: true }).click();
+  await expect(latest).toContainText('매뉴얼 근거 있음');
+  await expect(latest.getByText('답변 근거 ·', { exact: false })).toBeVisible();
+});

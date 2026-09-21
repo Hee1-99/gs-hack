@@ -10,11 +10,11 @@ Korean-speaking first-time 스토어 매니저 preparing for a first shift, and 
 
 ## Product Purpose
 
-Complete a12-stage store quiz, see a deterministic score, ask grounded manual questions, and complete a daily checklist. Interview test mode hides feedback until completion. Preserve these verified workflows while redesigning their presentation.
+Complete a 36-stage course across six work areas, receive objective and AI written-answer feedback, practice a conversation with an AI customer, ask manual/general questions, and complete a daily checklist. Interview test mode hides feedback until completion. Supabase accounts connect staff to an owner's store and separate personal and team records. GStep is the current user-selected name.
 
 ## Brand Personality
 
-Friendly, approachable, clear. The user supplied three 우리동네GS app reference screenshots on2026-09-21: bright cyan identity, lavender-tinted background, large white rounded service cards and playful dimensional graphics. Use the visual language with FirstDay.zip's own artwork and name.
+Friendly, approachable, clear. The user supplied three 우리동네GS app reference screenshots on2026-09-21: bright cyan identity, lavender-tinted background, large white rounded service cards and playful dimensional graphics. Use the visual language with GStep's own artwork and original ascending-step G logo.
 
 ## Anti-references
 

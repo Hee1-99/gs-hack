@@ -436,3 +436,16 @@ These are not part of this long-running P0 prompt. Do not automatically consume 
 - [x] **Step 3: Align simulator, Q&A, checklist and owner screens with the same visual language while retaining behavior and labels.**
 - [x] **Step 4: Run full tests, production build and desktop/mobile E2E; inspect rendered home, checklist, Q&A and active POS for overlap and readability.**
 - [x] **Step 5: Publish and deploy the verified revision, check the production navigation and core journey, and record outcomes and measured timing.**
+
+## Task 19: GStep AI Training and Account Backend
+
+**Depends on:** Task 18
+
+**Deliverable:** User-authorized GStep brand, broad manual course with time-aware score and subjective AI grading, Gemini conversation practice, helpful AI Q&A, and Supabase role/store-separated accounts and records. This request overrides historical12-step, local-only and deterministic-only scope. Client quiz records are coaching aids, not secure hiring decisions.
+
+- [x] **Step 1: Rebrand to GStep with a distinct logo, source-based landing copy and visible AI capabilities; preserve historical records and storage compatibility.**
+- [x] **Step 2: Expand confirmed-manual training into chapters with objective and short-answer steps, deterministic time-aware scoring plus validated Gemini rubric scores, truthful grading animations and transparent final breakdown.**
+- [x] **Step 3: Implement bounded Gemini multi-turn customer scenarios and useful friendly Q&A with manual/general guidance clearly distinguished and expanded FAQs.**
+- [x] **Step 4: Implement Supabase login/signup, roles, store membership, RLS-isolated records and shared checklist/rules with explicit local demo fallback; verify auth/error/isolation code paths.**
+- [ ] **Step 5: Connect the intended Supabase project, apply reviewed schema and verify live role/store isolation and persisted records; leave blocked if connection details are unavailable.**
+- [ ] **Step 6: Integrate dashboard/navigation, run full local tests/build/E2E, inspect mobile/desktop, verify bounded real Gemini, publish and deploy available functionality; record live backend separately and all limitations/timing.**

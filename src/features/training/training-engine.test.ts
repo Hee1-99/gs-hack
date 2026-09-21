@@ -10,7 +10,7 @@ describe('manual-based quiz', () => {
     attempt = answerTrainingStep(attempt, first.id, first.correctChoiceId);
     expect(attempt.score).toBeNull();
     expect(answerTrainingStep(attempt, first.id, first.correctChoiceId)).toEqual(attempt);
-    for (const step of trainingSteps.slice(1)) attempt = answerTrainingStep(attempt, step.id, step.correctChoiceId);
+    for (const step of trainingSteps.slice(1)) attempt = answerTrainingStep(attempt, step.id, step.correctChoiceId, {answerText:step.sampleAnswer,accuracyPoints:100,gradingMode:'demo',elapsedMs:1000});
     expect(attempt).toMatchObject({ status: 'completed', score: 100 });
     expect(attempt.completedAt).toBeTruthy();
     expect(attempt.answers).toHaveLength(trainingSteps.length);
@@ -20,7 +20,7 @@ describe('manual-based quiz', () => {
   it('preserves incorrect choices and calculates a deterministic final score in test mode', () => {
     let attempt = createTrainingAttempt('test', '지원자 A');
     for (const [index, step] of trainingSteps.entries()) {
-      attempt = answerTrainingStep(attempt, step.id, index === 0 ? step.choices.find(choice => choice.id !== step.correctChoiceId)!.id : step.correctChoiceId);
+      attempt = answerTrainingStep(attempt, step.id, index === 0 ? step.choices.find(choice => choice.id !== step.correctChoiceId)!.id : step.correctChoiceId, {answerText:step.sampleAnswer,accuracyPoints:100,gradingMode:'demo',elapsedMs:1000});
     }
     expect(attempt.score).toBe(Math.round((trainingSteps.length - 1) / trainingSteps.length * 100));
     expect(attempt.answers[0].correct).toBe(false);
@@ -40,7 +40,8 @@ describe('manual-based quiz', () => {
     for (const step of trainingSteps) {
       expect(step.source.title).toBeTruthy();
       expect(step.source.url).toMatch(/^https:\/\//);
-      expect(step.choices.filter(choice => choice.id === step.correctChoiceId)).toHaveLength(1);
+      if(step.kind==='short-answer'){expect(step.rubric).toHaveLength(3);expect(step.sampleAnswer).toBeTruthy();}
+      else expect(step.choices.filter(choice => choice.id === step.correctChoiceId)).toHaveLength(1);
       expect(step.explanation).toBeTruthy();
     }
   });
