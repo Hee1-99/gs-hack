@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { trainingSteps } from '../../src/features/training/training-data';
-import { enterTrainingAnswer } from './training-actions';
+import { enterTrainingAnswer, trainingWrittenInput } from './training-actions';
 test('HTTP failure retains question and retry resolves once; pending prevents duplicates', async ({ page }) => {
   await page.goto('/crew/questions');
   await page.route('**/api/ai/qa', route => route.fulfill({ status: 503, body: 'SYNTHETIC_ERROR_CANARY' }));
@@ -36,7 +36,7 @@ test('failed AI grading retains the written answer and resumes without leaking p
     await submit.click();
     if (step.kind === 'short-answer' && !retried) {
       await expect(page.getByRole('alert').filter({ hasText: '답안은 유지' })).toBeVisible();
-      await expect(page.getByLabel('고객에게 할 말')).toHaveValue(step.sampleAnswer!);
+      await expect(trainingWrittenInput(page, step)).toHaveValue(step.sampleAnswer!);
       await expect(page.getByRole('heading', { name: step.title, exact: true })).toBeVisible();
       expect(aiCalls).toBe(1);
       await page.unroute('**/api/ai/**');

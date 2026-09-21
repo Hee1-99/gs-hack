@@ -1,14 +1,11 @@
 import { expect, test } from '@playwright/test';
 import { trainingSteps } from '../../src/features/training/training-data';
+import { enterTrainingAnswer, trainingPracticeSubmit, trainingWrittenInput } from './training-actions';
 test.setTimeout(120000);
 const wrongPosIndex=trainingSteps.findIndex(step=>step.id==='promotion');
 
 async function choose(page: import('@playwright/test').Page, index: number, wrong = false) {
-  const step = trainingSteps[index];
-  await page.getByRole('heading', { name: step.title, exact: true }).waitFor();
-  if(step.kind==='short-answer'){await page.getByLabel('고객에게 할 말').fill(step.sampleAnswer!);return;}
-  const choice = step.choices.find(item => wrong ? item.id !== step.correctChoiceId : item.id === step.correctChoiceId)!;
-  await page.getByRole('group', { name: 'POS 행동 선택' }).getByRole('button').filter({ hasText: choice.label }).click();
+  await enterTrainingAnswer(page, trainingSteps[index], wrong);
 }
 
 test('complete quiz keeps an incorrect action and improves the score on a POS retry', async ({ page }, testInfo) => {
@@ -17,8 +14,8 @@ test('complete quiz keeps an incorrect action and improves the score on a POS re
   for (let index = 0; index < trainingSteps.length; index++) {
     await choose(page, index, index === wrongPosIndex);
     if (index === wrongPosIndex) await page.screenshot({ path: `docs/evidence/quiz-pos-${testInfo.project.name}.png`, fullPage: true, animations:'disabled' });
-    await page.getByRole('button', { name: '이 행동으로 진행' }).click();
-    await expect(page.getByRole('heading', { name: index === wrongPosIndex ? '이 단계는 다시 기억해 두세요.' : '좋아요, 정확한 순서예요!' })).toBeVisible();
+    await trainingPracticeSubmit(page, trainingSteps[index]).click();
+    await expect(page.getByRole('heading', { name: index === wrongPosIndex ? '이 단계는 다시 기억해 두세요.' : '좋아요, 필요한 행동을 짚었어요!' })).toBeVisible();
     await page.getByRole('button', { name: index === trainingSteps.length - 1 ? '최종 점수 보기' : '다음 단계', exact: true }).click();
   }
   await expect(page.getByRole('heading', { name: '끝까지 해냈어요!' })).toBeFocused();
@@ -26,7 +23,7 @@ test('complete quiz keeps an incorrect action and improves the score on a POS re
   await page.getByRole('button', { name: '다시 연습하기' }).click();
   for (let index = 0; index < trainingSteps.length; index++) {
     await choose(page, index);
-    await page.getByRole('button', { name: '이 행동으로 진행' }).click();
+    await trainingPracticeSubmit(page, trainingSteps[index]).click();
     await page.getByRole('button', { name: index === trainingSteps.length - 1 ? '최종 점수 보기' : '다음 단계', exact: true }).click();
   }
   await expect(page.locator('.score-display')).toHaveText('100/ 100점');
@@ -70,18 +67,18 @@ test('written grading shows pending, preserves failed answers and excludes AI la
   await page.getByLabel('연습할 업무').selectOption('근무 준비');
   await page.getByRole('button',{name:'연습 시작하기',exact:true}).click();
   for(let index=0;index<5;index++){
-    await choose(page,index);await page.getByRole('button',{name:'이 행동으로 진행'}).click();await page.getByRole('button',{name:'다음 단계',exact:true}).click();
+    await choose(page,index);await trainingPracticeSubmit(page, trainingSteps[index]).click();await page.getByRole('button',{name:'다음 단계',exact:true}).click();
   }
   const written=trainingSteps[5];
-  await page.getByLabel('고객에게 할 말').fill(written.sampleAnswer!);
+  await trainingWrittenInput(page, written).fill(written.sampleAnswer!);
   await page.route('**/api/ai/training-grade',route=>route.fulfill({status:503,body:'unavailable'}),{times:1});
-  await page.getByRole('button',{name:'이 행동으로 진행'}).click();
+  await trainingPracticeSubmit(page, written).click();
   await expect(page.getByRole('alert').filter({hasText:'답안은 유지돼요'})).toContainText('다시 제출해 주세요');
-  await expect(page.getByLabel('고객에게 할 말')).toHaveValue(written.sampleAnswer!);
+  await expect(trainingWrittenInput(page, written)).toHaveValue(written.sampleAnswer!);
   let release!:()=>void;
   const hold=new Promise<void>(resolve=>{release=resolve;});
   await page.route('**/api/ai/training-grade',async route=>{await hold;await route.fulfill({json:{stepId:written.id,score:100,feedback:'기본 기준을 확인했어요.',mode:'demo'}});});
-  await page.getByRole('button',{name:'이 행동으로 진행'}).click();
+  await trainingPracticeSubmit(page, written).click();
   await expect(page.getByRole('status')).toContainText('AI 채점을 요청하고 있어요');
   await expect(page.getByRole('button',{name:'채점 중…'})).toBeDisabled();
   await page.screenshot({path:`docs/evidence/quiz-written-pending-${testInfo.project.name}.png`,fullPage:true,animations:'disabled'});

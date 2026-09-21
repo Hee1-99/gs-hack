@@ -449,3 +449,16 @@ These are not part of this long-running P0 prompt. Do not automatically consume 
 - [x] **Step 4: Implement Supabase login/signup, roles, store membership, RLS-isolated records and shared checklist/rules with explicit local demo fallback; verify auth/error/isolation code paths.**
 - [x] **Step 5: Connect the intended Supabase project, apply reviewed schema and verify live role/store isolation and persisted records; leave blocked if connection details are unavailable.**
 - [x] **Step 6: Integrate dashboard/navigation, run full local tests/build/E2E, inspect mobile/desktop, verify bounded real Gemini, publish and deploy available functionality; record live backend separately and all limitations/timing.**
+
+
+## Task 20: End-to-end Training Content Audit
+
+**Depends on:** Task 19
+
+**Deliverable:** Direct Computer Use inspection of all36steps and3chat scenarios; source-grounded corrections to speaker, situation, mission, input, choices and feedback, retaining count and history compatibility.
+
+- [ ] **Step 1: Reproduce the mismatched written mission in a real browser and review every course/scenario against the supplied manual.**
+- [ ] **Step 2: Correct scenario-specific speaker, action instructions and written prompts; align practice screens and AI coaching with information actually shown to the learner.**
+- [ ] **Step 3: Walk through corrected training and all three chat scenarios in Computer Use, checking visible missions, dialogue, submitted answers and feedback.**
+- [x] **Step 4: Run full local tests/build/E2E and inspect desktop/mobile, including written grading failure and retry states.**
+- [ ] **Step 5: Publish and deploy the corrected content, verify deployed behavior and record evidence and measured duration.**

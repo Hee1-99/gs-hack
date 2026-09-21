@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { trainingSteps } from '../../src/features/training/training-data';
-import { enterTrainingAnswer } from './training-actions';
+import { enterTrainingAnswer, trainingPracticeSubmit } from './training-actions';
 test('single browser full demo: rules, quiz failure and retry, Q&A, checklist and owner records', async ({ page }, info) => {
   test.setTimeout(180_000);
   await page.goto('/manager/manual');
@@ -13,7 +13,7 @@ test('single browser full demo: rules, quiz failure and retry, Q&A, checklist an
   for (let attempt = 0; attempt < 2; attempt++) {
     for (const [index, step] of trainingSteps.entries()) {
       await enterTrainingAnswer(page, step, attempt === 0 && step.id === 'promotion');
-      await page.getByRole('button', { name: '이 행동으로 진행' }).click();
+      await trainingPracticeSubmit(page, step).click();
       await page.getByRole('button', { name: index === trainingSteps.length - 1 ? '최종 점수 보기' : '다음 단계', exact: true }).click();
     }
     await expect(page.locator('.score-display')).toContainText(attempt === 0 ? '97' : '100');

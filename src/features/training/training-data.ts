@@ -9,6 +9,11 @@ export type TrainingStep = {
   title: string;
   situation: string;
   customer: string;
+  /** Explicit scene roles; optional only for immutable version-1 records. */
+  speakerLabel?: string;
+  mission?: string;
+  responseLabel?: string;
+  answerPlaceholder?: string;
   question: string;
   choices: { id: string; label: string; detail?: string }[];
   correctChoiceId: string;
@@ -133,6 +138,74 @@ function written(id: string, title: string, situation: string, source: TrainingS
   return {id,title,chapter,situation,customer:situation,question:'고객이나 다음 근무자에게 어떻게 설명할까요?',choices:[],correctChoiceId:'written',explanation,source,screen:'complaint',kind:'short-answer',rubric,sampleAnswer};
 }
 
+// Scene copy is synthetic. Actions and answer rubrics remain within each cited summary.
+// Keep this separate from legacyTrainingSteps so historical version-1 content never changes.
+const sceneContext: Record<string, Pick<TrainingStep, 'speakerLabel' | 'mission' | 'customer'> & Partial<TrainingStep>> = {
+  handover: { speakerLabel:'이전 근무자', customer:'오늘 입고된 상품과 아직 끝내지 못한 일이 있어요.', mission:'이전 근무자와 교대할 때 함께 확인할 항목을 고르세요.' },
+  'cash-check': { speakerLabel:'이전 근무자', customer:'POS에 나온 현금과 실제 보관액이 다르네요.', mission:'차이의 원인을 단정하기 전에 다시 확인할 행동을 고르세요.' },
+  'scanner-ready': { speakerLabel:'업무 안내', customer:'입고 검수에 사용할 S/T와 블루투스 스캐너가 준비되어 있어요.', mission:'상품을 검수하기 전에 스캐너를 준비하는 행동을 고르세요.' },
+  receiving: { speakerLabel:'업무 안내', customer:'출하 목록의 수량과 도착한 상품 수량이 일치하지 않아요.', mission:'검수를 완료하기 전에 수량 차이를 확인할 방법을 고르세요.' },
+  'reserved-stock': { speakerLabel:'업무 안내', customer:'이 상품에는 고객 사전예약 표시가 있어요.', mission:'예약 고객이 수령하기 전까지 상품을 보관할 방법을 고르세요.' },
+  'handover-note': {
+    speakerLabel:'다음 근무자', customer:'입고 검수는 어디까지 했나요? 제가 이어서 확인할 일이 있나요?', screen:'report',
+    mission:'다음 근무자에게 입고 수량 차이와 재확인할 일을 전달하세요.',
+    question:'아직 끝나지 않은 검수와 다음 확인 행동을 어떻게 전달할까요?',
+    responseLabel:'다음 근무자에게 전달할 내용', answerPlaceholder:'확인이 끝나지 않은 내용과 이어서 확인할 일을 적어 주세요.',
+    sampleAnswer:'입고 수량에 차이가 있어 검수를 아직 완료하지 못했습니다. 전산 출하 수량과 실제 상품 수량을 다시 대조해 주시고, 확인 결과를 전달해 주세요.',
+    rubric:[{id:'unfinished',label:'입고 검수가 아직 끝나지 않았음을 명확히 전달',keywords:['미완료','아직','확인 중']},{id:'detail',label:'입고 수량에 차이가 있다는 구체적인 상황 전달',keywords:['수량','차이','입고']},{id:'next',label:'전산과 실물 수량을 다시 대조하는 등 다음 확인 행동 요청',keywords:['다시','재확인','대조','이어']}],
+  },
+  'expiry-register': { speakerLabel:'업무 안내', customer:'상품별 소비기한과 수량을 입력할 수 있는 등록 화면이에요.', mission:'소비기한 정보를 저장한 뒤 누락을 확인하는 행동을 고르세요.' },
+  'display-fifo': { speakerLabel:'업무 안내', customer:'같은 상품의 기존 재고와 새 입고분이 함께 있어요.', mission:'기존 재고가 먼저 판매되도록 진열하는 방법을 고르세요.' },
+  'price-label': { speakerLabel:'업무 안내', customer:'스캔한 상품이 가격표 인쇄 목록에 추가됐어요.', mission:'가격표를 인쇄하기 전에 목록에서 확인할 내용을 고르세요.' },
+  waste: { speakerLabel:'업무 안내', customer:'폐기로 분류한 연습용 상품 2개가 있어요.', situation:'매대 점검 중 폐기 대상으로 확인한 연습용 상품 2개를 찾았어요.', mission:'상품과 수량을 확인해 폐기등록하고 판매 재고와 분리하는 흐름을 고르세요.' },
+  'equipment-temperature': { speakerLabel:'업무 안내', customer:'냉장 설비 안에 상품이 많이 쌓여 있어요.', situation:'냉장 설비 안에 상품이 과하게 적재되어 있어요. 온도 표시와 보관 상태를 점검하려고 해요.', mission:'설비 종류에 맞춰 온도와 적재 상태를 확인하는 행동을 고르세요.' },
+  'stock-difference': { speakerLabel:'업무 안내', customer:'담배 재고 조사표와 실제 상품 수량에 차이가 있어요.', title:'담배 전산·실물 재고 대조', situation:'담배 재고를 조사하던 중 전산 수량과 실물 수량이 다르게 나왔어요.', mission:'차이가 있는 담배 상품과 수량을 확인한 뒤 전달할 내용을 고르세요.' },
+  scan: { speakerLabel:'고객', customer:`이 커피 ${trainingTransaction.quantity}개 계산해 주세요.`, mission:'결제할 상품을 POS에 먼저 등록하세요.' },
+  promotion: { speakerLabel:'고객', customer:'이 상품, 지금 행사 중인가요?', mission:'고객에게 행사 여부를 안내하기 위해 POS에서 조회할 기능을 고르세요.' },
+  discount: { speakerLabel:'고객', customer:'적립 바코드가 있어요. 지금 보여드릴까요?', mission:'최종 결제 전에 할인·적립 반영 여부를 확인하세요.' },
+  payment: { speakerLabel:'고객', customer:'카드 넣었어요. 이제 가져가도 되나요?', mission:'상품을 전달하기 전에 POS에서 카드 결제 결과를 확인하세요.' },
+  receipt: { speakerLabel:'고객', customer:'영수증도 부탁드려요.', mission:'감열지를 교체한 프린터에서 정상 인쇄 여부를 확인하세요.' },
+  hold: { speakerLabel:'고객', customer:'잠깐만요, 지갑을 두고 왔어요. 금방 돌아올게요.', mission:'이 고객의 상품 목록을 유지하면서 다음 고객의 결제를 준비하세요.' },
+  'mobile-coupon': { speakerLabel:'고객', customer:'이 상품 모바일 교환권으로 계산할게요.', mission:'상품을 등록하고 교환권과 실제 상품의 일치 여부를 확인하세요.' },
+  'split-payment': { speakerLabel:'고객', customer:'일부는 결제했어요. 나머지는 다른 수단으로 낼게요.', mission:'다음 결제수단에 입력하기 전에 남은 금액을 확인하세요.' },
+  'return-original': { speakerLabel:'고객', customer:'구매한 이 상품을 반품하고 싶어요.', mission:'반품 가능 여부와 처리를 확인할 원래 거래부터 찾으세요.' },
+  'cash-receipt': { speakerLabel:'고객', customer:'현금영수증도 발행해 주세요.', mission:'현금영수증의 용도와 고객 입력 방법을 안내하세요.' },
+  'parcel-accept': { speakerLabel:'업무 안내', customer:'일반택배와 반값택배 접수 물품이 각각 도착했어요.', mission:'접수 정보와 운송장을 확인한 뒤 종류별 보관 흐름을 고르세요.' },
+  'parcel-pickup': { speakerLabel:'고객', customer:'제 앞으로 도착한 택배를 찾으러 왔어요.', mission:'택배를 건네기 전에 고객의 수령 정보와 실물을 대조하세요.' },
+  'ff-hygiene': { speakerLabel:'업무 안내', customer:'카운터 조리에 사용할 재료와 도구가 준비되어 있어요.', mission:'조리를 시작하기 전에 손 위생과 재료 상태를 확인하세요.' },
+  'ff-label': { speakerLabel:'업무 안내', customer:'조리가 끝난 상품의 상미시간 표지를 발행해야 해요.', mission:'표지에 사용할 상품 정보와 제조 정보를 확인하세요.' },
+  'coffee-clean': { speakerLabel:'기기 안내', customer:'커피 기기 화면에 세척 알림이 표시됐어요.', mission:'현재 기종의 지침에 맞춰 세척·관리할 행동을 고르세요.' },
+  'hotpot-clean': { speakerLabel:'업무 안내', customer:'사용을 마친 어묵기가 아직 뜨거워요.', title:'어묵기 세척 준비', situation:'사용을 마친 어묵기를 세척하려고 해요. 용기와 본체에 열이 남아 있어요.', mission:'세척을 시작하기 전에 어묵기를 안전하게 준비하는 행동을 고르세요.', explanation:'어묵기 교육은 전원을 차단하고 충분히 식힌 뒤 세척하도록 설명해요. 본체에 직접 물을 뿌리거나 빈 용기를 가열하지 않아요. 실제 조작은 해당 기기의 지침을 확인해요.' },
+  'extinguisher-check': { speakerLabel:'업무 안내', customer:'상자가 소화기를 꺼내는 길을 막고 있어요.', mission:'소화기를 쉽게 꺼낼 수 있게 하고 평소 확인할 상태를 고르세요.' },
+  'emergency-call': { speakerLabel:'상황 안내', customer:'매장 안에 쓰러진 사람을 발견했어요.', mission:'현장 안전과 반응을 확인한 뒤 도움을 요청하는 행동을 고르세요.', question:'응급 상황을 발견했을 때 우선할 행동은?' },
+  complaint: { speakerLabel:'고객', customer:'아까 산 상품에 문제가 있어요. 너무 불편하네요.', mission:'고객의 불만을 처음 들었을 때 적절한 응대 행동을 고르세요.' },
+  expiry: { speakerLabel:'고객', customer:'이 상품 날짜를 봐 주세요. 일부 먹었는데 걱정돼요.', mission:'건강 상태나 보상을 단정하기 전에 확인할 사실을 고르세요.' },
+  'complaint-reply': {
+    speakerLabel:'고객', situation:'고객이 조금 전 구매한 상품에 문제가 있다며 돌아왔어요. 어떤 문제인지는 아직 확인하지 못했어요.', customer:'아까 산 상품 때문에 불편했어요. 어떻게 해 주실 건가요?',
+    mission:'고객의 불편에 공감하고, 사실 확인과 후속 대응을 설명하세요.', question:'이 고객에게 처음 어떻게 답할까요?',
+    responseLabel:'고객에게 할 말', answerPlaceholder:'불편에 대한 응대, 확인할 사실, 이어서 할 조치를 적어 주세요.',
+    rubric:[{id:'empathy',label:'고객의 불편을 인정하며 사과하거나 공감',keywords:['죄송','불편','공감']},{id:'facts',label:'문제가 된 상품과 구매 상황을 질문하거나 확인하겠다고 안내',keywords:['확인','상품','상황']},{id:'followup',label:'확인 가능한 조치나 경영주 확인 등 구체적인 후속 대응 안내; 확인 전 보상 확정 금지',keywords:['안내','경영주','조치','다시']}],
+  },
+  'expiry-reply': {
+    speakerLabel:'고객', situation:'고객이 소비기한이 의심되는 상품을 가져왔어요. 일부 섭취했다고 하지만 건강 이상 여부와 구매 상황은 아직 확인하지 못했어요.', customer:'이 상품 날짜가 이상해요. 조금 먹었는데 괜찮은 건가요?',
+    mission:'상품·구매 상황과 섭취·건강 이상 여부를 확인하고 후속 대응을 안내하세요.', question:'건강 상태를 단정하지 않고 이 고객에게 어떻게 답할까요?',
+    responseLabel:'고객에게 할 말', answerPlaceholder:'상품·구매 및 섭취 상황을 확인하는 말과 후속 안내를 적어 주세요.',
+    rubric:[{id:'facts',label:'문제가 된 상품과 구매 상황을 확인',keywords:['상품','구매','날짜']},{id:'health',label:'섭취 상황과 현재 건강 이상 여부를 각각 확인; 건강에 문제가 없다고 단정하지 않음',keywords:['드셨','섭취','이상','불편한']},{id:'escalate',label:'경영주 확인 등 후속 대응을 안내하며 확인 전 보상이나 건강 상태를 확정하지 않음',keywords:['경영주','확인한 뒤','단정','안내']}],
+  },
+  'pickup-reply': {
+    speakerLabel:'고객', situation:'고객이 보관 중인 택배를 찾으러 왔어요. 수령에 필요한 QR이 보이지 않아 확인이 끝나지 않은 상태예요.', customer:'택배를 찾으러 왔는데 QR이 안 보여요. 그냥 제 상자 주세요.',
+    mission:'수령 정보를 확인할 방법과 확인 후 택배를 전달한다는 점을 설명하세요.', question:'QR이 보이지 않는 고객에게 어떤 확인 절차를 안내할까요?',
+    responseLabel:'고객에게 할 말', answerPlaceholder:'수령 정보 대조, QR 재발송 요청, 전달 시점을 설명해 주세요.',
+    rubric:[{id:'match',label:'송장·주문번호 등 수령 정보와 보관 실물을 대조한다고 안내',keywords:['주문번호','송장','실물']},{id:'resend',label:'보이지 않는 QR을 재발송받도록 요청하거나 추가 확인을 요청',keywords:['재발송','다시','확인 요청']},{id:'wait',label:'확인이 끝난 뒤 전달한다고 안내; 확인 전 임의 전달 금지',keywords:['확인 후','확인되면','확인한 뒤','확인된 뒤']}],
+  },
+  report: {
+    speakerLabel:'다음 근무자', customer:'교대하러 왔어요. 아직 남아 있는 일과 제가 이어서 할 일을 알려 주세요.', screen:'report',
+    mission:'다음 근무자에게 고객 문의의 답변 대기 상태와 남은 상품 정리를 전달하세요.', question:'남아 있는 두 가지 업무와 다음 행동을 어떻게 인계할까요?',
+    responseLabel:'다음 근무자에게 전달할 내용', answerPlaceholder:'고객 문의의 현재 상태, 남은 상품 정리, 이어서 할 일을 적어 주세요.',
+    rubric:[{id:'pending',label:'고객 문의가 경영주 답변을 기다리는 미완료 상태임을 전달',keywords:['대기','아직','미완료','기다리']},{id:'tasks',label:'고객 문의와 남아 있는 상품 정리 두 가지 업무를 모두 전달',keywords:['상품','고객','문의']},{id:'next',label:'답변 확인·고객 안내와 상품 정리를 이어서 요청',keywords:['확인','전달','이어']}],
+  },
+};
+
 export const trainingSteps: TrainingStep[] = [
   base('handover','근무 준비'), base('cash-check','근무 준비'),
   choice('scanner-ready','근무 준비','S/T 스캐너 준비','입고 상품을 검수하기 전 스캐너를 준비해요.','스캐너를 사용하기 전 확인할 것은?', ['기기 연결을 확인하고 상품 바코드 스캔','연결 확인 없이 임의 수량 입력','상품명만 보고 검수 완료'], 'S/T는 바코드 스캔으로 검수·선도관리·상품 조회를 도와요. 휴대전화와 블루투스 스캐너의 준비·연결 상태부터 확인해요.','S/T 사용하기','KuikCHbuE6g'),
@@ -168,4 +241,4 @@ export const trainingSteps: TrainingStep[] = [
   written('expiry-reply','섭취한 상품 문의에 답하기','이 상품 날짜가 이상해요. 조금 먹었는데 괜찮은 건가요?', {title:'소비기한 VOC 응대',url:'https://youtu.be/paDpMGToDS4'},'상품·구매 상황과 섭취·건강 이상 여부를 구분해 확인해요. 건강 상태나 보상을 단정하지 않아요.',[{id:'facts',label:'상품·구매 상황 확인',keywords:['상품','구매','날짜']},{id:'health',label:'섭취·건강 이상 여부 확인',keywords:['드셨','섭취','이상','불편한']},{id:'escalate',label:'확인 후 후속 대응 안내',keywords:['경영주','확인한 뒤','단정','안내']}],'걱정되셨겠어요. 상품과 구매 날짜, 얼마나 드셨는지, 몸에 이상은 없는지 확인하겠습니다. 건강 상태를 단정하지 않고 경영주에게 확인한 뒤 후속 대응을 안내하겠습니다.'),
   written('pickup-reply','QR 확인이 어려울 때','택배를 찾으러 왔는데 QR이 안 보여요. 그냥 제 상자 주세요.', {title:'택배 픽업',url:'https://youtu.be/ncXixYAv-G8'},'송장·주문번호와 실물을 확인하고 QR 확인이 어려우면 재발송 또는 확인을 요청해요. 확인 전에 임의 전달하지 않아요.',[{id:'match',label:'주문번호·송장과 실물 대조',keywords:['주문번호','송장','실물']},{id:'resend',label:'재발송 또는 추가 확인 요청',keywords:['재발송','다시','확인 요청']},{id:'wait',label:'확인 후 전달 안내',keywords:['확인 후','확인되면','확인한 뒤','확인된 뒤']}],'주문번호나 송장을 실물과 먼저 대조하겠습니다. QR 재발송을 요청해 주시고 확인된 뒤 전달해 드리겠습니다.'),
   written('report','다음 근무자에게 전달','교대 시간이에요. 고객 문의는 경영주 답변을 기다리고 있고 정리할 상품도 남아 있어요.', {title:'GS25 하루',url:'https://youtu.be/FWRQiAlhUKw'},'미완료 업무와 특이사항, 이어서 확인할 내용을 다음 근무자에게 전달해요.',[{id:'pending',label:'답변 대기·미완료 상태 전달',keywords:['대기','아직','미완료','기다리']},{id:'tasks',label:'남은 상품·고객 문의 명시',keywords:['상품','고객','문의']},{id:'next',label:'후속 확인 요청',keywords:['확인','전달','이어']}],'고객 문의는 경영주 답변을 기다리는 중이고 정리할 상품이 남아 있습니다. 답변을 확인해 고객에게 전달하고 남은 업무를 이어서 처리해 주세요.'),
-];
+].map(step => ({ ...step, ...sceneContext[step.id] }));

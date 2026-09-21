@@ -24,3 +24,14 @@ it('does not treat an objective stage as AI-scored and treats answer text as unt
 it('all published sample answers fulfill each basic rubric criterion',async()=>{
   for(const written of trainingSteps.filter(item=>item.kind==='short-answer'))expect(await gradeTrainingAnswer(written.id,written.sampleAnswer!,{demoMode:true,apiKeyPresent:false,provider:vi.fn()})).toMatchObject({score:100,mode:'demo'});
 });
+it('grades the displayed recipient and mission without requiring unstated scenario facts',async()=>{
+  const handover=trainingSteps.find(item=>item.id==='handover-note')!;
+  const provider=vi.fn().mockResolvedValue(JSON.stringify({criteria:handover.rubric!.map(item=>({id:item.id,points:100})),feedback:'다음 근무자에게 필요한 확인 내용을 전달했어요.'}));
+  await gradeTrainingAnswer(handover.id,handover.sampleAnswer!,{demoMode:false,apiKeyPresent:true,provider});
+  const prompt=provider.mock.calls[0][0];
+  expect(prompt).toContain('"speakerLabel":"다음 근무자"');
+  expect(prompt).toContain(JSON.stringify(handover.customer));
+  expect(prompt).toContain(JSON.stringify(handover.mission));
+  expect(prompt).toContain(JSON.stringify(handover.question));
+  expect(prompt).toContain('Do not require quantities, details or facts absent from the supplied scenario');
+});

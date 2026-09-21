@@ -59,3 +59,9 @@ The course expands across confirmed manual processes and includes objective deci
 Q&A adopts a diligent, warm store-manager persona. It may answer general questions using model knowledge, clearly marked as general AI guidance; only cited manual passages are labeled manual-grounded. Do not invent exact store-specific policies or source citations when missing. Add varied FAQ examples.
 
 Supabase replaces browser-only persistence for signed-in users: email/password accounts, 스토어 매니저/경영주 roles, store-scoped sharing, owner settings and team training history. Enforce data access in RLS rather than merely hiding UI. Preserve a clearly labeled local demo when unconfigured or signed out. Existing training histories require version-safe handling. Live auth/database verification is separate from tests and requires the intended project's connection settings.
+
+## Training content audit — Task20
+
+All36stages and3chat scenarios require human-readable consistency across situation, speaker, mission, answer label, choices, explanation and rubric. Next-shift handover must address the next worker throughout the screen, not a customer. Non-POS actions must be described as workplace decisions. Only learner-visible information and questions actually answered may contribute to AI coaching expectations. Preserve original confirmed manual provenance and clearly separate synthetic scenario facts. Verify with direct Computer Use in addition to automated regression.
+
+Task19 account clarification: ID/password signup without email input or email verification supersedes the historical email/password description above.

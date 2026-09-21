@@ -5,6 +5,10 @@ test('freeform customer chat resumes, evaluates the actual transcript and stores
   await page.getByRole('button', { name: /행사 상품 문의/ }).click();
   await expect(page.getByRole('heading', { name: '행사 상품 문의' })).toBeVisible();
   await expect(page.getByRole('log', { name: '고객과의 대화' })).toContainText('캔커피 A');
+  await expect(page.getByRole('region', { name: '연습 상황 정보' })).toContainText('1,500원');
+  await expect(page.getByRole('region', { name: '연습 상황 정보' })).toContainText('3개 3,000원');
+  await expect(page.getByRole('region', { name: '연습 상황 정보' })).toContainText('동일 상품만 적용');
+  await page.screenshot({ path: `docs/evidence/chat-briefing-${testInfo.project.name}.png`, fullPage: true });
   await page.getByLabel('고객에게 할 말').fill('안녕하세요. 정확한 행사 조건을 POS에서 확인하고 안내드릴게요. 잠시 기다려 주셔서 감사합니다.');
   await page.getByRole('button', { name: '답변 보내기', exact: true }).click();
   await expect(page.getByRole('log')).toContainText('확인 부탁');
@@ -25,6 +29,19 @@ test('freeform customer chat resumes, evaluates the actual transcript and stores
   await expect(page.getByLabel('고객에게 할 말')).toBeVisible();
   const ids = await page.evaluate(() => JSON.parse(localStorage.getItem('gstep-chat-training-v1')!).map((entry: { id: string }) => entry.id));
   expect(ids).toHaveLength(2); expect(ids[0]).not.toBe(ids[1]);
+});
+
+test('customer clarification reveals fictional details without inventing a refund decision', async ({ page }) => {
+  await page.goto('/crew/chat');
+  await page.getByRole('button', { name: /교환·환불 문의/ }).click();
+  await expect(page.getByRole('region', { name: '연습 상황 정보' })).toContainText('교환·환불 가능 여부와 보상 기준은 제공되지 않았어요');
+  await page.getByLabel('고객에게 할 말').fill('불편하셨겠어요. 어떤 상품이며 포장 어디가 이상한지 보여 주실 수 있나요?');
+  await page.getByRole('button', { name: '답변 보내기', exact: true }).click();
+  await expect(page.getByRole('log')).toContainText('봉지 옆면이 벌어져');
+  await page.getByLabel('고객에게 할 말').fill('결제 수단과 구매 내역을 확인할 수 있을까요?');
+  await page.getByRole('button', { name: '답변 보내기', exact: true }).click();
+  await expect(page.getByRole('log')).toContainText('카드 결제 내역은 보여 드릴 수 있어요');
+  await expect(page.getByRole('log')).not.toContainText('환불이 가능합니다');
 });
 
 test('failed and malformed chat responses preserve typed input; pending prevents duplicate submissions', async ({ page }) => {

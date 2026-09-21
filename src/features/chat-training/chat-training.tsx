@@ -8,7 +8,7 @@ import { chatResponseSchema, criterionLabels, MAX_CHAT_TURNS, type ChatAttempt, 
 import { useChatHistory } from './use-chat-history';
 import styles from './chat-training.module.css';
 
-export function ChatTraining() {
+export function ChatTraining({ scenarioFacts }: { scenarioFacts: Record<ChatScenarioId, string[]> }) {
   const history = useChatHistory();
   const [activeId, setActiveId] = useState<string | null>(null);
   const [draft, setDraft] = useState('');
@@ -74,7 +74,8 @@ export function ChatTraining() {
     </> : <>
       <div className={styles.topBar}><button className={styles.back} onClick={leave} disabled={Boolean(pending)}><ArrowLeft size={17}/>나가기</button><span>내 답변 {turnCount} / {MAX_CHAT_TURNS}</span></div>
       <header className={styles.conversationHeading}><h1>{attempt.scenarioTitle}</h1><p>{getChatScenario(attempt.scenarioId).goal}</p></header>
-      <div className={styles.customerBar}><span><UserRound size={20}/></span><div><strong>연습 고객</strong><small>{pending === 'reply' ? '고객이 답변을 생각하고 있어요…' : turnCount === 0 ? '첫 질문을 기다리고 있어요' : attempt.mode === 'live' ? 'Gemini와 대화 중' : '데모 고객 · 기본 응답'}</small></div><span className={styles.online}/></div>
+      <section className={styles.briefing} aria-label="연습 상황 정보"><h2><BookOpen size={16} aria-hidden/>연습 상황 정보 <span>가상 상황</span></h2><ul>{scenarioFacts[attempt.scenarioId].map(fact => <li key={fact}>{fact}</li>)}</ul></section>
+      <div className={styles.customerBar}><span><UserRound size={20}/></span><div><strong>연습 고객</strong><small>{pending === 'reply' ? '고객이 답변을 생각하고 있어요…' : turnCount === 0 ? '매니저의 답변을 기다리고 있어요' : attempt.mode === 'live' ? 'Gemini와 대화 중' : '데모 고객 · 기본 응답'}</small></div><span className={styles.online}/></div>
       <div className={styles.messages} role="log" aria-label="고객과의 대화" aria-live="polite">{attempt.messages.map(message => <div key={message.id} className={message.role === 'manager' ? styles.myMessage : styles.customerMessage}><span>{message.role === 'manager' ? '나 · 스토어 매니저' : '고객'}</span><p>{message.text}</p></div>)}{pending && <div className={styles.pendingBubble} role="status"><LoaderCircle size={17}/>{pending === 'finish' ? '대화를 읽고 코칭을 준비하고 있어요…' : '고객이 답변을 입력하고 있어요…'}</div>}<div ref={end}/></div>
       {error && <p role="alert" className={styles.error}>{error}</p>}
       {turnCount < MAX_CHAT_TURNS ? <form className={styles.compose} onSubmit={event => { event.preventDefault(); void request('reply'); }}><label htmlFor="customer-reply">고객에게 할 말<textarea ref={input} id="customer-reply" rows={3} maxLength={1200} value={draft} onChange={event => setDraft(event.target.value)} placeholder="실제 고객에게 말하듯 직접 입력해 보세요." disabled={Boolean(pending)} required/></label><div><span>{draft.length} / 1200</span><button className="button" type="submit" disabled={Boolean(pending) || !draft.trim()}><Send size={16}/>{pending === 'reply' ? '답변 보내는 중…' : '답변 보내기'}</button></div></form> : <p className={styles.limit}>대화를 끝까지 연습했어요. 이제 피드백을 확인해 보세요.</p>}
