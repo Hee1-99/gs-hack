@@ -475,4 +475,4 @@ These are not part of this long-running P0 prompt. Do not automatically consume 
 - [x] **Step 3: Remove provider-specific model names from all user-facing copy while preserving internal compatibility and truthful live/demo states.**
 - [x] **Step 4: Present practice, hiring test and AI response practice together from the simulator entry.**
 - [x] **Step 5: Automatically finish AI customer conversations after a bounded natural exchange and transition to coaching with clear status and retry behavior.**
-- [ ] **Step 6: Run full tests/build/E2E, apply and verify the additive Supabase migration, inspect owner/crew desktop and mobile flows, publish and deploy.**
+- [x] **Step 6: Run full tests/build/E2E, apply and verify the additive Supabase migration, inspect owner/crew desktop and mobile flows, publish and deploy.**
