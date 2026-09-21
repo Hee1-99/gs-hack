@@ -1,7 +1,10 @@
 import { expect, it, vi } from 'vitest';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { listOwnerStaffActivity, saveLearningRecord } from './cloud';
+import { cloudError, listOwnerStaffActivity, saveLearningRecord } from './cloud';
 const storeId='00000000-0000-4000-8000-000000000001', userId='00000000-0000-4000-8000-000000000002', id='00000000-0000-4000-8000-000000000003';
+it('recognizes non-retryable store version conflicts', () => {
+  expect(cloudError({code:'P0001',message:'Concurrent change'})).toBe('다른 기기에서 변경한 내용이 있어요. 새로고침 후 다시 저장해 주세요.');
+});
 it('rejects absent or mismatched record identity before making any request', async () => {
   const from=vi.fn(); const client={from} as unknown as SupabaseClient;
   await expect(saveLearningRecord(client,{storeId,userId,kind:'quiz',id,payload:{score:100}})).rejects.toThrow();

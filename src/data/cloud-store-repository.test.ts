@@ -33,7 +33,7 @@ it('promotes legacy cloud checklist progress to today when date is absent',async
 });
 it('does not change displayed state when remote save fails and queues subsequent versioned saves',async()=>{
  const {client,rpc,result}=backend();const repo=await createCloudStoreRepository(client,member);const rule=repo.listRules()[0];
- result.mockResolvedValueOnce({data:null,error:{code:'40001'}});
+ result.mockResolvedValueOnce({data:null,error:{code:'P0001',message:'Concurrent change'}});
  await expect(repo.updateRule(rule.id,{...rule,title:'실패 제목'})).rejects.toThrow('다른 기기');expect(repo.listRules()[0].title).toBe(rule.title);
  await repo.updateRule(rule.id,{...rule,title:'저장 제목'});expect(repo.listRules()[0].title).toBe('저장 제목');
  expect(rpc).toHaveBeenLastCalledWith('gstep_save_content',expect.objectContaining({target_store:member.store_id,expected_version:1}));

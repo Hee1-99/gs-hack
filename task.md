@@ -512,3 +512,15 @@ These are not part of this long-running P0 prompt. Do not automatically consume 
 - [x] **Step 3: Build the privacy-safe preview with consistent width, typography, spacing and responsive layout.**
 - [x] **Step 4: Run full tests/build and inspect desktop/mobile in a real signed-out browser.**
 - [x] **Step 5: Publish, deploy and verify the production alias and remote commit.**
+
+## Task 25: Supabase CPU Retry-loop Incident
+
+**Depends on:** Task 24
+
+**Deliverable:** Stop the production database request storm, replace the retryable SQLSTATE misuse with a bounded application conflict, preserve the existing optimistic-lock UX, and verify the live database plus deployed client.
+
+- [x] **Step 1: Reproduce the high-CPU condition in Supabase Observability and identify the exact repeated query and error.**
+- [x] **Step 2: Add a failing client regression for the replacement non-retryable conflict contract.**
+- [x] **Step 3: Apply the reviewed function migration, terminate only active PostgREST GStep save loops, and verify zero active retry sessions.**
+- [x] **Step 4: Run focused tests, the full unit/integration suite, local SQL RLS verification, typecheck and production build.**
+- [ ] **Step 5: Publish and deploy the client contract, verify the production alias, remote commit and recovered Supabase CPU/error trend.**

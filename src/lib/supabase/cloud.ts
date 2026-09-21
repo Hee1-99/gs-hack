@@ -9,7 +9,7 @@ export function cloudError(error: unknown): string {
   const code = error && typeof error === 'object' && 'code' in error ? String(error.code) : '';
   if (code === '42P01' || code === 'PGRST202' || code === 'PGRST205') return '서버에 매장 데이터 구성이 아직 적용되지 않았어요. 운영자에게 연결 설정을 요청해 주세요.';
   if (code === '42501') return '이 매장의 변경 권한이 없어요. 로그인한 계정과 매장을 확인해 주세요.';
-  if (code === '40001') return '다른 기기에서 변경한 내용이 있어요. 새로고침 후 다시 저장해 주세요.';
+  if (code === 'P0001' && error && typeof error === 'object' && 'message' in error && String(error.message).includes('Concurrent change')) return '다른 기기에서 변경한 내용이 있어요. 새로고침 후 다시 저장해 주세요.';
   return '서버에 연결하지 못했어요. 연결을 확인하고 다시 시도해 주세요.';
 }
 export async function getMembership(client: SupabaseClient): Promise<Membership | null> {
