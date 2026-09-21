@@ -523,4 +523,4 @@ These are not part of this long-running P0 prompt. Do not automatically consume 
 - [x] **Step 2: Add a failing client regression for the replacement non-retryable conflict contract.**
 - [x] **Step 3: Apply the reviewed function migration, terminate only active PostgREST GStep save loops, and verify zero active retry sessions.**
 - [x] **Step 4: Run focused tests, the full unit/integration suite, local SQL RLS verification, typecheck and production build.**
-- [ ] **Step 5: Publish and deploy the client contract, verify the production alias, remote commit and recovered Supabase CPU/error trend.**
+- [x] **Step 5: Publish and deploy the client contract, verify the production alias, remote commit and recovered Supabase CPU/error trend.**
