@@ -21,7 +21,7 @@ const storeSans = localFont({
   fallback: ['Arial', 'sans-serif'],
 });
 
-export const metadata: Metadata = { title: 'GStep | 매뉴얼로 배우고 AI와 연습하는 첫 근무', description: '실제 GS25 공개 교육 매뉴얼 기반 업무 퀴즈, Gemini 서술형 피드백과 고객 대화 연습. 스토어 매니저의 첫 성장을 함께합니다.' };
+export const metadata: Metadata = { title: 'GStep | 매뉴얼로 배우고 AI와 연습하는 첫 근무', description: '실제 GS25 공개 교육 매뉴얼 기반 업무 퀴즈, AI 서술형 피드백과 고객 대화 연습. 스토어 매니저의 첫 성장을 함께합니다.' };
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <html lang="ko" className={storeSans.variable}><body className={storeSans.className}><AuthProvider>
     <a className="skip-link" href="#main">본문으로 건너뛰기</a>

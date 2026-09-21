@@ -65,3 +65,9 @@ Supabase replaces browser-only persistence for signed-in users: email/password a
 All36stages and3chat scenarios require human-readable consistency across situation, speaker, mission, answer label, choices, explanation and rubric. Next-shift handover must address the next worker throughout the screen, not a customer. Non-POS actions must be described as workplace decisions. Only learner-visible information and questions actually answered may contribute to AI coaching expectations. Preserve original confirmed manual provenance and clearly separate synthetic scenario facts. Verify with direct Computer Use in addition to automated regression.
 
 Task19 account clarification: ID/password signup without email input or email verification supersedes the historical email/password description above.
+
+## Daily history and owner workspace — Task21
+
+Checklist status belongs to a local calendar date. A store manager can choose today or a past recorded date and inspect that day's status without overwriting another day. Existing undated progress migrates safely to the current day. Signed-in owners see their account/store identity, store-scoped crew questions, quiz practice and hiring-test results, AI response-practice scores, checklist authoring and per-person daily completion. Store managers remain scoped to their own records; RLS remains authoritative.
+
+The simulator entry presents three paths together: practice, hiring test and AI response practice. AI customer practice concludes automatically after a short bounded exchange and transitions visibly into coaching, while an earlier manual finish remains available. User-facing copy says AI or AI coaching without naming an upstream model provider. Internal provider identifiers may remain for data compatibility and diagnostics, but must not appear in the product UI.

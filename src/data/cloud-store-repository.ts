@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { createSeed } from '@/domain/seed';
-import { stateSchema, type StoreState } from '@/domain/types';
+import { localDateKey, parseStoreState, type StoreState } from '@/domain/types';
 import { cloudError, type Membership } from '@/lib/supabase/cloud';
 import { createLocalStoreRepository } from './local-store-repository';
 import type { StoreRepository, SaveResult } from './store-repository';
@@ -15,7 +15,7 @@ export async function createCloudStoreRepository(client: SupabaseClient, members
   let contentVersion = content.data.version;
   let staffVersion = staff.data?.version ?? 0;
   const seed = createSeed();
-  let state: StoreState = stateSchema.parse({ ...seed, store: { ...seed.store, id: membership.store_id, name: membership.store_name }, rules: content.data.rules, checklistItems: content.data.checklist_items, checklistProgress: staff.data?.checklist_progress ?? [], questions: staff.data?.questions ?? [], sessions: [] });
+  let state: StoreState = parseStoreState({ ...seed, store: { ...seed.store, id: membership.store_id, name: membership.store_name }, rules: content.data.rules, checklistItems: content.data.checklist_items, checklistProgress: staff.data?.checklist_progress ?? [], questions: staff.data?.questions ?? [], sessions: [] }, localDateKey());
   const listeners = new Set<() => void>();
   let lastError = '';
   let queue: Promise<unknown> = Promise.resolve();
@@ -49,7 +49,7 @@ export async function createCloudStoreRepository(client: SupabaseClient, members
     subscribe: fn => { listeners.add(fn); return () => { listeners.delete(fn); }; },
     getStore: () => structuredClone(state.store), listProducts: () => structuredClone(state.products), listRules: () => structuredClone(state.rules), listChecklistItems: () => structuredClone(state.checklistItems),
     updateRule: (id,input) => save('content', draft => draft.updateRule(id,input)), createRule: input => save('content', draft => draft.createRule(input)),
-    saveChecklistItem: (input,id) => save('content', draft => draft.saveChecklistItem(input,id)), setChecklistStatus: (id,status) => save('staff', draft => draft.setChecklistStatus(id,status)),
+    saveChecklistItem: (input,id) => save('content', draft => draft.saveChecklistItem(input,id)), setChecklistStatus: (id,status,date) => save('staff', draft => draft.setChecklistStatus(id,status,date)),
     saveQuestion: input => save('staff', draft => draft.saveQuestion(input)),
     saveSession: async () => { throw new Error('이전 연습 방식은 계정에 저장할 수 없어요. 새 시뮬레이터를 사용해 주세요.'); },
     resetToSeed: async () => { throw new Error('공유 매장 데이터는 데모 초기화로 삭제할 수 없어요.'); },

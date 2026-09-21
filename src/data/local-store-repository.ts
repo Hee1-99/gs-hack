@@ -1,5 +1,5 @@
 import { createSeed } from '@/domain/seed';
-import { checklistItemInputSchema, checklistStatusSchema, questionSchema, ruleInputSchema, sessionSchema, stateSchema } from '@/domain/types';
+import { checklistDateSchema, checklistItemInputSchema, checklistStatusSchema, localDateKey, parseStoreState, questionSchema, ruleInputSchema, sessionSchema, stateSchema } from '@/domain/types';
 import type { StoreState } from '@/domain/types';
 import type { PersistenceStatus, StoreRepository } from './store-repository';
 
@@ -27,7 +27,12 @@ export function createLocalStoreRepository(storage: StorageAdapter | null): Stor
     const raw = storage.getItem(STORAGE_KEY);
     if (raw === null) persist(state);
     else {
-      try { state = stateSchema.parse(JSON.parse(raw)); }
+      try {
+        const stored = JSON.parse(raw) as { checklistProgress?: { itemId?: string; date?: string }[] };
+        state = parseStoreState(stored);
+        const migrated = state.checklistProgress.some(progress => !stored.checklistProgress?.some(entry => entry.itemId === progress.itemId && entry.date === progress.date));
+        if (migrated) persist(state);
+      }
       catch { persist(createSeed(), true); }
     }
   } catch { persistence = 'memory'; }
@@ -59,10 +64,10 @@ export function createLocalStoreRepository(storage: StorageAdapter | null): Stor
         Object.assign(existing, parsed);
       } else draft.checklistItems.push({ ...parsed, id: crypto.randomUUID() });
     }),
-    setChecklistStatus: (itemId, status) => mutate(draft => {
+    setChecklistStatus: (itemId, status, date = localDateKey()) => mutate(draft => {
       if (!draft.checklistItems.some(item => item.id === itemId)) throw new Error('항목을 찾지 못했어요.');
-      const progress = { itemId, status: checklistStatusSchema.parse(status), updatedAt: new Date().toISOString() };
-      const index = draft.checklistProgress.findIndex(item => item.itemId === itemId);
+      const progress = { itemId, date: checklistDateSchema.parse(date), status: checklistStatusSchema.parse(status), updatedAt: new Date().toISOString() };
+      const index = draft.checklistProgress.findIndex(item => item.itemId === itemId && item.date === date);
       if (index < 0) draft.checklistProgress.push(progress); else draft.checklistProgress[index] = progress;
     }),
     saveQuestion: question => mutate(draft => {

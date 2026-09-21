@@ -49,5 +49,5 @@ test('keyboard-only quiz, Q&A, checklist and reset focus flow', async ({ page })
   await page.keyboard.press('Escape');
   await expect(page.getByRole('button', { name: '데모 데이터 초기화', exact: true })).toBeFocused();
   await activate(page, page.getByRole('link', { name: '경영주 관리', exact: true }));
-  await expect(page.getByRole('heading', { name: '연습 기록과 점수', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '매장 교육 현황', exact: true })).toBeVisible();
 });

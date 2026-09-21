@@ -44,6 +44,35 @@ test('customer clarification reveals fictional details without inventing a refun
   await expect(page.getByRole('log')).not.toContainText('환불이 가능합니다');
 });
 
+test('customer chat automatically moves to feedback after a natural bounded exchange', async ({ page }) => {
+  await page.goto('/crew/chat');
+  await page.getByRole('button', { name: /행사 상품 문의/ }).click();
+  await expect(page.getByText('답변 0 / 3')).toBeVisible();
+  await page.getByLabel('고객에게 할 말').fill('안녕하세요. 행사 조건부터 확인해 드릴게요.');
+  await page.getByRole('button', { name: '답변 보내기', exact: true }).click();
+  await expect(page.getByText('답변 1 / 3')).toBeVisible();
+  await page.getByLabel('고객에게 할 말').fill('같은 캔커피 A 세 개에 3,000원이고 다른 음료와 섞으면 적용되지 않아요. 세 개로 준비해 드릴까요?');
+  await page.getByRole('button', { name: '답변 보내기', exact: true }).click();
+  await expect(page.getByRole('heading', { name: '응대 연습을 마쳤어요' })).toBeVisible();
+  await expect(page.getByRole('button', { name: '대화 마치고 피드백 보기' })).toHaveCount(0);
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('gstep-chat-training-v1')!)[0]);
+  expect(saved.status).toBe('completed');
+  expect(saved.messages.filter((message: { role: string }) => message.role === 'manager')).toHaveLength(2);
+});
+
+test('customer chat always caps the practice at three manager replies', async ({ page }) => {
+  await page.goto('/crew/chat');
+  await page.getByRole('button', { name: /행사 상품 문의/ }).click();
+  for (const answer of ['행사 조건을 확인해볼게요.', '아직 확인 중입니다. 잠시만 기다려 주세요.', '조금 더 확인한 뒤 안내드릴게요.']) {
+    await page.getByLabel('고객에게 할 말').fill(answer);
+    await page.getByRole('button', { name: '답변 보내기', exact: true }).click();
+  }
+  await expect(page.getByRole('heading', { name: '응대 연습을 마쳤어요' })).toBeVisible();
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('gstep-chat-training-v1')!)[0]);
+  expect(saved.status).toBe('completed');
+  expect(saved.messages.filter((message: { role: string }) => message.role === 'manager')).toHaveLength(3);
+});
+
 test('failed and malformed chat responses preserve typed input; pending prevents duplicate submissions', async ({ page }) => {
   await page.goto('/crew/chat');
   await page.getByRole('button', { name: /불편을 겪은 고객/ }).click();

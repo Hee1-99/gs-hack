@@ -9,11 +9,18 @@ const messages = [{ role: 'customer' as const, text: '이 커피 세 개 행사�
 it('uses scenario facts on server and returns a bounded customer turn in demo mode', async () => {
   const result = await handleChatTraining({ scenarioId: 'promotion', messages, action: 'reply' }, demo);
   expect(result.mode).toBe('demo'); expect(result.message?.length).toBeGreaterThan(10); expect(demo.provider).not.toHaveBeenCalled();
+  expect(result.shouldFinish).toBe(false);
+});
+it('signals a natural customer closure so the client can move to feedback early', async () => {
+  const result = await handleChatTraining({ scenarioId: 'promotion', messages: [{ role: 'customer', text: '행사 상품인가요?' }, { role: 'manager', text: '같은 캔커피 A 세 개를 고르시면 3,000원이고 다른 음료와 섞으면 적용되지 않아요. 세 개로 준비해 드릴까요?' }], action: 'reply' }, demo);
+  expect(result.message).toContain('감사합니다');
+  expect(result.shouldFinish).toBe(true);
 });
 it('evaluates the actual transcript, keeps citations real and derives the total from four rubric items', async () => {
   const result = await handleChatTraining({ scenarioId: 'promotion', messages, action: 'finish' }, demo);
   expect(result.feedback?.criteria).toHaveLength(4);
   expect(result.feedback?.score).toBe(result.feedback?.criteria.reduce((sum, item) => sum + item.score, 0));
+  expect(result.feedback?.criteria[0].comment).toContain('경청·공감 관련 표현');
   expect(result.sources.length).toBeGreaterThan(0);
 });
 it('rejects oversized and nonalternating conversations rather than sending them to Gemini', () => {

@@ -39,7 +39,8 @@ export const sessionSchema = z.object({ id, previousAttemptId: id.nullable(), sc
 export const checklistItemInputSchema = z.object({ title: text.max(100), description: text, category: text.max(50) });
 export const checklistItemSchema = checklistItemInputSchema.extend({ id });
 export const checklistStatusSchema = z.enum(['pending', 'done', 'needs_manager']);
-export const checklistProgressSchema = z.object({ itemId: id, status: checklistStatusSchema, updatedAt: timestamp });
+export const checklistDateSchema = z.iso.date();
+export const checklistProgressSchema = z.object({ itemId: id, date: checklistDateSchema, status: checklistStatusSchema, updatedAt: timestamp });
 // One answer includes both 2,000-character manual fields plus structured fact clauses.
 export const manualSourceSchema = z.object({ id, title: text.max(100), url: z.url().refine(value => /^https?:\/\//.test(value)).optional(), excerpt: text, status: text.max(100), origin: z.enum(['bundled', 'upload']) });
 export type ManualSource = z.infer<typeof manualSourceSchema>;
@@ -49,6 +50,19 @@ export const stateSchema = z.object({
   rules: z.array(ruleSchema).min(1), products: z.array(productSchema).length(3), promotions: z.array(promotionSchema).length(1), scenarios: z.array(scenarioSchema).length(2),
   sessions: z.array(sessionSchema), checklistItems: z.array(checklistItemSchema), checklistProgress: z.array(checklistProgressSchema), questions: z.array(questionSchema),
 });
+const legacyStateSchema = stateSchema.extend({
+  checklistProgress: z.array(checklistProgressSchema.extend({ date: checklistDateSchema.optional() })),
+});
+export function localDateKey(value = new Date()) {
+  const year = value.getFullYear();
+  const month = String(value.getMonth() + 1).padStart(2, '0');
+  const day = String(value.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+export function parseStoreState(value: unknown, legacyDate = localDateKey()) {
+  const parsed = legacyStateSchema.parse(value);
+  return stateSchema.parse({ ...parsed, checklistProgress: parsed.checklistProgress.map(progress => ({ ...progress, date: progress.date ?? legacyDate })) });
+}
 export type StoreRule = z.infer<typeof ruleSchema>;
 export type RuleInput = z.infer<typeof ruleInputSchema>;
 export type Product = z.infer<typeof productSchema>;
@@ -64,6 +78,7 @@ export type ChecklistItem = z.infer<typeof checklistItemSchema>;
 export type ChecklistItemInput = z.infer<typeof checklistItemInputSchema>;
 export type ChecklistProgress = z.infer<typeof checklistProgressSchema>;
 export type ChecklistStatus = z.infer<typeof checklistStatusSchema>;
+export type ChecklistDate = z.infer<typeof checklistDateSchema>;
 export type QuestionLog = z.infer<typeof questionSchema>;
 export type StoreState = z.infer<typeof stateSchema>;
 export type Store = StoreState['store'];

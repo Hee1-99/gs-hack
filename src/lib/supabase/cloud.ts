@@ -1,8 +1,10 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
+import { checklistProgressSchema, localDateKey, questionSchema, type ChecklistProgress, type QuestionLog } from '@/domain/types';
 
 export type Membership = { user_id: string; store_id: string; role: 'owner' | 'crew'; display_name: string; store_name: string };
 export type LearningRecord = { store_id: string; user_id: string; kind: 'quiz' | 'chat'; record_id: string; payload: unknown; updated_at: string; display_name?: string };
+export type OwnerStaffActivity = { user_id: string; display_name: string; questions: QuestionLog[]; checklist_progress: ChecklistProgress[]; updated_at: string | null };
 export function cloudError(error: unknown): string {
   const code = error && typeof error === 'object' && 'code' in error ? String(error.code) : '';
   if (code === '42P01' || code === 'PGRST202' || code === 'PGRST205') return '서버에 매장 데이터 구성이 아직 적용되지 않았어요. 운영자에게 연결 설정을 요청해 주세요.';
@@ -23,6 +25,24 @@ export async function listLearningRecords(client: SupabaseClient, storeId: strin
   if (members.error) throw members.error;
   const names = new Map<string, string>((members.data ?? []).map(member => [member.user_id, member.display_name]));
   return (records.data ?? []).map(record => ({ ...record, display_name: names.get(record.user_id) }));
+}
+export async function listOwnerStaffActivity(client: SupabaseClient, storeId: string): Promise<OwnerStaffActivity[]> {
+  const [members, states] = await Promise.all([
+    client.from('gstep_memberships').select('user_id,display_name,role').eq('store_id', storeId),
+    client.from('gstep_staff_state').select('user_id,questions,checklist_progress,updated_at').eq('store_id', storeId),
+  ]);
+  if (members.error) throw members.error;
+  if (states.error) throw states.error;
+  const stateByUser = new Map<string, { questions?: unknown; checklist_progress?: unknown; updated_at?: unknown }>((states.data ?? []).map(state => [state.user_id, state]));
+  return (members.data ?? []).filter(member => member.role === 'crew').map(member => {
+    const state = stateByUser.get(member.user_id);
+    const questions = z.array(questionSchema).safeParse(state?.questions);
+    const progress = Array.isArray(state?.checklist_progress) ? state.checklist_progress.flatMap(item => {
+      const normalized = item && typeof item === 'object' && !('date' in item) ? { ...item, date: localDateKey() } : item;
+      const parsed = checklistProgressSchema.safeParse(normalized); return parsed.success ? [parsed.data] : [];
+    }) : [];
+    return { user_id: member.user_id, display_name: member.display_name, questions: questions.success ? questions.data : [], checklist_progress: progress, updated_at: typeof state?.updated_at === 'string' ? state.updated_at : null };
+  });
 }
 const recordInput = z.object({ storeId: z.uuid(), userId: z.uuid(), kind: z.enum(['quiz', 'chat']), id: z.uuid(), payload: z.object({ id: z.uuid() }).passthrough() }).refine(value => value.id === value.payload.id, { message: 'record identity mismatch' });
 export async function saveLearningRecord(client: SupabaseClient, input: { storeId: string; userId: string; kind: 'quiz' | 'chat'; id: string; payload: unknown }) {

@@ -1,3 +1,10 @@
+.heading{display:flex;align-items:flex-end;justify-content:space-between;gap:24px}
+.datePicker{display:grid;gap:7px;min-width:250px;padding:15px 17px;background:#fff;border:1px solid #e5e8ef;border-radius:18px;box-shadow:0 4px 14px #243a5b05}
+.datePicker label{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:#55606f}
+.datePicker>div{display:flex;align-items:center;gap:8px}
+.datePicker input{width:100%;min-height:42px;padding:8px 11px;border:1px solid #dce1e9;border-radius:11px;background:#f8f9fc;color:#26303e;font:inherit;font-size:13px}
+.datePicker button{min-height:42px;white-space:nowrap;padding:8px 13px}
+@media(max-width:700px){.heading{display:grid;align-items:stretch}.datePicker{min-width:0}}
 .progressCard{padding:26px 30px;background:#d9f8fb;border:1px solid #c7edf2;border-radius:28px;box-shadow:0 6px 18px #243a5b04}
 .progressTop{display:flex;justify-content:space-between;align-items:center;gap:24px}
 .progressCaption{font-size:14px;font-weight:700;color:#006b79}

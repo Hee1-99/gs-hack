@@ -6,6 +6,13 @@ import { answerTrainingStep, createTrainingAttempt } from './training-engine';
 import { trainingSteps } from './training-data';
 vi.mock('./training-store', () => ({ useTrainingStore: vi.fn() }));
 beforeEach(() => vi.clearAllMocks());
+it('offers AI customer practice beside practice and test on the simulator landing', () => {
+  vi.mocked(useTrainingStore).mockReturnValue({ ready: true, persistence: 'saved', attempts: [], active: null } as unknown as ReturnType<typeof useTrainingStore>);
+  render(<TrainingShell />);
+  expect(screen.getByRole('button', { name: '차근차근 연습' })).toBeVisible();
+  expect(screen.getByRole('button', { name: '채용 테스트' })).toBeVisible();
+  expect(screen.getByRole('link', { name: 'AI 응대 연습' })).toHaveAttribute('href', '/crew/chat');
+});
 function resumeAt(id: string) {
   let attempt = createTrainingAttempt('practice', '검수');
   for (const step of trainingSteps) {

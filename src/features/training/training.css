@@ -7,3 +7,5 @@
 @keyframes grading-breathe{50%{transform:scale(1.08);box-shadow:0 0 0 9px #b9edf03d}}
 @media(max-width:650px){.training-course-picker{max-width:none}.training-written{padding:20px}.training-score-breakdown{gap:7px}.training-score-breakdown>span{min-width:calc(50% - 7px);padding:12px 10px}.training-timer{font-size:11px}.training-curriculum{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.training-prompt>p{font-size:12px}.training-prompt>p:after{display:none}.training-progress{gap:2px}.training-scoring-help{padding:16px}}
 @media(prefers-reduced-motion:reduce){.grading-orbit{animation:none}}
+.training-mode-switch a{display:flex;align-items:center;justify-content:center;gap:8px;min-height:45px;padding:10px 18px;border-radius:13px;font-size:14px;color:#006b79;font-weight:700;text-decoration:none;white-space:nowrap}.training-mode-switch a:hover{background:#d9f8fb}
+@media(max-width:650px){.training-mode-switch button,.training-mode-switch a{flex:1;padding:11px 5px;font-size:12px;gap:4px;white-space:nowrap}.training-mode-switch svg{width:16px;height:16px}}

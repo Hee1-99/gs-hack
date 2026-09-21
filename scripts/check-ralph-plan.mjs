@@ -16,7 +16,7 @@ function check(condition, description) {
 const tasks = documents['task.md'];
 const matches = [...tasks.matchAll(/^## Task (\d+):/gm)];
 const ids = matches.map(match => Number(match[1]));
-check(ids.join(',') === Array.from({ length: 20 }, (_, i) => i + 1).join(','), 'Tasks 1-20 exist exactly once and in order (including user revisions)');
+check(ids.join(',') === Array.from({ length: 21 }, (_, i) => i + 1).join(','), 'Tasks 1-21 exist exactly once and in order (including user revisions)');
 for (const match of matches) {
   const id = Number(match[1]);
   const tail = tasks.slice(match.index + match[0].length);

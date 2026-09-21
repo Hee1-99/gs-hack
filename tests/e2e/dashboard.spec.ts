@@ -59,7 +59,7 @@ test('manager reviews complete test scores, stage answers and in-progress record
   await page.reload();
   await expect(page.getByTestId('training-count')).toHaveText('1회');
   await expect(page.getByTestId('training-average')).toContainText('97');
-  await expect(page.getByText('진행 중', { exact: true })).toBeVisible();
+  await expect(page.locator('summary').filter({ hasText: '진행 중' })).toContainText('0 / 36단계');
   await page.getByRole('button', { name: '구인 테스트', exact: true }).click();
   const records = page.locator('details').filter({ has: page.locator('summary', { hasText: '지원자 A' }) });
   await expect(records).toHaveCount(1);

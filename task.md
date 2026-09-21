@@ -462,3 +462,17 @@ These are not part of this long-running P0 prompt. Do not automatically consume 
 - [x] **Step 3: Walk through corrected training and all three chat scenarios in Computer Use, checking visible missions, dialogue, submitted answers and feedback.**
 - [x] **Step 4: Run full local tests/build/E2E and inspect desktop/mobile, including written grading failure and retry states.**
 - [x] **Step 5: Publish and deploy the corrected content, verify deployed behavior and record evidence and measured duration.**
+
+
+## Task 21: Daily Records and Owner Workspace
+
+**Depends on:** Task 20
+
+**Deliverable:** Date-aware checklist history, a role-correct owner workspace, provider-neutral AI copy, a three-option simulator entry and bounded automatic chat completion, with preserved records and verified live Supabase isolation.
+
+- [x] **Step 1: Add date-keyed checklist progress with today/past date selection, legacy migration and daily local/cloud persistence.**
+- [x] **Step 2: Show signed-in owners account/store identity, crew questions, quiz practice/test/chat scores, checklist creation and per-person daily completion.**
+- [x] **Step 3: Remove provider-specific model names from all user-facing copy while preserving internal compatibility and truthful live/demo states.**
+- [x] **Step 4: Present practice, hiring test and AI response practice together from the simulator entry.**
+- [x] **Step 5: Automatically finish AI customer conversations after a bounded natural exchange and transition to coaching with clear status and retry behavior.**
+- [ ] **Step 6: Run full tests/build/E2E, apply and verify the additive Supabase migration, inspect owner/crew desktop and mobile flows, publish and deploy.**

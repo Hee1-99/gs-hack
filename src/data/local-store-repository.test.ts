@@ -66,6 +66,27 @@ describe('local store repository', () => {
     expect(localStorage.getItem('unrelated')).toBe('keep');
     expect(JSON.parse(localStorage.getItem(STORAGE_KEY)!).schemaVersion).toBe(1);
   });
+  it('keeps checklist completion separately for each work date', () => {
+    const repo = createLocalStoreRepository(localStorage);
+    const itemId = repo.listChecklistItems()[0].id;
+    (repo.setChecklistStatus as (...args: string[]) => unknown)(itemId, 'done', '2026-09-20');
+    (repo.setChecklistStatus as (...args: string[]) => unknown)(itemId, 'needs_manager', '2026-09-21');
+    const records = repo.getSnapshot().checklistProgress;
+    expect(records).toEqual(expect.arrayContaining([
+      expect.objectContaining({ itemId, date: '2026-09-20', status: 'done' }),
+      expect.objectContaining({ itemId, date: '2026-09-21', status: 'needs_manager' }),
+    ]));
+  });
+  it('migrates legacy checklist progress to today without dropping other saved data', () => {
+    const seed = createSeed();
+    const legacy = { ...seed, checklistProgress: [{ itemId: 'stock', status: 'done', updatedAt: '2026-09-20T12:00:00.000Z' }] };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(legacy));
+    const repo = createLocalStoreRepository(localStorage);
+    expect(repo.getSnapshot().checklistProgress).toEqual([
+      expect.objectContaining({ itemId: 'stock', status: 'done', date: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/) }),
+    ]);
+    expect(repo.getSnapshot().rules).toHaveLength(seed.rules.length);
+  });
   it('returns detached entities so callers cannot silently change stored facts', () => {
     const repo = createLocalStoreRepository(localStorage);
     repo.listProducts()[0].price = 1;
