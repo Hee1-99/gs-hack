@@ -1,13 +1,13 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, MessageCircle, Grid2X2, ClipboardCheck, UserRound } from 'lucide-react';
+import { Home, MessageCircle, Gamepad2, ClipboardCheck, UserRound } from 'lucide-react';
 import { useAuth } from '@/features/auth/auth-provider';
 
 const items = [
   { href: '/', label: '홈', icon: Home },
   { href: '/crew/questions', label: '매장 Q&A', icon: MessageCircle },
-  { href: '/crew/simulation', label: '시뮬레이터', icon: Grid2X2, main: true },
+  { href: '/crew/simulation', label: '시뮬레이터', icon: Gamepad2, main: true },
   { href: '/crew/checklist', label: '체크리스트', icon: ClipboardCheck },
   { href: '/manager/dashboard', label: '기록', icon: UserRound },
 ];

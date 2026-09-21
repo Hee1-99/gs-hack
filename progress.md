@@ -486,3 +486,16 @@
 - Task21 allsixcheckboxes verified. Outcome:completed-before-duration-target; required scope and one bounded residual UI review finished honestly before420minutes.
 - Timing: originalrunStartedAt2026-09-21T09:05:58.258Z; lastCheckpointAt:2026-09-22T01:43:41.8222255+09:00; measuredactiveinterval:5.28 minutes; cumulativeactiveWorkMinutes:231.89. No parallel doublecount; stopped gaps excluded.
 - Nextcheckbox:none. Finalaction:push this documentation-only closure; no additional application deploy is needed because the live artifact already contains commit50059e5.
+
+### Iteration42 — 2026-09-22T01:47:17+09:00 — Task22 begins
+
+- User requests a new LNB simulator logo. Startup documents reread in order. Current mobile LNB inspected: the raised central action uses lucide Grid2X2, which visually resembles a generic menu/QR control rather than interactive practice.
+- Smallest coherent change selected: use the same Gamepad2 language already present in the crew simulator tab, preserving route, Korean label, circular emphasis, active styles and sizing. Existing user-owned untracked docs/evidence/gs25-training-crawl-audit.json remains untouched.
+- Implementation timer starts at2026-09-22T01:47:17.7521625+09:00; preserve cumulativeactiveWorkMinutes231.89 and exclude the stopped gap after Task21. Exact next checkbox: Task22 Step1 focused navigation verification.
+
+### Iteration43 — 2026-09-22T01:51:13+09:00 — Task22 local verification
+
+- Replaced only the raised LNB simulator icon from Grid2X2 to Gamepad2. The /crew/simulation route, `시뮬레이터` label, central circular emphasis and active-state styling remain unchanged.
+- Verification: plan59/59 PASS; unit/integration150/150 PASS; production build PASS with21routes. Computer Use at390x844 displayed the new controller glyph centered in the raised action, aria-current=page on the simulator route, viewport390 and document scrollWidth375 with no horizontal overflow. Temporary viewport override reset and local server stopped.
+- Timing: originalrunStartedAt2026-09-21T09:05:58.258Z; lastCheckpointAt:2026-09-22T01:51:13.4248482+09:00; measuredactiveinterval:3.93 minutes; cumulativeactiveWorkMinutes:235.82. Stopped gaps excluded.
+- Next checkbox: Task22 Step5 stage only the verified icon/docs changes, push main, deploy to the linked Vercel production target and verify the live mobile icon. User-owned untracked docs/evidence/gs25-training-crawl-audit.json remains untouched.

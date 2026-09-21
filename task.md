@@ -476,3 +476,15 @@ These are not part of this long-running P0 prompt. Do not automatically consume 
 - [x] **Step 4: Present practice, hiring test and AI response practice together from the simulator entry.**
 - [x] **Step 5: Automatically finish AI customer conversations after a bounded natural exchange and transition to coaching with clear status and retry behavior.**
 - [x] **Step 6: Run full tests/build/E2E, apply and verify the additive Supabase migration, inspect owner/crew desktop and mobile flows, publish and deploy.**
+
+## Task 22: Simulator LNB Icon
+
+**Depends on:** Task 21
+
+**Deliverable:** Replace the ambiguous grid icon in the raised mobile simulator action with a game-controller icon and verify its responsive navigation state.
+
+- [x] **Step 1: Reproduce the ambiguity by inspecting the current Grid2X2 simulator action and its mobile LNB styling.**
+- [x] **Step 2: Replace the icon without changing the simulator route, label, active state or navigation dimensions.**
+- [x] **Step 3: Run the full unit/integration suite and production build.**
+- [x] **Step 4: Inspect the changed mobile navigation in a real browser and verify the active simulator state.**
+- [ ] **Step 5: Publish, deploy and verify the production alias and remote commit.**
