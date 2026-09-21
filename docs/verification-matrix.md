@@ -14,7 +14,7 @@ The original release evidence below is historical. Latest user request replaces 
 | Figma and actual UI visual review | https://www.figma.com/design/KYOkEnYcKTRuPpe6hi3QPW ; docs/evidence/figma-redesign.png and revision-*.png | Figma clipping fixed; screenshots inspected |
 | Full release gate | npm test; AI_DEMO_MODE=true npm run build; npm run test:e2e |82/82 unit/integration, build exit0,44/44 production E2E38.7s, retries0 |
 | Secret boundary | node scripts/check-secret-boundary.mjs |1018files inspected,0leaks, .env.local ignored/untracked |
-| Publication/deployment | progress.md iteration27 onward | Pending at this local checkpoint |
+| Publication/deployment | progress.md iteration27 onward | Source a7114bd on origin/main; dpl_8E4U1w4WvrKmoi1hNN6zyP8ZmyDr READY; live manual200/live/source-valid; deployed desktop/mobile2/2 passed30.4s |
 
 Computer Browser entry point returned `Unable to load browser request-header policy`, matching the prior three-failure blocker. No interactive browser operation is claimed. Actual UI behavior was exercised with the project's Chromium E2E runner and inspected rendered screenshots. Figma MCP was operational.
 

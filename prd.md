@@ -44,4 +44,4 @@ A first-shift simulator for a `스토어 매니저`: choose a concrete action in
 - [x] Gemini live answer verified separately from repeatable demo-mode tests.
 - [x] Checklist settings preserve item status; confirmed reset covers quiz/upload and legacy data.
 - [x] Full unit/integration tests, build and complete production E2E pass; Figma and actual rendered screens inspected.
-- [ ] Existing Git target and deployed app verified with exact outcomes in progress.md.
+- [x] Existing Git target and deployed app verified with exact outcomes in progress.md.
