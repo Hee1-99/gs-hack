@@ -39,6 +39,9 @@ it('does not require unprovided policy, wait time or medical assumptions when co
   const prompt = JSON.parse(provider.mock.calls[0][0]);
   expect(prompt.constraints).toContain('미제공 정보를 모른다는 이유로 감점하지');
   expect(prompt.constraints).toContain('소비기한 문제나 건강 이상을 임의로 가정하지');
+  expect(prompt.constraints).toContain('연락 예정 시점이나 연락처 수집을 필수 행동으로 요구하지');
+  expect(prompt.constraints).toContain('오늘 중으로');
+  expect(prompt.constraints).toContain('마지막 고객 질문에 아직 답할 차례가 오지 않은');
   expect(prompt.learnerVisibleFacts).toEqual(getScenarioFacts('refund'));
 });
 it('makes demo follow-ups respond to the actual situation rather than generic instructions', async () => {
@@ -51,4 +54,17 @@ it('lets a manager discover fictional customer details by asking instead of loop
   const result = await handleChatTraining({ scenarioId: 'refund', messages: [{ role: 'customer', text: '환불해 주세요.' }, { role: 'manager', text: '어떤 상품을 구매하셨고, 어디가 이상한지 보여 주시겠어요?' }], action: 'reply' }, demo);
   expect(result.message).toContain('봉지 과자');
   expect(result.message).toContain('옆면');
+});
+it('uses factual-inquiry empathy criteria without demanding an apology or hedging a confirmed rule', async () => {
+  const provider = vi.fn(async (_prompt: string) => '{}');
+  await handleChatTraining({ scenarioId: 'promotion', messages: [{ role: 'customer', text: '이 커피 세 개 행사인가요? 다른 음료와 섞어도 되나요?' }, { role: 'manager', text: '안녕하세요. 캔커피 A는 같은 상품 세 개에 3,000원입니다. 다른 음료와 섞는 것은 적용되지 않아요. 세 개로 준비해 드릴까요?' }], action: 'finish' }, { apiKeyPresent: true, demoMode: false, provider });
+  const prompt = JSON.parse(provider.mock.calls[0][0]);
+  expect(prompt.scenarioRubric).toContain('사과나 감정 공감을 의무로 요구하지');
+  expect(prompt.scenarioRubric).toContain('적용되지 않아요');
+  expect(prompt.scenarioRubric).toContain('확인된 조건을 정중하고 정확하게');
+  expect(prompt.scenarioRubric).toContain('억지로 감점');
+  await handleChatTraining({ scenarioId: 'complaint', messages, action: 'finish' }, { apiKeyPresent: true, demoMode: false, provider });
+  const complaintPrompt = JSON.parse(provider.mock.calls[1][0]);
+  expect(complaintPrompt.scenarioRubric).toContain('표현한 불편');
+  expect(complaintPrompt.scenarioRubric).not.toBe(prompt.scenarioRubric);
 });

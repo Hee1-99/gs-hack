@@ -457,7 +457,7 @@ These are not part of this long-running P0 prompt. Do not automatically consume 
 
 **Deliverable:** Direct Computer Use inspection of all36steps and3chat scenarios; source-grounded corrections to speaker, situation, mission, input, choices and feedback, retaining count and history compatibility.
 
-- [ ] **Step 1: Reproduce the mismatched written mission in a real browser and review every course/scenario against the supplied manual.**
+- [x] **Step 1: Reproduce the mismatched written mission in a real browser and review every course/scenario against the supplied manual.**
 - [ ] **Step 2: Correct scenario-specific speaker, action instructions and written prompts; align practice screens and AI coaching with information actually shown to the learner.**
 - [ ] **Step 3: Walk through corrected training and all three chat scenarios in Computer Use, checking visible missions, dialogue, submitted answers and feedback.**
 - [x] **Step 4: Run full local tests/build/E2E and inspect desktop/mobile, including written grading failure and retry states.**
