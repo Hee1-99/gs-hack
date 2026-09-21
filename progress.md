@@ -508,3 +508,18 @@
 - Task22 all five checkboxes are verified. Outcome: completed-before-duration-target; the requested bounded icon change, regression checks, publication and live review are complete.
 - Timing: originalrunStartedAt2026-09-21T09:05:58.258Z; lastCheckpointAt:2026-09-22T01:54:49.2730142+09:00; measuredactiveinterval:3.60 minutes; cumulativeactiveWorkMinutes:239.42. Stopped gaps excluded.
 - Nextcheckbox:none. Finalaction:push this documentation-only closure and verify the remote SHA; no additional application deploy is needed because the live artifact already contains commit `8bac171`.
+
+### Iteration45 — 2026-09-22T01:58:45+09:00 — Task23 begins
+
+- User reports that the landing-page `경영주 관리` entry shows populated data while signed out. Code inspection reproduced the cause: `OwnerGate` allowed guests through and `Dashboard` then treated browser-local practice/checklist/question state as a `체험 스토어 매니저` owner record.
+- Added the boundary regression first; focused Vitest failed1/5 because signed-out children remained visible. Implemented the smallest correction in `OwnerGate`: after auth readiness, signed-out visitors see only the owner capability explanation and `경영주로 로그인`; authenticated crew denial and authenticated owner content are preserved. Focused regression then passed5/5.
+- Task23 implementation timing begins at the first exact checkpoint 2026-09-22T01:58:45.7700967+09:00. Earlier diagnosis and failing-test time in this turn lacks an exact start timestamp and is excluded rather than estimated. Preserve cumulativeactiveWorkMinutes239.42.
+- Exact next checkbox: Task23 Step3 run document/full unit and integration checks, then production build and direct signed-out landing-to-owner browser verification. User-owned untracked `docs/evidence/gs25-training-crawl-audit.json` remains untouched.
+
+### Iteration46 — 2026-09-22T02:03:13+09:00 — Task23 local gates
+
+- Verified document plan61/61, full unit/integration151/151 and production build with21routes. Secret boundary inspected1,572files with no leak and no tracked secret file; whitespace check passed.
+- Direct Computer Use started from the real landing page, clicked `경영주 관리`, and reached `/manager/dashboard` while signed out. The resulting accessibility tree and screenshot contained only `로그인하면 매장 현황을 확인할 수 있어요`, the capability explanation and `경영주로 로그인`.
+- Read-only browser verification found none of `완료한 연습·테스트`, `평균 점수`, `체크리스트 완료 현황`, `체험 스토어 매니저` or `최근 기록`. The production server on port3101 was stopped after verification.
+- Timing: originalrunStartedAt2026-09-21T09:05:58.258Z; lastCheckpointAt:2026-09-22T02:03:13.6912472+09:00; measuredactiveinterval:4.47 minutes; cumulativeactiveWorkMinutes:243.89. The earlier unmeasured diagnosis interval remains excluded.
+- Exact next checkbox: Task23 Step5 stage only tracked correction/docs, publish to `origin/main`, deploy the linked Vercel production target and repeat the signed-out owner check on the production alias. User-owned untracked crawl audit remains untouched.

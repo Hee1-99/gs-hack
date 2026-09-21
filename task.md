@@ -488,3 +488,15 @@ These are not part of this long-running P0 prompt. Do not automatically consume 
 - [x] **Step 3: Run the full unit/integration suite and production build.**
 - [x] **Step 4: Inspect the changed mobile navigation in a real browser and verify the active simulator state.**
 - [x] **Step 5: Publish, deploy and verify the production alias and remote commit.**
+
+## Task 23: Signed-out Owner Empty State
+
+**Depends on:** Task 22
+
+**Deliverable:** Keep the landing-page owner entry informative while ensuring a signed-out visitor sees no local or sample data in the owner workspace.
+
+- [x] **Step 1: Reproduce the signed-out leak with a failing owner-boundary regression test.**
+- [x] **Step 2: Gate the owner workspace so a signed-out visitor receives only an explanation and login action.**
+- [x] **Step 3: Verify loading, signed-out, crew and owner states with focused and full automated tests.**
+- [x] **Step 4: Run the production build and inspect the landing-to-owner flow in a real signed-out browser.**
+- [ ] **Step 5: Publish, deploy and verify the corrected production owner entry.**

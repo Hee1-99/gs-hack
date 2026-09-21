@@ -73,3 +73,7 @@ Checklist status belongs to a local calendar date. A store manager can choose to
 The simulator entry presents three paths together: practice, hiring test and AI response practice. AI customer practice concludes automatically after a short bounded exchange and transitions visibly into coaching, while an earlier manual finish remains available. User-facing copy says AI or AI coaching without naming an upstream model provider. Internal provider identifiers may remain for data compatibility and diagnostics, but must not appear in the product UI.
 
 The mobile LNB uses a game-controller symbol for its raised simulator action so the primary destination reads as interactive practice at a glance. The existing circular emphasis, active color and accessible `시뮬레이터` label remain unchanged.
+
+## Signed-out owner state — Task23
+
+The landing-page owner entry remains available as a product explanation. Until authentication resolves it shows a loading state; after a signed-out result it shows only what owners can review and a login action. It must not render browser-local practice attempts, questions, checklist status, scores, synthetic staff rows or owner navigation as store data. Signed-in owners retain the existing store-scoped workspace, while signed-in store managers retain the owner-only denial state.
