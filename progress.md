@@ -499,3 +499,12 @@
 - Verification: plan59/59 PASS; unit/integration150/150 PASS; production build PASS with21routes. Computer Use at390x844 displayed the new controller glyph centered in the raised action, aria-current=page on the simulator route, viewport390 and document scrollWidth375 with no horizontal overflow. Temporary viewport override reset and local server stopped.
 - Timing: originalrunStartedAt2026-09-21T09:05:58.258Z; lastCheckpointAt:2026-09-22T01:51:13.4248482+09:00; measuredactiveinterval:3.93 minutes; cumulativeactiveWorkMinutes:235.82. Stopped gaps excluded.
 - Next checkbox: Task22 Step5 stage only the verified icon/docs changes, push main, deploy to the linked Vercel production target and verify the live mobile icon. User-owned untracked docs/evidence/gs25-training-crawl-audit.json remains untouched.
+
+### Iteration44 — 2026-09-22T01:54:49+09:00 — Task22 published and live
+
+- Published application commit `8bac171699001fc769f1dd6e5f83eafe5f0e18fe` to `origin/main`; `git ls-remote` confirmed the remote ref matched. The user-owned untracked `docs/evidence/gs25-training-crawl-audit.json` remained excluded.
+- Vercel production deployment `dpl_Hc1h37ZMwZTk5QRnHe1cxvW6LZoE` reached READY. Immutable deployment: https://gs-hack-pkcpoxp2c-hee1-99s-projects.vercel.app ; production alias: https://gs-hack-seven.vercel.app .
+- Live Computer Use at a temporary 390x844 viewport confirmed `/crew/simulation` has `aria-current=page`, the centered LNB SVG class is `lucide-gamepad-2`, and document scrollWidth is375 with no horizontal overflow. The screenshot visually confirmed the white controller glyph inside the raised turquoise action. The viewport override was reset.
+- Task22 all five checkboxes are verified. Outcome: completed-before-duration-target; the requested bounded icon change, regression checks, publication and live review are complete.
+- Timing: originalrunStartedAt2026-09-21T09:05:58.258Z; lastCheckpointAt:2026-09-22T01:54:49.2730142+09:00; measuredactiveinterval:3.60 minutes; cumulativeactiveWorkMinutes:239.42. Stopped gaps excluded.
+- Nextcheckbox:none. Finalaction:push this documentation-only closure and verify the remote SHA; no additional application deploy is needed because the live artifact already contains commit `8bac171`.

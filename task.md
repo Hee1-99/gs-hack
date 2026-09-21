@@ -487,4 +487,4 @@ These are not part of this long-running P0 prompt. Do not automatically consume 
 - [x] **Step 2: Replace the icon without changing the simulator route, label, active state or navigation dimensions.**
 - [x] **Step 3: Run the full unit/integration suite and production build.**
 - [x] **Step 4: Inspect the changed mobile navigation in a real browser and verify the active simulator state.**
-- [ ] **Step 5: Publish, deploy and verify the production alias and remote commit.**
+- [x] **Step 5: Publish, deploy and verify the production alias and remote commit.**
