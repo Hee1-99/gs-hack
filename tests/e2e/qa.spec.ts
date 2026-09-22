@@ -4,7 +4,7 @@ test('answers from the latest rule and preserves unsupported questions', async (
   await page.getByLabel('매장에 궁금한 점').fill('직원 급여 정산 계좌');
   await page.getByRole('button', { name: '질문하기', exact: true }).click();
   await expect(page.getByTestId('question-log').first()).toContainText('경영주 확인 필요');
-  await page.getByRole('link', { name: '경영주 관리', exact: true }).click();
+  await page.getByRole('link', { name: '경영주 페이지', exact: true }).click();
   await page.getByRole('link', { name: '추가 매장 규칙', exact: true }).click();
   const rule = page.getByRole('form', { name: '행사 문의는 POS 확인 후 안내' });
   await rule.getByLabel('규칙 내용').fill('조회 후 행사 조건을 고객에게 차근차근 안내해 주세요.');

@@ -5,7 +5,7 @@ test('new manual rule answers a new question without rewriting unresolved histor
   await page.getByRole('button', { name: '질문하기', exact: true }).click();
   await expect(page.getByTestId('question-log')).toContainText('경영주 확인 필요');
   const original = await page.evaluate(() => JSON.parse(localStorage.getItem('firstday.zip')!).questions[0]);
-  await page.getByRole('link', { name: '경영주 관리', exact: true }).click();
+  await page.getByRole('link', { name: '경영주 페이지', exact: true }).click();
   await page.getByRole('link', { name: '추가 매장 규칙', exact: true }).click();
   await page.getByRole('button', { name: '새 규칙 추가' }).click();
   const form = page.getByRole('form', { name: '새 규칙 작성' });
@@ -32,7 +32,7 @@ test('new manual rule answers a new question without rewriting unresolved histor
   expect(state.questions).toHaveLength(2);
   expect(state.questions.filter((question: { status: string }) => question.status === 'unresolved')).toHaveLength(1);
   await expect(page.getByRole('progressbar', { name: '업무 완료 현황' })).toHaveAttribute('value', '1');
-  await page.getByRole('link', { name: '경영주 관리', exact: true }).click();
+  await page.getByRole('link', { name: '경영주 페이지', exact: true }).click();
   await expect(page.getByTestId('training-count')).toHaveText('0회');
   await expect(page.getByTestId('training-average')).toHaveText('—완료 후 표시');
 });

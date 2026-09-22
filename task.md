@@ -524,3 +524,14 @@ These are not part of this long-running P0 prompt. Do not automatically consume 
 - [x] **Step 3: Apply the reviewed function migration, terminate only active PostgREST GStep save loops, and verify zero active retry sessions.**
 - [x] **Step 4: Run focused tests, the full unit/integration suite, local SQL RLS verification, typecheck and production build.**
 - [x] **Step 5: Publish and deploy the client contract, verify the production alias, remote commit and recovered Supabase CPU/error trend.**
+
+## Task 26: Owner Page Wording
+
+**Depends on:** Task 25
+
+**Deliverable:** Rename every current user-facing owner navigation label from `경영주 관리` to `경영주 페이지` without changing access control or routes.
+
+- [x] **Step 1: Add a failing regression for the new owner-entry label.**
+- [x] **Step 2: Update the landing entry, signed-out preview and owner workspace heading together with browser selectors and demo copy.**
+- [x] **Step 3: Run focused and full tests, production build and real-browser verification.**
+- [ ] **Step 4: Publish, deploy and verify the production alias and remote commit.**

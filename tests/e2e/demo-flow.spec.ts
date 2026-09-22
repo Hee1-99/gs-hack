@@ -35,7 +35,7 @@ test('single browser full demo: rules, quiz failure and retry, Q&A, checklist an
   await page.getByLabel('소비기한 확인 상태').selectOption('needs_manager');
   await page.reload();
   await expect(page.getByLabel('입고 상품 확인 상태')).toHaveValue('done');
-  await page.getByRole('link', { name: '경영주 관리', exact: true }).click();
+  await page.getByRole('link', { name: '경영주 페이지', exact: true }).click();
   await expect(page.getByTestId('training-count')).toHaveText('2회');
   await expect(page.getByTestId('training-average')).toHaveText('99/ 100');
   await expect(page.getByRole('link', { name: '업무 관리', exact: true })).toHaveCount(0);

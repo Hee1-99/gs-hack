@@ -9,7 +9,7 @@ test('manager checklist edits preserve progress and reset requires confirmation'
   await page.getByLabel('소비기한 확인 상태').selectOption('needs_manager');
   await page.reload();
   await expect(page.getByLabel('입고 상품 확인 상태')).toHaveValue('done');
-  await page.getByRole('link', { name: '경영주 관리', exact: true }).click();
+  await page.getByRole('link', { name: '경영주 페이지', exact: true }).click();
   await page.getByRole('link', { name: '체크리스트 설정', exact: true }).first().click();
   await page.locator('summary').filter({ hasText: '입고 상품 확인' }).click();
   const first = page.getByRole('form', { name: '입고 상품 확인 수정' });
@@ -35,7 +35,7 @@ test('manager checklist edits preserve progress and reset requires confirmation'
   await page.getByRole('button', { name: '초기화하기', exact: true }).click();
   await expect(page.getByRole('combobox')).toHaveCount(4);
   await expect(page.getByRole('progressbar', { name: '업무 완료 현황' })).toHaveAttribute('value', '0');
-  await page.getByRole('link', { name: '경영주 관리', exact: true }).click();
+  await page.getByRole('link', { name: '경영주 페이지', exact: true }).click();
   await expect(page.getByTestId('training-count')).toHaveText('0회');
   await expect(page.getByTestId('training-average')).toHaveText('—완료 후 표시');
   await expect(page.getByRole('heading', { name: '아직 연습 기록이 없어요' })).toBeVisible();
@@ -54,7 +54,7 @@ test('manager reviews complete test scores, stage answers and in-progress record
   }
   await expect(page.getByRole('heading', { name: '끝까지 해냈어요!' })).toBeVisible();
   await page.getByRole('button', { name: '다시 연습하기' }).click();
-  await page.getByRole('link', { name: '경영주 관리', exact: true }).click();
+  await page.getByRole('link', { name: '경영주 페이지', exact: true }).click();
   await expect(page).toHaveURL(/\/manager\/dashboard$/);
   await page.reload();
   await expect(page.getByTestId('training-count')).toHaveText('1회');

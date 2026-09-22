@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 test('edits all fields and creates a missing rule, retaining both after refresh', async ({ page }, testInfo) => {
   await page.goto('/');
-  await page.getByRole('link', { name: '경영주 관리', exact: true }).click();
+  await page.getByRole('link', { name: '경영주 페이지', exact: true }).click();
   await page.getByRole('link', { name: '추가 매장 규칙', exact: true }).click();
   const form = page.getByRole('form', { name: '행사 문의는 POS 확인 후 안내' });
   await form.getByLabel('규칙 제목').fill('행사 안내 순서');

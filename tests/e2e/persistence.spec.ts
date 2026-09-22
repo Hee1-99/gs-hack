@@ -53,7 +53,7 @@ test('rejects a corrupted quiz result rather than showing an invented score', as
   await page.reload();
   await expect(page.getByRole('status').filter({ hasText: '복구했어요' })).toBeVisible();
   await expect(page.getByRole('button', { name: '이어서 하기' })).toHaveCount(0);
-  await page.getByRole('link', { name: '경영주 관리', exact: true }).click();
+  await page.getByRole('link', { name: '경영주 페이지', exact: true }).click();
   await expect(page.getByTestId('training-count')).toHaveText('0회');
   await expect(page.getByTestId('training-average')).toContainText('완료 후 표시');
 });

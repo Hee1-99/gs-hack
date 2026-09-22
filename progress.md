@@ -577,3 +577,12 @@
 - Task25 all five checkboxes are verified. Outcome: completed-before-duration-target; the production incident is contained, source and live schema are aligned, and the client preserves the existing reload guidance for genuine version conflicts.
 - Timing: originalrunStartedAt2026-09-21T09:05:58.258Z; lastCheckpointAt:2026-09-22T02:45:07.2375124+09:00; measuredactiveinterval:4.06 minutes; cumulativeactiveWorkMinutes:256.99. Earlier unknown incident-diagnosis interval remains excluded rather than estimated.
 - Nextcheckbox:none. Finalaction:push this documentation-only closure and verify remote SHA; no additional app deployment is needed because the live artifact already contains `b5aacb3`.
+
+### Iteration53 — 2026-09-22T09:43:53.7573823+09:00 — Task26 owner-page wording
+
+- Reproduced the stale landing label with a new focused regression: the test expected `경영주 페이지` and failed because the rendered link was `경영주 관리`. Replaced the user-facing label in the landing account menu, signed-out blurred preview and signed-in owner role bar; updated current E2E selectors and the demo script without changing `/manager/dashboard` or any authorization behavior.
+- Verification: focused auth regression6/6 PASS; full unit/integration153/153 PASS; TypeScript PASS; forced-demo production build PASS with21routes; focused owner-entry production E2E2/2 PASS at desktop1440x900 and mobile390x844. Computer Use confirmed the visible landing link `경영주 페이지`, navigation to `/manager/dashboard`, and the signed-out owner-login prompt.
+- A complete E2E audit was also run and exposed a pre-existing release-gate mismatch:40/62 passed, while22 manager scenarios still assume signed-out access to private owner data and now fail behind the Task23/24 login gate. The wording selector itself reaches the route correctly; the focused owner-entry scenario was corrected to verify the privacy-safe login prompt. No blanket skips or access-control bypass were added.
+- User-owned untracked `docs/evidence/gs25-training-crawl-audit.json` remained untouched. Playwright-generated tracked screenshots were restored and excluded from this change.
+- Timing: originalrunStartedAt2026-09-21T09:05:58.258Z; lastCheckpointAt:2026-09-22T09:43:53.7573823+09:00; measuredactiveinterval:12.18 minutes from the first exact failing-test timestamp09:31:43; cumulativeactiveWorkMinutes:269.17. Earlier setup before that timestamp is excluded.
+- Exact next checkbox: Task26 Step4 publish the scoped wording change, deploy the linked Vercel project, verify remote SHA and the live production wording.
