@@ -535,3 +535,15 @@ These are not part of this long-running P0 prompt. Do not automatically consume 
 - [x] **Step 2: Update the landing entry, signed-out preview and owner workspace heading together with browser selectors and demo copy.**
 - [x] **Step 3: Run focused and full tests, production build and real-browser verification.**
 - [x] **Step 4: Publish, deploy and verify the production alias and remote commit.**
+
+## Task 27: Signup and Return Login
+
+**Depends on:** Task 26
+
+**Deliverable:** Diagnose the reported return-login failure, fix reproducible credential-flow defects, and verify a new account can sign in again without exposing credentials.
+
+- [x] **Step 1: Inspect account status and authentication logs; test signup and login with a separate synthetic account.**
+- [x] **Step 2: Reproduce and fix retained signup mode, misleading auth errors, and missing password confirmation.**
+- [x] **Step 3: Run full tests/build and verify the actual signup/logout UI.**
+- [ ] **Step 4: Publish and verify production signup, fresh-browser login, and session persistence.**
+- [ ] **Step 5: Confirm the reporting user's account can log in, or document the user-assisted recovery required.**

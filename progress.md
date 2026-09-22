@@ -595,3 +595,12 @@
 - Task26 all four checkboxes are verified. Outcome: completed-before-duration-target; landing, preview and owner-shell wording are aligned and deployed without changing routes or access control.
 - Timing: originalrunStartedAt2026-09-21T09:05:58.258Z; lastCheckpointAt:2026-09-22T09:47:09.8321100+09:00; measuredactiveinterval:3.27 minutes; cumulativeactiveWorkMinutes:272.44. Stopped and unmeasured gaps remain excluded.
 - Nextcheckbox:none. Finalaction:push this documentation-only closure and verify remote SHA; no additional deployment is needed because the live artifact already contains `b350e11`.
+
+### Iteration55 — 2026-09-22T11:44:26+09:00 — Task27 return-login diagnosis
+
+- Read startup documents and inspected current auth flow. The reporting account exists and was confirmed at signup; its recent user-specific logs show repeated-signup errors. Nearby password-token requests show invalid_credentials, without an account identifier, so they are not conclusively attributed to that account. No user password was requested, guessed, reset, or logged.
+- A separate synthetic live Supabase SDK account completed signup, logout and fresh-client password login to the same user ID. No general credential persistence failure reproduced. Account-specific recovery remains unverified.
+- Reproduced three failing tests: signup mode retained after logout, rate limits described as wrong credentials, and missing signup password confirmation. Fixed these; added a password visibility toggle and matching signup heading. Existing ID normalization and password bytes remain unchanged.
+- Focused9/9, full156/156, typecheck and forced-demo production build passed. Computer Use completed real signup and logout and confirmed the login tab becomes active. Host interruption stopped the browser before fresh-tab login. Resume found an unrelated active build; did not terminate it or overwrite unrelated PRODUCT.md, README.md or output/ changes.
+- Timing: measured active interval09:54:37 through09:57:45 is3.13minutes; cumulativeactiveWorkMinutes275.57. Diagnosis before the exact test timestamp and interruption gap remain uncounted. Resume checkpoint11:44:26 begins the next measured interval.
+- Next: publish only auth files and task/progress; verify fresh-browser production login. Original account login still requires user verification; no claim of account recovery.
