@@ -586,3 +586,12 @@
 - User-owned untracked `docs/evidence/gs25-training-crawl-audit.json` remained untouched. Playwright-generated tracked screenshots were restored and excluded from this change.
 - Timing: originalrunStartedAt2026-09-21T09:05:58.258Z; lastCheckpointAt:2026-09-22T09:43:53.7573823+09:00; measuredactiveinterval:12.18 minutes from the first exact failing-test timestamp09:31:43; cumulativeactiveWorkMinutes:269.17. Earlier setup before that timestamp is excluded.
 - Exact next checkbox: Task26 Step4 publish the scoped wording change, deploy the linked Vercel project, verify remote SHA and the live production wording.
+
+### Iteration54 — 2026-09-22T09:47:09.8321100+09:00 — Task26 published and live
+
+- Published `b350e115341b54bab2189958f8e63192309799d7` to `origin/main`; `git ls-remote` matched exactly. The user-owned crawl audit remained untracked and excluded.
+- Vercel deployment `dpl_9YtWgv2Vp5Zh5zrTsEcqCW97JF7p` reached READY. Immutable deployment: https://gs-hack-5pj1s41n4-hee1-99s-projects.vercel.app ; production alias: https://gs-hack-seven.vercel.app . The alias returned HTTP200.
+- Fresh production delivery verification found the exact `경영주 페이지` label in the alias-served immutable client chunk. The alias browser also loaded the deployed GStep landing correctly; its existing signed-in crew session intentionally hid owner navigation, while the fresh signed-out local production browser had already verified the updated entry and owner-login route.
+- Task26 all four checkboxes are verified. Outcome: completed-before-duration-target; landing, preview and owner-shell wording are aligned and deployed without changing routes or access control.
+- Timing: originalrunStartedAt2026-09-21T09:05:58.258Z; lastCheckpointAt:2026-09-22T09:47:09.8321100+09:00; measuredactiveinterval:3.27 minutes; cumulativeactiveWorkMinutes:272.44. Stopped and unmeasured gaps remain excluded.
+- Nextcheckbox:none. Finalaction:push this documentation-only closure and verify remote SHA; no additional deployment is needed because the live artifact already contains `b350e11`.
