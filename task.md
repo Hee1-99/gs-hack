@@ -545,5 +545,5 @@ These are not part of this long-running P0 prompt. Do not automatically consume 
 - [x] **Step 1: Inspect account status and authentication logs; test signup and login with a separate synthetic account.**
 - [x] **Step 2: Reproduce and fix retained signup mode, misleading auth errors, and missing password confirmation.**
 - [x] **Step 3: Run full tests/build and verify the actual signup/logout UI.**
-- [ ] **Step 4: Publish and verify production signup, fresh-browser login, and session persistence.**
+- [x] **Step 4: Publish and verify production signup, fresh-browser login, and session persistence.**
 - [ ] **Step 5: Confirm the reporting user's account can log in, or document the user-assisted recovery required.**

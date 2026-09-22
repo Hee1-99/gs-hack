@@ -604,3 +604,11 @@
 - Focused9/9, full156/156, typecheck and forced-demo production build passed. Computer Use completed real signup and logout and confirmed the login tab becomes active. Host interruption stopped the browser before fresh-tab login. Resume found an unrelated active build; did not terminate it or overwrite unrelated PRODUCT.md, README.md or output/ changes.
 - Timing: measured active interval09:54:37 through09:57:45 is3.13minutes; cumulativeactiveWorkMinutes275.57. Diagnosis before the exact test timestamp and interruption gap remain uncounted. Resume checkpoint11:44:26 begins the next measured interval.
 - Next: publish only auth files and task/progress; verify fresh-browser production login. Original account login still requires user verification; no claim of account recovery.
+
+### Iteration56 — 2026-09-22T11:46:17+09:00 — Task27 production auth verified, reported account awaiting retry
+
+- Published auth source0c316194a6ad3919db005116aa24308ba7388e88; remote main matched. Deployed a clean git archive so concurrent uncommitted documents/output were excluded. Vercel dpl_CzC9AKqZ6Ly24Aoc6fd5nwp3jtiq independently inspected READY, alias https://gs-hack-seven.vercel.app . Build used AI_DEMO_MODE=true; runtime settings retained.
+- Real production browser with a separate synthetic account: mismatch blocked before signup, matching signup succeeded, logout returned to login, fresh isolated browser context logged into the same account with uppercase ID normalization, reload retained the account, final logout succeeded. Password existed only in process memory; no credentials or tokens logged or saved. The test account has no store or personal records.
+- User account recovery is NOT claimed: requested a retry through the deployed login page. Step5 remains pending; if invalid_credentials persists, user-assisted password recovery is needed. Existing user credentials, memberships and records were not modified. Previous unrelated owner E2E legacy failures were not silently reclassified as passes.
+- Timing: measured active interval11:44:26 through11:46:17 is1.85minutes; cumulativeactiveWorkMinutes277.42. Interrupted09:57→11:43 gap excluded. No app server started by this iteration remains running.
+- Next checkbox: Task27 Step5 receive reporting user's login result and resolve account recovery if needed.
